@@ -26,19 +26,19 @@ html, body {
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background-image: url('Wheel-Wallpaper.jpg');
+  background-image: url('Wheel Wallpaper.png'); /* updated filename */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-/* centers the “card” with your wheel */
+/* centers the “card” with your wheel, lets wallpaper show at full width */
 .frame-outer {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 24px 8px;
+  padding: 24px 0;
   box-sizing: border-box;
 }
 
@@ -300,6 +300,7 @@ body {
     0 0 0 6px rgba(250,211,107,0.95);
 }
 
+/* aligned pairs */
 .hotspot.pos-1 { top: 18.5%; left: 30%; }
 .hotspot.pos-2 { top: 18.5%; left: 70%; }
 .hotspot.pos-3 { top: 86%;   left: 30%; }
