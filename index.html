@@ -166,7 +166,6 @@ html, body {
   pointer-events: none;
 }
 
-/* subtle outline so the golden star reads on the light sky */
 .sticker-star.door::before {
   content: "";
   position: absolute;
@@ -196,7 +195,6 @@ html, body {
   );
 }
 
-/* pulse + glow so the stars pop */
 @keyframes starPulse {
   0% {
     transform: translate(-50%, -50%) scale(1);
@@ -224,7 +222,6 @@ html, body {
   animation: starPulse 1.9s ease-in-out infinite;
 }
 
-/* positions */
 .sticker-star.door { top: 18%; left: 50%; }
 .sticker-star.hearth { top: 52%; left: 79%; }
 .sticker-star.river { top: 87%; left: 50%; }
@@ -235,11 +232,11 @@ html, body {
 .hotspot {
   position: absolute;
   transform: translate(-50%, -50%);
-  padding: 8px 20px;                 /* slightly taller & wider */
+  padding: 8px 20px;
   background: var(--golden-ochre);
   color: var(--ink-black);
   border-radius: 999px;
-  border: 2px solid rgba(0,0,0,0.75); /* strong outline */
+  border: 2px solid rgba(0,0,0,0.75);
   font-family: "house-of-cards", serif;
   font-size: 0.9rem;
   letter-spacing: 0.14em;
@@ -247,7 +244,7 @@ html, body {
   cursor: pointer;
   box-shadow:
     0 3px 14px rgba(0,0,0,0.35),
-    0 0 0 3px rgba(255,255,255,0.9);  /* halo ring */
+    0 0 0 3px rgba(255,255,255,0.9);
   transition:
     transform 0.12s ease,
     box-shadow 0.12s ease,
@@ -259,7 +256,6 @@ html, body {
   white-space: nowrap;
 }
 
-/* breathing + wiggle so they read as tappable */
 @keyframes hotspotBreath {
   0%   { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
   40%  { transform: translate(-50%, -50%) scale(1.06) rotate(-1.5deg); }
@@ -289,18 +285,17 @@ html, body {
     0 0 0 6px rgba(255,255,255,1);
 }
 
-/* ACTIVE STATE */
 .hotspot.is-active {
   box-shadow:
     0 0 0 2px rgba(0,0,0,0.5),
     0 0 0 6px rgba(250,211,107,0.95);
 }
 
-/* Ritual moved down a nudge; others as before */
-.hotspot.pos-1 { top: 22%; left: 30%; } /* Ritual – slightly lower */
-.hotspot.pos-2 { top: 18%; left: 69%; } /* Recipe */
-.hotspot.pos-3 { top: 86%; left: 31%; } /* Symbolism */
-.hotspot.pos-4 { top: 86%; left: 69%; } /* Story */
+/* Micro‑alignment: Ritual/Recipe, Symbolism/Story horizontal */
+.hotspot.pos-1 { top: 18.5%; left: 30%; } /* Ritual */
+.hotspot.pos-2 { top: 18.5%; left: 70%; } /* Recipe */
+.hotspot.pos-3 { top: 86%;   left: 30%; } /* Symbolism */
+.hotspot.pos-4 { top: 86%;   left: 70%; } /* Story */
 
 /* ===== MODALS ===== */
 
@@ -445,6 +440,9 @@ const stickerColors = {
 let currentRotation = 0;
 let isSpinning = false;
 let hasClickedHotspot = false;
+let clickedHotspotsThisSpin = new Set();
+
+/* Label states */
 
 function setLabelTextIdle() {
   spinLabel.textContent = 'SPIN THE WHEEL';
@@ -458,10 +456,17 @@ function setLabelTextSpinAgain() {
   spinLabel.textContent = 'SPIN THE WHEEL AGAIN';
 }
 
+function setLabelTextAllDone() {
+  spinLabel.textContent = 'YOU FOUND EVERY HOTSPOT • SPIN AGAIN?';
+}
+
+/* Spin logic */
+
 function triggerSpin() {
   if (isSpinning) return;
   isSpinning = true;
   hasClickedHotspot = false;
+  clickedHotspotsThisSpin.clear();
   setLabelTextIdle();
 
   Object.values(stickerStars).forEach(s => {
@@ -469,7 +474,10 @@ function triggerSpin() {
   });
 
   hotspotEls.forEach(btn => {
-    btn.style.display = 'none';
+    // keep visible if user already clicked them this spin; hide otherwise
+    if (!clickedHotspotsThisSpin.has(btn.dataset.type)) {
+      btn.style.display = 'none';
+    }
     btn.classList.remove('is-active');
     btn.classList.remove('hotspot-animated');
   });
@@ -519,6 +527,8 @@ function triggerSpin() {
 wand.addEventListener('click', triggerSpin);
 spinLabel.addEventListener('click', triggerSpin);
 
+/* Hotspots */
+
 function showHotspots(stickerKey) {
   const baseColor = stickerColors[stickerKey] || 'var(--golden-ochre)';
   const textColor = (stickerKey === 'door') ? 'var(--ink-black)' : 'var(--ivory-fog)';
@@ -527,8 +537,9 @@ function showHotspots(stickerKey) {
     btn.textContent = hotspotLabels[index];
     btn.dataset.sticker = stickerKey;
     btn.dataset.type = hotspotLabels[index].toLowerCase();
-    btn.classList.remove('is-active');
-    btn.style.display = 'inline-flex';
+    if (!clickedHotspotsThisSpin.has(btn.dataset.type)) {
+      btn.style.display = 'inline-flex';
+    }
     btn.style.backgroundColor = baseColor;
     btn.style.color = textColor;
     btn.classList.add('hotspot-animated');
@@ -555,6 +566,11 @@ function closeAllModals() {
   backdrop.style.display = 'none';
 }
 
+/* Click handling:
+   - Mark which hotspot types were clicked this spin
+   - Hide hotspots only when all 4 have been clicked
+*/
+
 document.addEventListener('click', (e) => {
   const target = e.target;
   if (target.classList.contains('hotspot')) {
@@ -565,8 +581,17 @@ document.addEventListener('click', (e) => {
     hotspotEls.forEach(btn => btn.classList.remove('is-active'));
     target.classList.add('is-active');
 
-    if (!hasClickedHotspot) {
-      hasClickedHotspot = true;
+    clickedHotspotsThisSpin.add(type);
+    hasClickedHotspot = true;
+
+    if (clickedHotspotsThisSpin.size === 4) {
+      // user has visited all four; gently fade hotspots out
+      hotspotEls.forEach(btn => {
+        btn.classList.remove('hotspot-animated');
+        btn.style.display = 'none';
+      });
+      setLabelTextAllDone();
+    } else {
       setLabelTextSpinAgain();
     }
   }
