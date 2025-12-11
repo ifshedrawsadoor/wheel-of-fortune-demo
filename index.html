@@ -225,7 +225,7 @@ html, body {
 }
 
 /* positions */
-.sticker-star.door { top: 18%; left: 50%; } /* golden ochre above door */
+.sticker-star.door { top: 18%; left: 50%; }
 .sticker-star.hearth { top: 52%; left: 79%; }
 .sticker-star.river { top: 87%; left: 50%; }
 .sticker-star.cross { top: 52%; left: 21%; }
@@ -235,56 +235,70 @@ html, body {
 .hotspot {
   position: absolute;
   transform: translate(-50%, -50%);
-  padding: 6px 16px;
+  padding: 8px 20px;                 /* slightly taller & wider */
   background: var(--golden-ochre);
   color: var(--ink-black);
   border-radius: 999px;
-  border: none;
+  border: 2px solid rgba(0,0,0,0.75); /* strong outline */
   font-family: "house-of-cards", serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.12em;
+  font-size: 0.9rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.18);
-  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+  box-shadow:
+    0 3px 14px rgba(0,0,0,0.35),
+    0 0 0 3px rgba(255,255,255,0.9);  /* halo ring */
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    filter 0.12s ease,
+    background-color 0.12s ease,
+    border-color 0.12s ease;
   z-index: 7;
   display: none;
   white-space: nowrap;
 }
 
-/* small breathing animation so the hotspots read as tappable */
+/* breathing + wiggle so they read as tappable */
 @keyframes hotspotBreath {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.04);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  }
+  0%   { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  40%  { transform: translate(-50%, -50%) scale(1.06) rotate(-1.5deg); }
+  60%  { transform: translate(-50%, -50%) scale(1.06) rotate(1.5deg); }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
 }
 
 .hotspot.hotspot-animated {
-  animation: hotspotBreath 1.8s ease-in-out infinite;
+  animation: hotspotBreath 1.6s ease-in-out infinite;
 }
 
-.hotspot:hover {
-  transform: translate(-50%, -50%) scale(1.07);
-  box-shadow: 0 3px 14px rgba(0,0,0,0.28);
+.hotspot:hover,
+.hotspot:focus-visible {
+  transform: translate(-50%, -50%) scale(1.08);
+  background-color: #ffdf82;
+  border-color: rgba(0,0,0,0.95);
+  box-shadow:
+    0 4px 18px rgba(0,0,0,0.45),
+    0 0 0 4px rgba(255,255,255,1);
   filter: brightness(1.05);
+  outline: none;
 }
 
+.hotspot:focus-visible {
+  box-shadow:
+    0 0 0 3px rgba(15,76,129,0.4),
+    0 0 0 6px rgba(255,255,255,1);
+}
+
+/* ACTIVE STATE */
 .hotspot.is-active {
-  box-shadow: 0 0 0 2px rgba(0,0,0,0.25);
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,0.5),
+    0 0 0 6px rgba(250,211,107,0.95);
 }
 
-/* Ritual moved down a nudge; Recipe up a nudge; bottom two unchanged */
-.hotspot.pos-1 { top: 21%; left: 30%; } /* Ritual – down slightly */
-.hotspot.pos-2 { top: 18%; left: 69%; } /* Recipe – up a nudge */
+/* Ritual moved down a nudge; others as before */
+.hotspot.pos-1 { top: 22%; left: 30%; } /* Ritual – slightly lower */
+.hotspot.pos-2 { top: 18%; left: 69%; } /* Recipe */
 .hotspot.pos-3 { top: 86%; left: 31%; } /* Symbolism */
 .hotspot.pos-4 { top: 86%; left: 69%; } /* Story */
 
@@ -342,7 +356,7 @@ html, body {
 @media (max-width: 700px) {
   .wand { width: 16vw; }
   .wand-label { font-size: 0.7rem; padding: 5px 14px; }
-  .hotspot { font-size: 0.7rem; padding: 4px 10px; }
+  .hotspot { font-size: 0.8rem; padding: 6px 14px; }
 }
 </style>
 </head>
@@ -430,7 +444,7 @@ const stickerColors = {
 
 let currentRotation = 0;
 let isSpinning = false;
-let hasClickedHotspot = false; // track if at least one hotspot has been clicked
+let hasClickedHotspot = false;
 
 function setLabelTextIdle() {
   spinLabel.textContent = 'SPIN THE WHEEL';
@@ -447,15 +461,13 @@ function setLabelTextSpinAgain() {
 function triggerSpin() {
   if (isSpinning) return;
   isSpinning = true;
-  hasClickedHotspot = false; // reset on each spin
-  setLabelTextIdle(); // while spinning, keep it simple
+  hasClickedHotspot = false;
+  setLabelTextIdle();
 
-  // hide stars
   Object.values(stickerStars).forEach(s => {
     s.classList.remove('visible');
   });
 
-  // hide hotspots and remove animation
   hotspotEls.forEach(btn => {
     btn.style.display = 'none';
     btn.classList.remove('is-active');
@@ -494,11 +506,11 @@ function triggerSpin() {
     const star = stickerStars[key];
     if (star) {
       star.style.color = stickerColors[key] || 'var(--golden-ochre)';
-      star.classList.add('visible'); // star now pulses via CSS
+      star.classList.add('visible');
     }
 
     showHotspots(key);
-    setLabelTextPromptHotspots(); // tell users to click hotspots
+    setLabelTextPromptHotspots();
     isSpinning = false;
   };
   halo.addEventListener('transitionend', onEnd);
@@ -519,7 +531,7 @@ function showHotspots(stickerKey) {
     btn.style.display = 'inline-flex';
     btn.style.backgroundColor = baseColor;
     btn.style.color = textColor;
-    btn.classList.add('hotspot-animated'); // breathing animation on
+    btn.classList.add('hotspot-animated');
   });
 }
 
@@ -555,7 +567,7 @@ document.addEventListener('click', (e) => {
 
     if (!hasClickedHotspot) {
       hasClickedHotspot = true;
-      setLabelTextSpinAgain(); // after first hotspot click
+      setLabelTextSpinAgain();
     }
   }
 
