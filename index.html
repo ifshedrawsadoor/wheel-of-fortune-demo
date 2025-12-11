@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -64,6 +64,8 @@
       cursor: pointer;
       transition: transform 0.2s ease, filter 0.2s ease;
       z-index: 5;
+      background: none;             /* no box */
+      image-rendering: auto;
     }
 
     .wand:hover {
@@ -123,14 +125,14 @@
       transform-origin: center center;
     }
 
-    /* ===== STICKER HIGHLIGHT HALO ===== */
+    /* ===== STICKER HIGHLIGHT HALOS ===== */
 
     .sticker-halo {
       position: absolute;
-      width: 16%;                 /* smaller than before */
+      width: 13%;              /* smaller */
       aspect-ratio: 1 / 1;
       border-radius: 50%;
-      border: 5px solid rgba(250, 211, 107, 0.98); /* thicker line */
+      border: 5px solid rgba(250, 211, 107, 0.98);
       box-shadow: 0 0 14px rgba(250, 211, 107, 0.9);
       pointer-events: none;
       opacity: 0;
@@ -151,11 +153,11 @@
       100% { box-shadow: 0 0 12px rgba(250,211,107,0.7); }
     }
 
-    /* fine-tuned centers of the four stickers on the wheel image */
-    .sticker-halo.door   { top: 20%; left: 50%; }  /* Prayer / frankincense */
-    .sticker-halo.hearth { top: 50%; left: 81%; }  /* Pleasure / orange */
-    .sticker-halo.river  { top: 83%; left: 50%; }  /* Passage / peppermint */
-    .sticker-halo.cross  { top: 50%; left: 19%; }  /* Prosperity / almond */
+    /* refined centers – adjust in small % steps as needed */
+    .sticker-halo.door   { top: 19%; left: 50%; }
+    .sticker-halo.hearth { top: 49%; left: 79%; }
+    .sticker-halo.river  { top: 82%; left: 50%; }
+    .sticker-halo.cross  { top: 49%; left: 21%; }
 
     /* ===== HOTSPOTS ===== */
 
@@ -190,24 +192,24 @@
       color: var(--ivory-fog);
     }
 
-    /* position hotspots near their quadrant stickers */
-    .hotspot.pos-1 { /* Ritual near PRAYER (top-left-ish) */
-      top: 40%;
-      left: 22%;
+    /* Centered on corner stickers (fine-tune visually) */
+    .hotspot.pos-1 { /* Ritual – Prayer (top left) */
+      top: 31%;
+      left: 24%;
     }
 
-    .hotspot.pos-2 { /* Recipe near PLEASURE (top-right-ish) */
-      top: 40%;
-      left: 78%;
+    .hotspot.pos-2 { /* Recipe – Pleasure (top right) */
+      top: 31%;
+      left: 76%;
     }
 
-    .hotspot.pos-3 { /* Symbolism near PASSAGE (bottom-left-ish) */
-      top: 76%;
+    .hotspot.pos-3 { /* Symbolism – Passage (bottom left) */
+      top: 79%;
       left: 26%;
     }
 
-    .hotspot.pos-4 { /* Story near PROSPERITY (bottom-right-ish) */
-      top: 76%;
+    .hotspot.pos-4 { /* Story – Prosperity (bottom right) */
+      top: 79%;
       left: 74%;
     }
 
