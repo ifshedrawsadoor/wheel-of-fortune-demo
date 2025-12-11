@@ -92,7 +92,7 @@
       z-index: 6;
       text-align: center;
       animation: spinLabelPulse 1.8s ease-in-out infinite alternate;
-      cursor: pointer; /* clickable now */
+      cursor: pointer;
     }
 
     @keyframes spinLabelPulse {
@@ -126,31 +126,43 @@
       transform-origin: center center;
     }
 
-    /* ===== STICKER STARS (instead of halos) ===== */
+    /* ===== ROUNDED STICKER STARS ===== */
 
     .sticker-star {
       position: absolute;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--golden-ochre);
-      clip-path: polygon(
-        50% 0%,
-        61% 38%,
-        100% 38%,
-        69% 59%,
-        82% 100%,
-        50% 75%,
-        18% 100%,
-        31% 59%,
-        0% 38%,
-        39% 38%
-      );
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;                  /* rounded outside */
+      background: radial-gradient(circle at center,
+                   rgba(255,255,255,0.95) 0%,
+                   rgba(255,255,255,0.2) 40%,
+                   transparent 70%);
+      box-shadow: 0 0 10px rgba(0,0,0,0.25);
       opacity: 0;
       transform: translate(-50%, -50%) scale(0.6);
       transition: opacity 0.2s ease, transform 0.2s ease;
       z-index: 3;
       pointer-events: none;
+    }
+
+    .sticker-star::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      clip-path: polygon(
+        50% 12%,
+        60% 38%,
+        88% 40%,
+        66% 58%,
+        74% 84%,
+        50% 70%,
+        26% 84%,
+        34% 58%,
+        12% 40%,
+        40% 38%
+      );
     }
 
     .sticker-star.visible {
@@ -165,11 +177,11 @@
       100% { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 8px rgba(0,0,0,0.2); }
     }
 
-    /* position roughly over center of each sticker */
-    .sticker-star.door   { top: 18.5%; left: 50%; }  /* door */
-    .sticker-star.hearth { top: 48.5%; left: 79.5%; }/* heart */
-    .sticker-star.river  { top: 83%;   left: 50%; }  /* crossroads sign */
-    .sticker-star.cross  { top: 48.5%; left: 20.5%; }/* river dome */
+    /* moved further onto stickers – tweak as needed */
+    .sticker-star.door   { top: 19%; left: 50%; }   /* door */
+    .sticker-star.hearth { top: 49%; left: 79%; }   /* heart */
+    .sticker-star.river  { top: 84.5%; left: 50%; } /* crossroads */
+    .sticker-star.cross  { top: 49%; left: 21%; }   /* river */
 
     /* ===== HOTSPOTS ===== */
 
@@ -202,24 +214,24 @@
       box-shadow: 0 0 0 2px rgba(0,0,0,0.25);
     }
 
-    /* centered on each corner sticker */
+    /* centered more tightly on sticker art */
     .hotspot.pos-1 { /* Ritual – Prayer (top left) */
-      top: 25%;
+      top: 23%;
       left: 26%;
     }
 
     .hotspot.pos-2 { /* Recipe – Pleasure (top right) */
-      top: 25%;
+      top: 23%;
       left: 74%;
     }
 
     .hotspot.pos-3 { /* Symbolism – Passage (bottom left) */
-      top: 84%;
+      top: 86%;
       left: 28%;
     }
 
     .hotspot.pos-4 { /* Story – Prosperity (bottom right) */
-      top: 84%;
+      top: 86%;
       left: 72%;
     }
 
@@ -295,7 +307,7 @@
 
     <img src="Ring.png" alt="" class="halo-overlay" id="halo">
 
-    <!-- Sticker stars (color changed in JS) -->
+    <!-- Sticker stars -->
     <div class="sticker-star door"   id="star-door"></div>
     <div class="sticker-star hearth" id="star-hearth"></div>
     <div class="sticker-star river"  id="star-river"></div>
@@ -407,7 +419,7 @@
       // show colored star on winning sticker
       const star = stickerStars[key];
       if (star) {
-        star.style.background = stickerColors[key] || 'var(--golden-ochre)';
+        star.style.color = stickerColors[key] || 'var(--golden-ochre)';
         star.classList.add('visible');
       }
 
