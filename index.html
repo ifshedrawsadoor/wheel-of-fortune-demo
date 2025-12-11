@@ -92,6 +92,7 @@
       z-index: 6;
       text-align: center;
       animation: spinLabelPulse 1.8s ease-in-out infinite alternate;
+      cursor: pointer; /* clickable now */
     }
 
     @keyframes spinLabelPulse {
@@ -100,7 +101,7 @@
       100% { transform: translateX(-50%) translateY(0) scale(1);   box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
     }
 
-    /* ===== HALO OVERLAY ===== */
+    /* ===== HALO OVERLAY (wheel ring) ===== */
 
     .halo-overlay {
       position: absolute;
@@ -125,39 +126,50 @@
       transform-origin: center center;
     }
 
-    /* ===== STICKER HIGHLIGHT HALOS ===== */
+    /* ===== STICKER STARS (instead of halos) ===== */
 
-    .sticker-halo {
+    .sticker-star {
       position: absolute;
-      width: 11%;              /* smaller again */
-      aspect-ratio: 1 / 1;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      border: 5px solid rgba(250, 211, 107, 0.98);
-      box-shadow: 0 0 14px rgba(250, 211, 107, 0.9);
-      pointer-events: none;
+      background: var(--golden-ochre);
+      clip-path: polygon(
+        50% 0%,
+        61% 38%,
+        100% 38%,
+        69% 59%,
+        82% 100%,
+        50% 75%,
+        18% 100%,
+        31% 59%,
+        0% 38%,
+        39% 38%
+      );
       opacity: 0;
-      transform: translate(-50%, -50%) scale(0.9);
-      transition: opacity 0.25s ease, transform 0.25s ease;
+      transform: translate(-50%, -50%) scale(0.6);
+      transition: opacity 0.2s ease, transform 0.2s ease;
       z-index: 3;
+      pointer-events: none;
     }
 
-    .sticker-halo.visible {
+    .sticker-star.visible {
       opacity: 1;
-      transform: translate(-50%, -50%) scale(1.02);
-      animation: haloPulse 1.4s ease-in-out infinite;
+      transform: translate(-50%, -50%) scale(1);
+      animation: starPulse 1.2s ease-in-out infinite;
     }
 
-    @keyframes haloPulse {
-      0%   { box-shadow: 0 0 12px rgba(250,211,107,0.7); }
-      50%  { box-shadow: 0 0 24px rgba(250,211,107,1); }
-      100% { box-shadow: 0 0 12px rgba(250,211,107,0.7); }
+    @keyframes starPulse {
+      0%   { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 8px rgba(0,0,0,0.2); }
+      50%  { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 18px rgba(0,0,0,0.4); }
+      100% { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 8px rgba(0,0,0,0.2); }
     }
 
-    /* fine-tuned centers (adjust by 1–2% if needed) */
-    .sticker-halo.door   { top: 18.5%; left: 50%; } /* door */
-    .sticker-halo.hearth { top: 48.5%; left: 79.5%; } /* heart */
-    .sticker-halo.river  { top: 83%;  left: 50%; }  /* crossroads sign */
-    .sticker-halo.cross  { top: 48.5%; left: 20.5%; } /* river dome */
+    /* position roughly over center of each sticker */
+    .sticker-star.door   { top: 18.5%; left: 50%; }  /* door */
+    .sticker-star.hearth { top: 48.5%; left: 79.5%; }/* heart */
+    .sticker-star.river  { top: 83%;   left: 50%; }  /* crossroads sign */
+    .sticker-star.cross  { top: 48.5%; left: 20.5%; }/* river dome */
 
     /* ===== HOTSPOTS ===== */
 
@@ -175,7 +187,7 @@
       text-transform: uppercase;
       cursor: pointer;
       box-shadow: 0 2px 10px rgba(0,0,0,0.18);
-      transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
       z-index: 7;
       display: none;
       white-space: nowrap;
@@ -183,6 +195,7 @@
 
     .hotspot:hover {
       transform: translate(-50%, -50%) scale(1.05);
+      box-shadow: 0 3px 14px rgba(0,0,0,0.28);
     }
 
     .hotspot.is-active {
@@ -278,15 +291,15 @@
          class="wheel-bg" />
 
     <img src="Magic Wand.png" alt="Spin the Wheel" class="wand" id="wand">
-    <div class="wand-label">SPIN THE WHEEL</div>
+    <div class="wand-label" id="spin-label">SPIN THE WHEEL</div>
 
     <img src="Ring.png" alt="" class="halo-overlay" id="halo">
 
-    <!-- Sticker halos -->
-    <div class="sticker-halo door"   id="halo-door"></div>
-    <div class="sticker-halo hearth" id="halo-hearth"></div>
-    <div class="sticker-halo river"  id="halo-river"></div>
-    <div class="sticker-halo cross"  id="halo-cross"></div>
+    <!-- Sticker stars (color changed in JS) -->
+    <div class="sticker-star door"   id="star-door"></div>
+    <div class="sticker-star hearth" id="star-hearth"></div>
+    <div class="sticker-star river"  id="star-river"></div>
+    <div class="sticker-star cross"  id="star-cross"></div>
 
     <!-- Hotspots -->
     <button class="hotspot pos-1" data-slot="1"></button>
@@ -334,32 +347,35 @@
 
   const halo = document.getElementById('halo');
   const wand = document.getElementById('wand');
+  const spinLabel = document.getElementById('spin-label');
   const hotspotEls = Array.from(document.querySelectorAll('.hotspot'));
 
-  const stickerHalos = {
-    door:   document.getElementById('halo-door'),
-    hearth: document.getElementById('halo-hearth'),
-    river:  document.getElementById('halo-river'),
-    cross:  document.getElementById('halo-cross')
+  const stickerStars = {
+    door:   document.getElementById('star-door'),
+    hearth: document.getElementById('star-hearth'),
+    river:  document.getElementById('star-river'),
+    cross:  document.getElementById('star-cross')
   };
 
-  // colors per sticker for hotspots
   const stickerColors = {
-    door:   '--golden-ochre', // Prayer / frankincense
-    hearth: '--tomato-red',   // Pleasure / orange
-    river:  '--classic-blue', // Passage / peppermint
-    cross:  '--sap-green'     // Prosperity / almond
+    door:   'var(--golden-ochre)',
+    hearth: 'var(--tomato-red)',
+    river:  'var(--classic-blue)',
+    cross:  'var(--sap-green)'
   };
 
   let currentRotation = 0;
   let isSpinning = false;
 
-  wand.addEventListener('click', () => {
+  function triggerSpin() {
     if (isSpinning) return;
     isSpinning = true;
 
-    // reset halos and hotspots each spin
-    Object.values(stickerHalos).forEach(h => h.classList.remove('visible'));
+    // reset stars and hotspots each spin
+    Object.values(stickerStars).forEach(s => {
+      s.classList.remove('visible');
+    });
+
     hotspotEls.forEach(btn => {
       btn.style.display = 'none';
       btn.classList.remove('is-active');
@@ -388,19 +404,26 @@
       halo.classList.remove('halo-spinning');
       halo.style.opacity = 0.4;
 
-      const stickerHalo = stickerHalos[key];
-      if (stickerHalo) stickerHalo.classList.add('visible');
+      // show colored star on winning sticker
+      const star = stickerStars[key];
+      if (star) {
+        star.style.background = stickerColors[key] || 'var(--golden-ochre)';
+        star.classList.add('visible');
+      }
 
       showHotspots(key);
       isSpinning = false;
     };
     halo.addEventListener('transitionend', onEnd);
-  });
+  }
+
+  // wand click or label click both spin
+  wand.addEventListener('click', triggerSpin);
+  spinLabel.addEventListener('click', triggerSpin);
 
   function showHotspots(stickerKey) {
-    const cssVar = stickerColors[stickerKey] || '--golden-ochre';
-    const baseColor = getComputedStyle(document.documentElement)
-      .getPropertyValue(cssVar).trim();
+    const baseColor = stickerColors[stickerKey] || 'var(--golden-ochre)';
+    const textColor = (stickerKey === 'door') ? 'var(--ink-black)' : 'var(--ivory-fog)';
 
     hotspotEls.forEach((btn, index) => {
       btn.textContent = hotspotLabels[index];
@@ -409,7 +432,7 @@
       btn.classList.remove('is-active');
       btn.style.display = 'inline-flex';
       btn.style.backgroundColor = baseColor;
-      btn.style.color = (stickerKey === 'door') ? 'var(--ink-black)' : 'var(--ivory-fog)';
+      btn.style.color = textColor;
     });
   }
 
