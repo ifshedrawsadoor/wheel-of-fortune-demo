@@ -101,7 +101,7 @@
       100% { transform: translateX(-50%) translateY(0) scale(1);   box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
     }
 
-    /* ===== HALO OVERLAY (wheel ring) ===== */
+    /* ===== HALO OVERLAY ===== */
 
     .halo-overlay {
       position: absolute;
@@ -126,64 +126,57 @@
       transform-origin: center center;
     }
 
-    /* ===== BIGGER ROUNDED STARS ===== */
+    /* ===== BIG, CENTERED STARS ===== */
 
     .sticker-star {
       position: absolute;
-      width: 64px;   /* larger so easy to see */
-      height: 64px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
       background: radial-gradient(circle at center,
-                   rgba(255,255,255,0.95) 0%,
-                   rgba(255,255,255,0.2) 40%,
-                   transparent 70%);
-      box-shadow: 0 0 14px rgba(0,0,0,0.35);
+                   rgba(255,255,255,0.98) 0%,
+                   rgba(255,255,255,0.6) 35%,
+                   rgba(255,255,255,0.0) 70%);
+      box-shadow: 0 0 22px rgba(0,0,0,0.55);
       opacity: 0;
-      transform: translate(-50%, -50%) scale(0.7);
+      transform: translate(-50%, -50%) scale(0.8);
       transition: opacity 0.2s ease, transform 0.2s ease;
-      z-index: 3;
+      z-index: 4;
       pointer-events: none;
     }
 
     .sticker-star::after {
       content: "";
       position: absolute;
-      inset: 10px;
+      inset: 12px;
       border-radius: 50%;
       background: currentColor;
       clip-path: polygon(
-        50% 10%,
-        62% 38%,
-        90% 40%,
-        68% 58%,
-        76% 86%,
+        50% 8%,
+        63% 36%,
+        92% 38%,
+        69% 57%,
+        78% 88%,
         50% 70%,
-        24% 86%,
-        32% 58%,
-        10% 40%,
-        38% 38%
+        22% 88%,
+        31% 57%,
+        8% 38%,
+        37% 36%
       );
     }
 
     .sticker-star.visible {
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
-      animation: starPulse 1.2s ease-in-out infinite;
     }
 
-    @keyframes starPulse {
-      0%   { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 10px rgba(0,0,0,0.3); }
-      50%  { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 22px rgba(0,0,0,0.5); }
-      100% { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 10px rgba(0,0,0,0.3); }
-    }
+    /* tuned toward the visual centers of each sticker */
+    .sticker-star.door   { top: 23%; left: 50%; }
+    .sticker-star.hearth { top: 52%; left: 78%; }
+    .sticker-star.river  { top: 88%; left: 50%; }
+    .sticker-star.cross  { top: 52%; left: 22%; }
 
-    /* centers tuned toward middle of each picture */
-    .sticker-star.door   { top: 22%; left: 50%; }   /* door */
-    .sticker-star.hearth { top: 52%; left: 79%; }   /* heart */
-    .sticker-star.river  { top: 87%; left: 50%; }   /* crossroads */
-    .sticker-star.cross  { top: 52%; left: 21%; }   /* river */
-
-    /* ===== HOTSPOTS ===== */
+    /* ===== HOTSPOT LABELS ===== */
 
     .hotspot {
       position: absolute;
@@ -214,25 +207,25 @@
       box-shadow: 0 0 0 2px rgba(0,0,0,0.25);
     }
 
-    /* closer to true centers of the illustration part */
-    .hotspot.pos-1 { /* Ritual – Prayer (top left image) */
-      top: 27%;
-      left: 27%;
-    }
-
-    .hotspot.pos-2 { /* Recipe – Pleasure (top right image) */
-      top: 27%;
-      left: 73%;
-    }
-
-    .hotspot.pos-3 { /* Symbolism – Passage (bottom left image) */
-      top: 88%;
+    /* moved up and inward toward the center of each image */
+    .hotspot.pos-1 {   /* Ritual – Prayer */
+      top: 24%;
       left: 29%;
     }
 
-    .hotspot.pos-4 { /* Story – Prosperity (bottom right image) */
-      top: 88%;
+    .hotspot.pos-2 {   /* Recipe – Pleasure */
+      top: 24%;
       left: 71%;
+    }
+
+    .hotspot.pos-3 {   /* Symbolism – Passage */
+      top: 86%;
+      left: 31%;
+    }
+
+    .hotspot.pos-4 {   /* Story – Prosperity */
+      top: 86%;
+      left: 69%;
     }
 
     /* ===== MODALS ===== */
@@ -324,7 +317,7 @@
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<!-- Example modals; duplicate pattern for all 16 -->
+<!-- Example modals; copy pattern for all 16 poem/image combos -->
 <div class="modal poem-modal" id="modal-door-ritual">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -383,7 +376,6 @@
     if (isSpinning) return;
     isSpinning = true;
 
-    // reset stars and hotspots each spin
     Object.values(stickerStars).forEach(s => {
       s.classList.remove('visible');
     });
