@@ -126,20 +126,20 @@
       transform-origin: center center;
     }
 
-    /* ===== ROUNDED STICKER STARS ===== */
+    /* ===== BIGGER ROUNDED STARS ===== */
 
     .sticker-star {
       position: absolute;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;                  /* rounded outside */
+      width: 64px;   /* larger so easy to see */
+      height: 64px;
+      border-radius: 50%;
       background: radial-gradient(circle at center,
                    rgba(255,255,255,0.95) 0%,
                    rgba(255,255,255,0.2) 40%,
                    transparent 70%);
-      box-shadow: 0 0 10px rgba(0,0,0,0.25);
+      box-shadow: 0 0 14px rgba(0,0,0,0.35);
       opacity: 0;
-      transform: translate(-50%, -50%) scale(0.6);
+      transform: translate(-50%, -50%) scale(0.7);
       transition: opacity 0.2s ease, transform 0.2s ease;
       z-index: 3;
       pointer-events: none;
@@ -148,20 +148,20 @@
     .sticker-star::after {
       content: "";
       position: absolute;
-      inset: 8px;
+      inset: 10px;
       border-radius: 50%;
       background: currentColor;
       clip-path: polygon(
-        50% 12%,
-        60% 38%,
-        88% 40%,
-        66% 58%,
-        74% 84%,
+        50% 10%,
+        62% 38%,
+        90% 40%,
+        68% 58%,
+        76% 86%,
         50% 70%,
-        26% 84%,
-        34% 58%,
-        12% 40%,
-        40% 38%
+        24% 86%,
+        32% 58%,
+        10% 40%,
+        38% 38%
       );
     }
 
@@ -172,23 +172,23 @@
     }
 
     @keyframes starPulse {
-      0%   { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 8px rgba(0,0,0,0.2); }
-      50%  { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 18px rgba(0,0,0,0.4); }
-      100% { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 8px rgba(0,0,0,0.2); }
+      0%   { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 10px rgba(0,0,0,0.3); }
+      50%  { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 22px rgba(0,0,0,0.5); }
+      100% { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 10px rgba(0,0,0,0.3); }
     }
 
-    /* moved further onto stickers – tweak as needed */
-    .sticker-star.door   { top: 19%; left: 50%; }   /* door */
-    .sticker-star.hearth { top: 49%; left: 79%; }   /* heart */
-    .sticker-star.river  { top: 84.5%; left: 50%; } /* crossroads */
-    .sticker-star.cross  { top: 49%; left: 21%; }   /* river */
+    /* centers tuned toward middle of each picture */
+    .sticker-star.door   { top: 22%; left: 50%; }   /* door */
+    .sticker-star.hearth { top: 52%; left: 79%; }   /* heart */
+    .sticker-star.river  { top: 87%; left: 50%; }   /* crossroads */
+    .sticker-star.cross  { top: 52%; left: 21%; }   /* river */
 
     /* ===== HOTSPOTS ===== */
 
     .hotspot {
       position: absolute;
       transform: translate(-50%, -50%);
-      padding: 6px 14px;
+      padding: 6px 16px;
       background: var(--golden-ochre);
       color: var(--ink-black);
       border-radius: 999px;
@@ -214,25 +214,25 @@
       box-shadow: 0 0 0 2px rgba(0,0,0,0.25);
     }
 
-    /* centered more tightly on sticker art */
-    .hotspot.pos-1 { /* Ritual – Prayer (top left) */
-      top: 23%;
-      left: 26%;
+    /* closer to true centers of the illustration part */
+    .hotspot.pos-1 { /* Ritual – Prayer (top left image) */
+      top: 27%;
+      left: 27%;
     }
 
-    .hotspot.pos-2 { /* Recipe – Pleasure (top right) */
-      top: 23%;
-      left: 74%;
+    .hotspot.pos-2 { /* Recipe – Pleasure (top right image) */
+      top: 27%;
+      left: 73%;
     }
 
-    .hotspot.pos-3 { /* Symbolism – Passage (bottom left) */
-      top: 86%;
-      left: 28%;
+    .hotspot.pos-3 { /* Symbolism – Passage (bottom left image) */
+      top: 88%;
+      left: 29%;
     }
 
-    .hotspot.pos-4 { /* Story – Prosperity (bottom right) */
-      top: 86%;
-      left: 72%;
+    .hotspot.pos-4 { /* Story – Prosperity (bottom right image) */
+      top: 88%;
+      left: 71%;
     }
 
     /* ===== MODALS ===== */
@@ -416,7 +416,6 @@
       halo.classList.remove('halo-spinning');
       halo.style.opacity = 0.4;
 
-      // show colored star on winning sticker
       const star = stickerStars[key];
       if (star) {
         star.style.color = stickerColors[key] || 'var(--golden-ochre)';
@@ -429,7 +428,6 @@
     halo.addEventListener('transitionend', onEnd);
   }
 
-  // wand click or label click both spin
   wand.addEventListener('click', triggerSpin);
   spinLabel.addEventListener('click', triggerSpin);
 
