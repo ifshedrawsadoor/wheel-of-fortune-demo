@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Wheel of Fortune – Oils</title>
 
-  <!-- House of Cards font -->
   <link rel="stylesheet" href="https://use.typekit.net/yyy7lby.css" />
 
   <style>
@@ -25,8 +24,6 @@
       min-height: 100vh;
     }
 
-    /* ===== LAYOUT WRAPPER ===== */
-
     .frame-outer {
       min-height: 100vh;
       display: flex;
@@ -40,7 +37,7 @@
       position: relative;
       width: 100%;
       max-width: 900px;
-      max-height: 95vh;          /* vertical constraint */
+      max-height: 95vh;
       margin: 0 auto;
     }
 
@@ -61,7 +58,7 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 13%; /* relative so it scales with image */
+      width: 13%;
       max-width: 130px;
       transform: translate(-50%, -50%);
       cursor: pointer;
@@ -83,22 +80,22 @@
       background: var(--ivory-fog);
       border-radius: 999px;
       border: 1px solid rgba(27,27,27,0.24);
-      color: var(--classic-blue);         /* updated color */
+      color: var(--classic-blue);
       font-family: "house-of-cards", serif;
-      font-size: 0.9rem;                  /* larger */
+      font-size: 0.9rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       box-shadow: 0 3px 12px rgba(0,0,0,0.20);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.15s ease;
+      opacity: 0.98;
       z-index: 6;
       text-align: center;
+      animation: spinLabelPulse 1.8s ease-in-out infinite alternate;
     }
 
-    .wand:hover + .wand-label,
-    .wand:focus + .wand-label {
-      opacity: 1;
+    @keyframes spinLabelPulse {
+      0%   { transform: translateX(-50%) translateY(0) scale(1);   box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+      50%  { transform: translateX(-50%) translateY(-3px) scale(1.03); box-shadow: 0 4px 14px rgba(0,0,0,0.28); }
+      100% { transform: translateX(-50%) translateY(0) scale(1);   box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
     }
 
     /* ===== HALO OVERLAY ===== */
@@ -107,7 +104,7 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 70%; /* roughly matches wheel */
+      width: 70%;
       transform: translate(-50%, -50%) rotate(0deg) scale(1);
       opacity: 0;
       mix-blend-mode: screen;
@@ -121,8 +118,8 @@
     }
 
     .halo-spinning {
-      opacity: 0.7;                            /* more visible during spin */
-      filter: hue-rotate(-8deg) saturate(1.3) brightness(1.15);
+      opacity: 0.75;
+      filter: hue-rotate(-8deg) saturate(1.35) brightness(1.17);
       transform-origin: center center;
     }
 
@@ -130,11 +127,11 @@
 
     .sticker-halo {
       position: absolute;
-      width: 20%;
+      width: 16%;                 /* smaller than before */
       aspect-ratio: 1 / 1;
       border-radius: 50%;
-      border: 4px solid rgba(250, 211, 107, 0.9);
-      box-shadow: 0 0 18px rgba(250, 211, 107, 0.95);
+      border: 5px solid rgba(250, 211, 107, 0.98); /* thicker line */
+      box-shadow: 0 0 14px rgba(250, 211, 107, 0.9);
       pointer-events: none;
       opacity: 0;
       transform: translate(-50%, -50%) scale(0.9);
@@ -144,20 +141,26 @@
 
     .sticker-halo.visible {
       opacity: 1;
-      transform: translate(-50%, -50%) scale(1.05);
+      transform: translate(-50%, -50%) scale(1.02);
+      animation: haloPulse 1.4s ease-in-out infinite;
     }
 
-    /* approximate centers of the four stickers on the wheel image */
-    .sticker-halo.door   { top: 18%; left: 50%; }  /* Prayer/Frankincense area */
-    .sticker-halo.hearth { top: 46%; left: 86%; }  /* Pleasure/Orange area */
-    .sticker-halo.river  { top: 82%; left: 50%; }  /* Passage/Peppermint area */
-    .sticker-halo.cross  { top: 46%; left: 14%; }  /* Prosperity/Almond area */
+    @keyframes haloPulse {
+      0%   { box-shadow: 0 0 12px rgba(250,211,107,0.7); }
+      50%  { box-shadow: 0 0 24px rgba(250,211,107,1); }
+      100% { box-shadow: 0 0 12px rgba(250,211,107,0.7); }
+    }
+
+    /* fine-tuned centers of the four stickers on the wheel image */
+    .sticker-halo.door   { top: 20%; left: 50%; }  /* Prayer / frankincense */
+    .sticker-halo.hearth { top: 50%; left: 81%; }  /* Pleasure / orange */
+    .sticker-halo.river  { top: 83%; left: 50%; }  /* Passage / peppermint */
+    .sticker-halo.cross  { top: 50%; left: 19%; }  /* Prosperity / almond */
 
     /* ===== HOTSPOTS ===== */
 
     .hotspot {
       position: absolute;
-      top: 50%;
       transform: translate(-50%, -50%);
       padding: 6px 14px;
       background: var(--golden-ochre);
@@ -165,14 +168,14 @@
       border-radius: 999px;
       border: none;
       font-family: "house-of-cards", serif;
-      font-size: 0.85rem;              /* larger text */
+      font-size: 0.85rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       cursor: pointer;
       box-shadow: 0 2px 10px rgba(0,0,0,0.18);
       transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
       z-index: 7;
-      display: none; /* hidden until active */
+      display: none;
       white-space: nowrap;
     }
 
@@ -187,13 +190,28 @@
       color: var(--ivory-fog);
     }
 
-    /* four horizontal positions across the wheel */
-    .hotspot.pos-1 { left: 24%; }
-    .hotspot.pos-2 { left: 40%; }
-    .hotspot.pos-3 { left: 60%; }
-    .hotspot.pos-4 { left: 76%; }
+    /* position hotspots near their quadrant stickers */
+    .hotspot.pos-1 { /* Ritual near PRAYER (top-left-ish) */
+      top: 40%;
+      left: 22%;
+    }
 
-    /* ===== MODALS (from Strawberry) ===== */
+    .hotspot.pos-2 { /* Recipe near PLEASURE (top-right-ish) */
+      top: 40%;
+      left: 78%;
+    }
+
+    .hotspot.pos-3 { /* Symbolism near PASSAGE (bottom-left-ish) */
+      top: 76%;
+      left: 26%;
+    }
+
+    .hotspot.pos-4 { /* Story near PROSPERITY (bottom-right-ish) */
+      top: 76%;
+      left: 74%;
+    }
+
+    /* ===== MODALS ===== */
 
     .modal-backdrop {
       position: fixed;
@@ -256,25 +274,22 @@
 <div class="frame-outer">
   <div class="wheel-wrapper">
 
-    <!-- Background wheel image -->
     <img src="Wheel Background Image.png"
          alt="Wheel of Fortune Oils"
          class="wheel-bg" />
 
-    <!-- Wand hotspot -->
     <img src="Magic Wand.png" alt="Spin the Wheel" class="wand" id="wand">
     <div class="wand-label">SPIN THE WHEEL</div>
 
-    <!-- Halo overlay -->
     <img src="Ring.png" alt="" class="halo-overlay" id="halo">
 
-    <!-- Sticker halos for Prayer / Pleasure / Passage / Prosperity -->
+    <!-- Sticker halos -->
     <div class="sticker-halo door"   id="halo-door"></div>
     <div class="sticker-halo hearth" id="halo-hearth"></div>
     <div class="sticker-halo river"  id="halo-river"></div>
     <div class="sticker-halo cross"  id="halo-cross"></div>
 
-    <!-- Hotspots (created once, reused) -->
+    <!-- Hotspots -->
     <button class="hotspot pos-1" data-slot="1"></button>
     <button class="hotspot pos-2" data-slot="2"></button>
     <button class="hotspot pos-3" data-slot="3"></button>
@@ -283,11 +298,9 @@
   </div>
 </div>
 
-<!-- Modals: one per sticker+type (16 total).
-     Here are four examples; duplicate pattern and change ids/src. -->
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<!-- DOOR / RITUAL example -->
+<!-- Example modals; duplicate pattern for all 16 -->
 <div class="modal poem-modal" id="modal-door-ritual">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -295,7 +308,6 @@
   </div>
 </div>
 
-<!-- DOOR / RECIPE -->
 <div class="modal poem-modal" id="modal-door-recipe">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -303,7 +315,6 @@
   </div>
 </div>
 
-<!-- HEARTH / SYMBOLISM -->
 <div class="modal poem-modal" id="modal-hearth-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -311,7 +322,6 @@
   </div>
 </div>
 
-<!-- CROSSROADS / STORY -->
 <div class="modal poem-modal" id="modal-cross-story">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -320,8 +330,6 @@
 </div>
 
 <script>
-  // ===== CONFIG =====
-
   const stops = ['door', 'hearth', 'river', 'cross'];
   const hotspotLabels = ['Ritual', 'Recipe', 'Symbolism', 'Story'];
 
@@ -339,22 +347,17 @@
   let currentRotation = 0;
   let isSpinning = false;
 
-  // ===== WAND CLICK → SPIN =====
   wand.addEventListener('click', () => {
     if (isSpinning) return;
     isSpinning = true;
 
-    // clear previous sticker halos
     Object.values(stickerHalos).forEach(h => h.classList.remove('visible'));
 
-    // show overlay and mark as spinning
     halo.classList.add('halo-spinning');
-    halo.style.opacity = 0.7;
+    halo.style.opacity = 0.75;
 
-    // pick random stop
     const key = stops[Math.floor(Math.random() * stops.length)];
 
-    // degrees for each sticker; tweak to match your art
     const targetAngles = {
       door:   0,
       hearth: 90,
@@ -362,7 +365,7 @@
       cross:  270
     };
 
-    const extraSpins = 720; // 2 full turns
+    const extraSpins = 720;
     const targetRotation = currentRotation + extraSpins + targetAngles[key];
     halo.style.transform =
       `translate(-50%, -50%) rotate(${targetRotation}deg)`;
@@ -371,9 +374,8 @@
     const onEnd = () => {
       halo.removeEventListener('transitionend', onEnd);
       halo.classList.remove('halo-spinning');
-      halo.style.opacity = 0.4;              // calmer resting state
+      halo.style.opacity = 0.4;
 
-      // highlight the selected sticker area
       const stickerHalo = stickerHalos[key];
       if (stickerHalo) stickerHalo.classList.add('visible');
 
@@ -383,19 +385,15 @@
     halo.addEventListener('transitionend', onEnd);
   });
 
-  // ===== HOTSPOTS SETUP =====
-
   function showHotspots(stickerKey) {
     hotspotEls.forEach((btn, index) => {
       btn.textContent = hotspotLabels[index];
       btn.dataset.sticker = stickerKey;
-      btn.dataset.type = hotspotLabels[index].toLowerCase(); // ritual, recipe...
+      btn.dataset.type = hotspotLabels[index].toLowerCase();
       btn.classList.remove('is-active');
       btn.style.display = 'inline-flex';
     });
   }
-
-  // ===== MODAL HELPERS =====
 
   const backdrop = document.getElementById('modal-backdrop');
 
@@ -417,7 +415,6 @@
     backdrop.style.display = 'none';
   }
 
-  // click on hotspot → open appropriate modal
   document.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('hotspot')) {
