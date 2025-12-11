@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Wheel of Fortune – Oils</title>
+
+  <!-- House of Cards font -->
+  <link rel="stylesheet" href="https://use.typekit.net/yyy7lby.css" />
+
+  <style>
+    :root {
+      --classic-blue: #0F4C81;
+      --golden-ochre: #FAD36B;
+      --tomato-red: #FF6347;
+      --ivory-fog: #F9F6EE;
+      --ink-black: #1B1B1B;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--ivory-fog);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    /* ===== LAYOUT WRAPPER ===== */
+
+    .frame-outer {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 12px;
+      box-sizing: border-box;
+    }
+
+    .wheel-wrapper {
+      position: relative;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .wheel-bg {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 22px;
+      box-shadow: 0 8px 40px 8px #ece6dd;
+      background: var(--ivory-fog);
+    }
+
+    /* ===== WAND + LABEL ===== */
+
+    .wand {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120px; /* adjust to taste */
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      transition: transform 0.2s ease, filter 0.2s ease;
+      z-index: 5;
+    }
+
+    .wand:hover {
+      transform: translate(-50%, -50%) scale(1.05) rotate(-5deg);
+      filter: drop-shadow(0 0 12px rgba(250, 211, 107, 0.9));
+    }
+
+    .wand-label {
+      position: absolute;
+      top: 34%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 5px 16px 4px 16px;
+      background: var(--ivory-fog);
+      border-radius: 999px;
+      border: 1px solid rgba(27,27,27,0.24);
+      color: var(--golden-ochre);
+      font-family: "house-of-cards", serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.20);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+      z-index: 6;
+    }
+
+    .wand:hover + .wand-label,
+    .wand:focus + .wand-label {
+      opacity: 1;
+    }
+
+    /* ===== HALO OVERLAY ===== */
+
+    .halo-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 70%; /* roughly matches wheel */
+      transform: translate(-50%, -50%) rotate(0deg);
+      opacity: 0;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      filter: hue-rotate(-8deg) saturate(1.15);
+      transition: opacity 0.25s ease, transform 1.1s ease-out;
+      z-index: 4;
+    }
+
+    /* ===== HOTSPOTS ===== */
+
+    .hotspot {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      padding: 4px 10px;
+      background: var(--golden-ochre);
+      color: var(--ink-black);
+      border-radius: 999px;
+      border: none;
+      font-family: "house-of-cards", serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+      transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+      z-index: 7;
+      display: none; /* hidden until active */
+    }
+
+    .hotspot:hover {
+      background: var(--tomato-red);
+      color: var(--ivory-fog);
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    .hotspot.is-active {
+      background: var(--classic-blue);
+      color: var(--ivory-fog);
+    }
+
+    /* four horizontal positions across the wheel */
+    .hotspot.pos-1 { left: 23%; }
+    .hotspot.pos-2 { left: 39%; }
+    .hotspot.pos-3 { left: 61%; }
+    .hotspot.pos-4 { left: 77%; }
+
+    /* ===== MODALS (from Strawberry) ===== */
+
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(32,24,10,0.41);
+      z-index: 9999;
+      display: none;
+    }
+
+    .modal {
+      position: fixed; z-index: 10000;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      border-radius: 18px;
+      border: 4px solid var(--classic-blue);
+      box-shadow: 0 12px 48px 2px #c9e3f8, 0 0 0 4px #d5eaff60;
+      background: var(--ivory-fog);
+      color: var(--classic-blue);
+      font-family: 'house-of-cards', Arial, serif;
+      min-width: 340px;
+      box-sizing: border-box;
+      padding: 20px 8px 10px 8px;
+      max-width: 98vw;
+      max-height: 95vh;
+      overflow: auto;
+      display: none;
+    }
+
+    .modal.poem-modal .modal-content {
+      max-height: 82vh;
+      overflow-y: auto;
+    }
+
+    .modal-close {
+      position: absolute; top: 12px; right: 28px;
+      font-size: 2em; color: var(--classic-blue);
+      cursor: pointer; z-index: 10001;
+      font-weight: bold; border: none; background: none;
+    }
+
+    .modal-content img {
+      width: 97%;
+      border-radius: 14px;
+      margin-bottom: 9px;
+      display: block;
+      object-fit: contain;
+      box-shadow: 0 3px 24px #23222640;
+      background: var(--ivory-fog);
+    }
+
+    @media (max-width: 700px) {
+      .wand { width: 90px; }
+      .wand-label { font-size: 0.6rem; }
+      .hotspot { font-size: 0.6rem; padding: 3px 8px; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="frame-outer">
+  <div class="wheel-wrapper">
+
+    <!-- Background wheel image -->
+    <img src="Wheel Background Image.png"
+         alt="Wheel of Fortune Oils"
+         class="wheel-bg" />
+
+    <!-- Wand hotspot -->
+    <img src="Magic Wand.png" alt="Spin the Wheel" class="wand" id="wand">
+    <div class="wand-label">SPIN THE WHEEL</div>
+
+    <!-- Halo overlay -->
+    <img src="Ring.png" alt="" class="halo-overlay" id="halo">
+
+    <!-- Hotspots (created once, reused) -->
+    <button class="hotspot pos-1" data-slot="1"></button>
+    <button class="hotspot pos-2" data-slot="2"></button>
+    <button class="hotspot pos-3" data-slot="3"></button>
+    <button class="hotspot pos-4" data-slot="4"></button>
+
+  </div>
+</div>
+
+<!-- Modals: one per sticker+type (16 total).
+     Here are four examples; duplicate pattern and change ids/src. -->
+<div class="modal-backdrop" id="modal-backdrop"></div>
+
+<!-- DOOR / RITUAL example -->
+<div class="modal poem-modal" id="modal-door-ritual">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="door-ritual.png" alt="Door Ritual">
+  </div>
+</div>
+
+<!-- DOOR / RECIPE -->
+<div class="modal poem-modal" id="modal-door-recipe">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="door-recipe.png" alt="Door Recipe">
+  </div>
+</div>
+
+<!-- HEARTH / SYMBOLISM -->
+<div class="modal poem-modal" id="modal-hearth-symbolism">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="hearth-symbolism.png" alt="Hearth Symbolism">
+  </div>
+</div>
+
+<!-- CROSSROADS / STORY -->
+<div class="modal poem-modal" id="modal-cross-story">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="cross-story.png" alt="Crossroads Story">
+  </div>
+</div>
+
+<script>
+  // ===== CONFIG =====
+
+  const stops = ['door', 'hearth', 'river', 'cross'];
+  const hotspotLabels = ['Ritual', 'Recipe', 'Symbolism', 'Story'];
+
+  const halo = document.getElementById('halo');
+  const wand = document.getElementById('wand');
+  const hotspotEls = Array.from(document.querySelectorAll('.hotspot'));
+
+  let currentRotation = 0;
+  let isSpinning = false;
+
+  // ===== WAND CLICK → SPIN =====
+  wand.addEventListener('click', () => {
+    if (isSpinning) return;
+    isSpinning = true;
+
+    // show overlay
+    halo.style.opacity = 0.4;
+
+    // pick random stop
+    const key = stops[Math.floor(Math.random() * stops.length)];
+
+    // degrees for each sticker; tweak to match your art
+    const targetAngles = {
+      door:   0,
+      hearth: 90,
+      river:  180,
+      cross:  270
+    };
+
+    const extraSpins = 720; // 2 full turns
+    const targetRotation = currentRotation + extraSpins + targetAngles[key];
+    halo.style.transform =
+      `translate(-50%, -50%) rotate(${targetRotation}deg)`;
+    currentRotation = targetRotation;
+
+    const onEnd = () => {
+      halo.removeEventListener('transitionend', onEnd);
+      showHotspots(key);
+      isSpinning = false;
+    };
+    halo.addEventListener('transitionend', onEnd);
+  });
+
+  // ===== HOTSPOTS SETUP =====
+
+  function showHotspots(stickerKey) {
+    hotspotEls.forEach((btn, index) => {
+      btn.textContent = hotspotLabels[index];
+      btn.dataset.sticker = stickerKey;
+      btn.dataset.type = hotspotLabels[index].toLowerCase(); // ritual, recipe...
+      btn.classList.remove('is-active');
+      btn.style.display = 'inline-flex';
+    });
+  }
+
+  // ===== MODAL HELPERS =====
+
+  const backdrop = document.getElementById('modal-backdrop');
+
+  function openModalFor(stickerKey, type) {
+    const id = `modal-${stickerKey}-${type}`;
+    const modal = document.getElementById(id);
+    if (!modal) {
+      console.warn('Missing modal:', id);
+      return;
+    }
+    backdrop.style.display = 'block';
+    modal.style.display = 'block';
+  }
+
+  function closeAllModals() {
+    document.querySelectorAll('.modal').forEach(m => {
+      m.style.display = 'none';
+    });
+    backdrop.style.display = 'none';
+  }
+
+  // click on hotspot → open appropriate modal
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.classList.contains('hotspot')) {
+      const sticker = target.dataset.sticker;
+      const type = target.dataset.type;
+      openModalFor(sticker, type);
+
+      hotspotEls.forEach(btn => btn.classList.remove('is-active'));
+      target.classList.add('is-active');
+    }
+
+    if (target.classList.contains('modal-close') ||
+        target.id === 'modal-backdrop') {
+      closeAllModals();
+    }
+  });
+</script>
+</body>
+</html>
