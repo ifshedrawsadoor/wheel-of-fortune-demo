@@ -12,6 +12,7 @@
       --classic-blue: #0F4C81;
       --golden-ochre: #FAD36B;
       --tomato-red: #FF6347;
+      --sap-green: #2E6F40;
       --ivory-fog: #F9F6EE;
       --ink-black: #1B1B1B;
     }
@@ -64,8 +65,7 @@
       cursor: pointer;
       transition: transform 0.2s ease, filter 0.2s ease;
       z-index: 5;
-      background: none;             /* no box */
-      image-rendering: auto;
+      background: none;
     }
 
     .wand:hover {
@@ -129,7 +129,7 @@
 
     .sticker-halo {
       position: absolute;
-      width: 13%;              /* smaller */
+      width: 11%;              /* smaller again */
       aspect-ratio: 1 / 1;
       border-radius: 50%;
       border: 5px solid rgba(250, 211, 107, 0.98);
@@ -153,11 +153,11 @@
       100% { box-shadow: 0 0 12px rgba(250,211,107,0.7); }
     }
 
-    /* refined centers – adjust in small % steps as needed */
-    .sticker-halo.door   { top: 19%; left: 50%; }
-    .sticker-halo.hearth { top: 49%; left: 79%; }
-    .sticker-halo.river  { top: 82%; left: 50%; }
-    .sticker-halo.cross  { top: 49%; left: 21%; }
+    /* fine-tuned centers (adjust by 1–2% if needed) */
+    .sticker-halo.door   { top: 18.5%; left: 50%; } /* door */
+    .sticker-halo.hearth { top: 48.5%; left: 79.5%; } /* heart */
+    .sticker-halo.river  { top: 83%;  left: 50%; }  /* crossroads sign */
+    .sticker-halo.cross  { top: 48.5%; left: 20.5%; } /* river dome */
 
     /* ===== HOTSPOTS ===== */
 
@@ -182,35 +182,32 @@
     }
 
     .hotspot:hover {
-      background: var(--tomato-red);
-      color: var(--ivory-fog);
       transform: translate(-50%, -50%) scale(1.05);
     }
 
     .hotspot.is-active {
-      background: var(--classic-blue);
-      color: var(--ivory-fog);
+      box-shadow: 0 0 0 2px rgba(0,0,0,0.25);
     }
 
-    /* Centered on corner stickers (fine-tune visually) */
+    /* centered on each corner sticker */
     .hotspot.pos-1 { /* Ritual – Prayer (top left) */
-      top: 31%;
-      left: 24%;
-    }
-
-    .hotspot.pos-2 { /* Recipe – Pleasure (top right) */
-      top: 31%;
-      left: 76%;
-    }
-
-    .hotspot.pos-3 { /* Symbolism – Passage (bottom left) */
-      top: 79%;
+      top: 25%;
       left: 26%;
     }
 
-    .hotspot.pos-4 { /* Story – Prosperity (bottom right) */
-      top: 79%;
+    .hotspot.pos-2 { /* Recipe – Pleasure (top right) */
+      top: 25%;
       left: 74%;
+    }
+
+    .hotspot.pos-3 { /* Symbolism – Passage (bottom left) */
+      top: 84%;
+      left: 28%;
+    }
+
+    .hotspot.pos-4 { /* Story – Prosperity (bottom right) */
+      top: 84%;
+      left: 72%;
     }
 
     /* ===== MODALS ===== */
@@ -346,6 +343,14 @@
     cross:  document.getElementById('halo-cross')
   };
 
+  // colors per sticker for hotspots
+  const stickerColors = {
+    door:   '--golden-ochre', // Prayer / frankincense
+    hearth: '--tomato-red',   // Pleasure / orange
+    river:  '--classic-blue', // Passage / peppermint
+    cross:  '--sap-green'     // Prosperity / almond
+  };
+
   let currentRotation = 0;
   let isSpinning = false;
 
@@ -353,7 +358,12 @@
     if (isSpinning) return;
     isSpinning = true;
 
+    // reset halos and hotspots each spin
     Object.values(stickerHalos).forEach(h => h.classList.remove('visible'));
+    hotspotEls.forEach(btn => {
+      btn.style.display = 'none';
+      btn.classList.remove('is-active');
+    });
 
     halo.classList.add('halo-spinning');
     halo.style.opacity = 0.75;
@@ -388,12 +398,18 @@
   });
 
   function showHotspots(stickerKey) {
+    const cssVar = stickerColors[stickerKey] || '--golden-ochre';
+    const baseColor = getComputedStyle(document.documentElement)
+      .getPropertyValue(cssVar).trim();
+
     hotspotEls.forEach((btn, index) => {
       btn.textContent = hotspotLabels[index];
       btn.dataset.sticker = stickerKey;
       btn.dataset.type = hotspotLabels[index].toLowerCase();
       btn.classList.remove('is-active');
       btn.style.display = 'inline-flex';
+      btn.style.backgroundColor = baseColor;
+      btn.style.color = (stickerKey === 'door') ? 'var(--ink-black)' : 'var(--ivory-fog)';
     });
   }
 
