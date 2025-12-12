@@ -28,12 +28,12 @@ html, body {
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background-image: url('Wheel Wallpaper.png');
-  background-size: cover;      /* always fill viewport */
-  background-position: center; /* keep pattern centered */
-  background-repeat: repeat;   /* allow repeating so icons are visible */
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
 }
 
-/* center card, but let wallpaper touch edges */
+/* center card, wallpaper visible at sides */
 .frame-outer {
   min-height: 100vh;
   display: flex;
@@ -62,8 +62,7 @@ body {
   background: var(--ivory-fog);
 }
 
-/* ===== WAND + LABEL ===== */
-/* Simplified: wand only ever rotates to 0 / 90 / 180 / -90 */
+/* ===== WAND + LABEL (original spin behavior) ===== */
 
 .wand {
   position: absolute;
@@ -71,18 +70,28 @@ body {
   left: 50%;
   width: 13%;
   max-width: 130px;
-  transform: translate(-50%, -50%) rotate(0deg);
+  transform: translate(-50%, -50%);
   cursor: pointer;
-  transition:
-    transform 0.35s ease-out,
-    filter 0.2s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
   z-index: 5;
   background: none;
   transform-origin: 50% 80%;
 }
 
 .wand:hover {
+  transform: translate(-50%, -50%) scale(1.05) rotate(-5deg);
   filter: drop-shadow(0 0 12px rgba(250, 211, 107, 0.9));
+}
+
+.wand-spinning {
+  animation: wandSpin 1.1s ease-out forwards;
+  filter: drop-shadow(0 0 16px rgba(250,211,107,1));
+}
+
+@keyframes wandSpin {
+  0%   { transform: translate(-50%, -50%) rotate(0deg); }
+  70%  { transform: translate(-50%, -50%) rotate(430deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 .wand-label {
@@ -291,10 +300,11 @@ body {
     0 0 0 6px rgba(250,211,107,0.95);
 }
 
-.hotspot.pos-1 { top: 18.5%; left: 30%; }
-.hotspot.pos-2 { top: 18.5%; left: 70%; }
-.hotspot.pos-3 { top: 86%;   left: 30%; }
-.hotspot.pos-4 { top: 86%;   left: 70%; }
+/* Micro‑alignment: Ritual/Recipe, Symbolism/Story horizontal */
+.hotspot.pos-1 { top: 18.5%; left: 30%; } /* Ritual */
+.hotspot.pos-2 { top: 18.5%; left: 70%; } /* Recipe */
+.hotspot.pos-3 { top: 86%;   left: 30%; } /* Symbolism */
+.hotspot.pos-4 { top: 86%;   left: 70%; } /* Story */
 
 /* ===== MODALS ===== */
 
@@ -368,11 +378,13 @@ body {
 
     <img src="Ring.png" alt="" class="halo-overlay" id="halo">
 
+    <!-- Sticker stars -->
     <div class="sticker-star door" id="star-door"></div>
     <div class="sticker-star hearth" id="star-hearth"></div>
     <div class="sticker-star river" id="star-river"></div>
     <div class="sticker-star cross" id="star-cross"></div>
 
+    <!-- Hotspots -->
     <button class="hotspot pos-1" data-slot="1"></button>
     <button class="hotspot pos-2" data-slot="2"></button>
     <button class="hotspot pos-3" data-slot="3"></button>
@@ -428,18 +440,10 @@ const stickerStars = {
 };
 
 const stickerColors = {
-  door: 'var(--golden-ochre)',  // top
-  hearth: 'var(--tomato-red)',  // right
-  river: 'var(--classic-blue)', // bottom
-  cross: 'var(--sap-green)'     // left
-};
-
-/* exact wand directions */
-const wandAngles = {
-  door: 0,     // up
-  hearth: 90,  // right
-  river: 180,  // down
-  cross: -90   // left
+  door: 'var(--golden-ochre)',
+  hearth: 'var(--tomato-red)',
+  river: 'var(--classic-blue)',
+  cross: 'var(--sap-green)'
 };
 
 let currentRotation = 0;
@@ -447,18 +451,25 @@ let isSpinning = false;
 let hasClickedHotspot = false;
 let clickedHotspotsThisSpin = new Set();
 
+/* Label states */
+
 function setLabelTextIdle() {
   spinLabel.textContent = 'SPIN THE WHEEL';
 }
+
 function setLabelTextPromptHotspots() {
   spinLabel.textContent = 'CLICK EACH HOTSPOT TO MANIFEST YOUR FORTUNE';
 }
+
 function setLabelTextSpinAgain() {
   spinLabel.textContent = 'SPIN THE WHEEL AGAIN';
 }
+
 function setLabelTextAllDone() {
   spinLabel.textContent = 'YOU FOUND EVERY HOTSPOT • SPIN AGAIN?';
 }
+
+/* Spin logic (halo + original wand spin) */
 
 function triggerSpin() {
   if (isSpinning) return;
@@ -482,6 +493,10 @@ function triggerSpin() {
   halo.classList.add('halo-spinning');
   halo.style.opacity = 0.75;
 
+  wand.classList.remove('wand-spinning');
+  void wand.offsetWidth;
+  wand.classList.add('wand-spinning');
+
   const key = stops[Math.floor(Math.random() * stops.length)];
 
   const targetAngles = {
@@ -502,9 +517,7 @@ function triggerSpin() {
     halo.classList.remove('halo-spinning');
     halo.style.opacity = 0.4;
 
-    // snap wand cleanly to direction
-    const finalAngle = wandAngles[key] ?? 0;
-    wand.style.transform = `translate(-50%, -50%) rotate(${finalAngle}deg)`;
+    wand.classList.remove('wand-spinning');
 
     const star = stickerStars[key];
     if (star) {
@@ -521,6 +534,8 @@ function triggerSpin() {
 
 wand.addEventListener('click', triggerSpin);
 spinLabel.addEventListener('click', triggerSpin);
+
+/* Hotspots */
 
 function showHotspots(stickerKey) {
   const baseColor = stickerColors[stickerKey] || 'var(--golden-ochre)';
@@ -558,6 +573,8 @@ function closeAllModals() {
   });
   backdrop.style.display = 'none';
 }
+
+/* Click handling */
 
 document.addEventListener('click', (e) => {
   const target = e.target;
