@@ -33,24 +33,47 @@ body {
   background-repeat: repeat;
 }
 
-/* center card, wallpaper visible at sides */
+/* ===== LAYOUT: TITLE + WHEEL ===== */
+
 .frame-outer {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 24px 0;
+  padding: 24px;
   box-sizing: border-box;
 }
 
-.wheel-wrapper {
-  position: relative;
+.main-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  max-width: 1180px;
   width: 100%;
-  max-width: 900px;
-  max-height: 95vh;
-  margin: 0 auto;
 }
 
+/* title sticker on the left */
+.title-wrapper {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.title-wrapper img {
+  max-width: 260px;
+  height: auto;
+  display: block;
+}
+
+/* wheel on the right */
+.wheel-wrapper {
+  position: relative;
+  flex: 1 1 auto;
+  max-width: 900px;
+  max-height: 95vh;
+}
+
+/* remove big white “frame” – just show the art with soft radius/shadow */
 .wheel-bg {
   display: block;
   width: 100%;
@@ -59,10 +82,10 @@ body {
   object-fit: contain;
   border-radius: 22px;
   box-shadow: 0 8px 40px 8px #ece6dd;
-  background: var(--ivory-fog);
+  background: transparent;
 }
 
-/* ===== WAND + LABEL (original spin behavior) ===== */
+/* ===== WAND + LABEL (original spin) ===== */
 
 .wand {
   position: absolute;
@@ -94,6 +117,8 @@ body {
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
+/* fortune + helper text now live in label area */
+
 .wand-label {
   position: absolute;
   top: 34%;
@@ -105,7 +130,7 @@ body {
   border: 1px solid rgba(27,27,27,0.24);
   color: var(--classic-blue);
   font-family: "house-of-cards", serif;
-  font-size: 0.9rem;
+  font-size: 0.78rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   box-shadow: 0 3px 12px rgba(0,0,0,0.20);
@@ -114,6 +139,29 @@ body {
   text-align: center;
   animation: spinLabelPulse 1.8s ease-in-out infinite alternate;
   cursor: pointer;
+  white-space: nowrap;
+}
+
+/* helper text under label */
+.helper-text {
+  position: absolute;
+  top: 38.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 14px 3px 14px;
+  background: rgba(249,246,238,0.96);
+  border-radius: 999px;
+  border: 1px solid rgba(27,27,27,0.18);
+  color: var(--classic-blue);
+  font-family: "house-of-cards", serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.16);
+  opacity: 0.98;
+  z-index: 6;
+  text-align: center;
+  white-space: nowrap;
 }
 
 @keyframes spinLabelPulse {
@@ -300,11 +348,11 @@ body {
     0 0 0 6px rgba(250,211,107,0.95);
 }
 
-/* Micro‑alignment: Ritual/Recipe, Symbolism/Story horizontal */
-.hotspot.pos-1 { top: 18.5%; left: 30%; } /* Ritual */
-.hotspot.pos-2 { top: 18.5%; left: 70%; } /* Recipe */
-.hotspot.pos-3 { top: 86%;   left: 30%; } /* Symbolism */
-.hotspot.pos-4 { top: 86%;   left: 70%; } /* Story */
+/* Ritual/Recipe, Symbolism/Story horizontal */
+.hotspot.pos-1 { top: 18.5%; left: 30%; }
+.hotspot.pos-2 { top: 18.5%; left: 70%; }
+.hotspot.pos-3 { top: 86%;   left: 30%; }
+.hotspot.pos-4 { top: 86%;   left: 70%; }
 
 /* ===== MODALS ===== */
 
@@ -357,9 +405,20 @@ body {
   background: var(--ivory-fog);
 }
 
+@media (max-width: 900px) {
+  .main-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+  .title-wrapper {
+    justify-content: center;
+  }
+}
+
 @media (max-width: 700px) {
   .wand { width: 16vw; }
-  .wand-label { font-size: 0.7rem; padding: 5px 14px; }
+  .wand-label { font-size: 0.65rem; padding: 5px 12px; }
+  .helper-text { font-size: 0.52rem; padding: 3px 10px; }
   .hotspot { font-size: 0.8rem; padding: 6px 14px; }
 }
 </style>
@@ -367,29 +426,40 @@ body {
 
 <body>
 <div class="frame-outer">
-  <div class="wheel-wrapper">
+  <div class="main-layout">
 
-    <img src="Wheel Background Image.png"
-         alt="Wheel of Fortune Oils"
-         class="wheel-bg" />
+    <div class="title-wrapper">
+      <!-- use Title.png or Title.jpg depending on your file -->
+      <img src="Title.png" alt="Dr. MLE's Wheel of Fortune">
+    </div>
 
-    <img src="Magic Wand.png" alt="Spin the Wheel" class="wand" id="wand">
-    <div class="wand-label" id="spin-label">SPIN THE WHEEL</div>
+    <div class="wheel-wrapper">
 
-    <img src="Ring.png" alt="" class="halo-overlay" id="halo">
+      <img src="Wheel Background Image.png"
+           alt="Wheel of Fortune Oils"
+           class="wheel-bg" />
 
-    <!-- Sticker stars -->
-    <div class="sticker-star door" id="star-door"></div>
-    <div class="sticker-star hearth" id="star-hearth"></div>
-    <div class="sticker-star river" id="star-river"></div>
-    <div class="sticker-star cross" id="star-cross"></div>
+      <img src="Magic Wand.png" alt="Spin the Wheel" class="wand" id="wand">
+      <div class="wand-label" id="spin-label">SPIN THE WHEEL</div>
+      <div class="helper-text" id="helper-text">
+        CLICK THE HOTSPOTS IN EACH CORNER TO LEARN MORE
+      </div>
 
-    <!-- Hotspots -->
-    <button class="hotspot pos-1" data-slot="1"></button>
-    <button class="hotspot pos-2" data-slot="2"></button>
-    <button class="hotspot pos-3" data-slot="3"></button>
-    <button class="hotspot pos-4" data-slot="4"></button>
+      <img src="Ring.png" alt="" class="halo-overlay" id="halo">
 
+      <!-- Sticker stars -->
+      <div class="sticker-star door" id="star-door"></div>
+      <div class="sticker-star hearth" id="star-hearth"></div>
+      <div class="sticker-star river" id="star-river"></div>
+      <div class="sticker-star cross" id="star-cross"></div>
+
+      <!-- Hotspots -->
+      <button class="hotspot pos-1" data-slot="1"></button>
+      <button class="hotspot pos-2" data-slot="2"></button>
+      <button class="hotspot pos-3" data-slot="3"></button>
+      <button class="hotspot pos-4" data-slot="4"></button>
+
+    </div>
   </div>
 </div>
 
@@ -430,6 +500,7 @@ const hotspotLabels = ['Ritual', 'Recipe', 'Symbolism', 'Story'];
 const halo = document.getElementById('halo');
 const wand = document.getElementById('wand');
 const spinLabel = document.getElementById('spin-label');
+const helperText = document.getElementById('helper-text');
 const hotspotEls = Array.from(document.querySelectorAll('.hotspot'));
 
 const stickerStars = {
@@ -446,27 +517,47 @@ const stickerColors = {
   cross: 'var(--sap-green)'
 };
 
+/* map star → fortune label text */
+const fortuneTexts = {
+  river: 'YOUR FORTUNE: A CROSSROADS',      // blue star
+  hearth: 'YOUR FORTUNE: A FLAMING HEART',  // red star
+  door: 'YOUR FORTUNE: A THRESHOLD',        // gold star
+  cross: 'YOUR FORTUNE: A DOORWAY'          // green star
+};
+
 let currentRotation = 0;
 let isSpinning = false;
 let hasClickedHotspot = false;
 let clickedHotspotsThisSpin = new Set();
 
-/* Label states */
+/* Label + helper text states */
 
 function setLabelTextIdle() {
   spinLabel.textContent = 'SPIN THE WHEEL';
 }
 
-function setLabelTextPromptHotspots() {
-  spinLabel.textContent = 'CLICK EACH HOTSPOT TO MANIFEST YOUR FORTUNE';
+function setLabelTextForStar(key) {
+  const text = fortuneTexts[key] || 'YOUR FORTUNE';
+  spinLabel.textContent = text;
 }
 
 function setLabelTextSpinAgain() {
-  spinLabel.textContent = 'SPIN THE WHEEL AGAIN';
+  spinLabel.textContent = 'SPIN AGAIN';
 }
 
 function setLabelTextAllDone() {
-  spinLabel.textContent = 'YOU FOUND EVERY HOTSPOT • SPIN AGAIN?';
+  spinLabel.textContent = 'SPIN AGAIN';
+}
+
+/* manage helper text visibility */
+
+function showHelperDefault() {
+  helperText.style.display = 'inline-flex';
+  helperText.textContent = 'CLICK THE HOTSPOTS IN EACH CORNER TO LEARN MORE';
+}
+
+function hideHelper() {
+  helperText.style.display = 'none';
 }
 
 /* Spin logic (halo + original wand spin) */
@@ -477,6 +568,7 @@ function triggerSpin() {
   hasClickedHotspot = false;
   clickedHotspotsThisSpin.clear();
   setLabelTextIdle();
+  showHelperDefault();
 
   Object.values(stickerStars).forEach(s => {
     s.classList.remove('visible');
@@ -526,7 +618,7 @@ function triggerSpin() {
     }
 
     showHotspots(key);
-    setLabelTextPromptHotspots();
+    setLabelTextForStar(key); // show star-specific fortune
     isSpinning = false;
   };
   halo.addEventListener('transitionend', onEnd);
@@ -589,12 +681,18 @@ document.addEventListener('click', (e) => {
     clickedHotspotsThisSpin.add(type);
     hasClickedHotspot = true;
 
+    if (clickedHotspotsThisSpin.size === 1) {
+      // after first hotspot click, remove helper text
+      hideHelper();
+    }
+
     if (clickedHotspotsThisSpin.size === 4) {
       hotspotEls.forEach(btn => {
         btn.classList.remove('hotspot-animated');
         btn.style.display = 'none';
       });
       setLabelTextAllDone();
+      // helper text already hidden after first click
     } else {
       setLabelTextSpinAgain();
     }
