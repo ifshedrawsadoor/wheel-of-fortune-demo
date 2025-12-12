@@ -33,7 +33,7 @@ body {
   background-repeat: repeat;
 }
 
-/* ===== LAYOUT: TITLE + WHEEL ===== */
+/* ===== LAYOUT: centered wheel, title left ===== */
 
 .frame-outer {
   min-height: 100vh;
@@ -44,8 +44,10 @@ body {
   box-sizing: border-box;
 }
 
+/* two-column layout in a fixed-width container centered on page */
 .main-layout {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   gap: 24px;
   align-items: flex-start;
   max-width: 1180px;
@@ -54,7 +56,6 @@ body {
 
 /* title sticker on the left */
 .title-wrapper {
-  flex: 0 0 auto;
   display: flex;
   justify-content: flex-start;
 }
@@ -65,15 +66,15 @@ body {
   display: block;
 }
 
-/* wheel on the right */
+/* wheel column centered within its grid cell */
 .wheel-wrapper {
   position: relative;
-  flex: 1 1 auto;
   max-width: 900px;
   max-height: 95vh;
+  margin: 0 auto;
 }
 
-/* remove big white “frame” – just show the art with soft radius/shadow */
+/* only the art; no extra frame */
 .wheel-bg {
   display: block;
   width: 100%;
@@ -117,21 +118,20 @@ body {
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* fortune + helper text now live in label area */
-
+/* bigger fortune label */
 .wand-label {
   position: absolute;
   top: 34%;
   left: 50%;
   transform: translateX(-50%);
-  padding: 6px 20px 5px 20px;
+  padding: 7px 24px 6px 24px;
   background: var(--ivory-fog);
   border-radius: 999px;
   border: 1px solid rgba(27,27,27,0.24);
   color: var(--classic-blue);
   font-family: "house-of-cards", serif;
-  font-size: 0.78rem;
-  letter-spacing: 0.18em;
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   box-shadow: 0 3px 12px rgba(0,0,0,0.20);
   opacity: 0.98;
@@ -142,20 +142,20 @@ body {
   white-space: nowrap;
 }
 
-/* helper text under label */
+/* larger helper text */
 .helper-text {
   position: absolute;
-  top: 38.5%;
+  top: 39.2%;
   left: 50%;
   transform: translateX(-50%);
-  padding: 4px 14px 3px 14px;
+  padding: 5px 18px 4px 18px;
   background: rgba(249,246,238,0.96);
   border-radius: 999px;
   border: 1px solid rgba(27,27,27,0.18);
   color: var(--classic-blue);
   font-family: "house-of-cards", serif;
-  font-size: 0.6rem;
-  letter-spacing: 0.16em;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   box-shadow: 0 2px 8px rgba(0,0,0,0.16);
   opacity: 0.98;
@@ -407,6 +407,7 @@ body {
 
 @media (max-width: 900px) {
   .main-layout {
+    display: flex;
     flex-direction: column;
     align-items: center;
   }
@@ -417,8 +418,8 @@ body {
 
 @media (max-width: 700px) {
   .wand { width: 16vw; }
-  .wand-label { font-size: 0.65rem; padding: 5px 12px; }
-  .helper-text { font-size: 0.52rem; padding: 3px 10px; }
+  .wand-label { font-size: 0.75rem; padding: 6px 14px; }
+  .helper-text { font-size: 0.6rem; padding: 4px 10px; }
   .hotspot { font-size: 0.8rem; padding: 6px 14px; }
 }
 </style>
@@ -429,7 +430,6 @@ body {
   <div class="main-layout">
 
     <div class="title-wrapper">
-      <!-- use Title.png or Title.jpg depending on your file -->
       <img src="Title.png" alt="Dr. MLE's Wheel of Fortune">
     </div>
 
@@ -529,6 +529,8 @@ let currentRotation = 0;
 let isSpinning = false;
 let hasClickedHotspot = false;
 let clickedHotspotsThisSpin = new Set();
+let lastFortuneKey = null;
+let isHoveringWand = false;
 
 /* Label + helper text states */
 
@@ -537,6 +539,7 @@ function setLabelTextIdle() {
 }
 
 function setLabelTextForStar(key) {
+  lastFortuneKey = key;
   const text = fortuneTexts[key] || 'YOUR FORTUNE';
   spinLabel.textContent = text;
 }
@@ -546,7 +549,7 @@ function setLabelTextSpinAgain() {
 }
 
 function setLabelTextAllDone() {
-  spinLabel.textContent = 'SPIN AGAIN';
+  setLabelTextSpinAgain();
 }
 
 /* manage helper text visibility */
@@ -560,6 +563,25 @@ function hideHelper() {
   helperText.style.display = 'none';
 }
 
+/* wand hover behavior: show "SPIN" only while hovering if not spinning */
+wand.addEventListener('mouseenter', () => {
+  isHoveringWand = true;
+  if (!isSpinning) {
+    spinLabel.textContent = 'SPIN';
+  }
+});
+
+wand.addEventListener('mouseleave', () => {
+  isHoveringWand = false;
+  if (!isSpinning) {
+    if (lastFortuneKey) {
+      setLabelTextForStar(lastFortuneKey);
+    } else {
+      setLabelTextIdle();
+    }
+  }
+});
+
 /* Spin logic (halo + original wand spin) */
 
 function triggerSpin() {
@@ -567,6 +589,7 @@ function triggerSpin() {
   isSpinning = true;
   hasClickedHotspot = false;
   clickedHotspotsThisSpin.clear();
+  lastFortuneKey = null;
   setLabelTextIdle();
   showHelperDefault();
 
@@ -620,6 +643,11 @@ function triggerSpin() {
     showHotspots(key);
     setLabelTextForStar(key); // show star-specific fortune
     isSpinning = false;
+
+    // restore hover behavior after spin
+    if (isHoveringWand) {
+      spinLabel.textContent = 'SPIN';
+    }
   };
   halo.addEventListener('transitionend', onEnd);
 }
@@ -681,20 +709,23 @@ document.addEventListener('click', (e) => {
     clickedHotspotsThisSpin.add(type);
     hasClickedHotspot = true;
 
+    // hide that hotspot (keep current "disappear as clicked" behavior)
+    target.style.display = 'none';
+    target.classList.remove('hotspot-animated');
+
     if (clickedHotspotsThisSpin.size === 1) {
       // after first hotspot click, remove helper text
       hideHelper();
+      // DO NOT change fortune label yet
     }
 
     if (clickedHotspotsThisSpin.size === 4) {
+      // all four visited
       hotspotEls.forEach(btn => {
         btn.classList.remove('hotspot-animated');
         btn.style.display = 'none';
       });
-      setLabelTextAllDone();
-      // helper text already hidden after first click
-    } else {
-      setLabelTextSpinAgain();
+      setLabelTextAllDone(); // now show SPIN AGAIN
     }
   }
 
