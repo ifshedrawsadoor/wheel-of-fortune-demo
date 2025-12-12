@@ -33,45 +33,39 @@ body {
   background-repeat: repeat;
 }
 
-/* ===== LAYOUT: centered wheel, title left ===== */
+/* ===== LAYOUT: centered wheel, title floated left ===== */
 
 .frame-outer {
   min-height: 100vh;
   display: flex;
-  justify-content: center;
+  justify-content: center;  /* center wheel horizontally */
   align-items: center;
   padding: 24px;
   box-sizing: border-box;
+  position: relative;
 }
 
-/* two-column layout in a fixed-width container centered on page */
-.main-layout {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 24px;
-  align-items: flex-start;
-  max-width: 1180px;
+/* wheel is the main centered element */
+.wheel-wrapper {
+  position: relative;
+  max-width: 900px;
   width: 100%;
+  max-height: 95vh;
+  margin: 0 auto;
 }
 
-/* title sticker on the left */
+/* title is positioned relative to viewport, not affecting centering */
 .title-wrapper {
-  display: flex;
-  justify-content: flex-start;
+  position: absolute;
+  top: 32px;
+  left: 40px;
+  z-index: 2;
 }
 
 .title-wrapper img {
   max-width: 260px;
   height: auto;
   display: block;
-}
-
-/* wheel column centered within its grid cell */
-.wheel-wrapper {
-  position: relative;
-  max-width: 900px;
-  max-height: 95vh;
-  margin: 0 auto;
 }
 
 /* only the art; no extra frame */
@@ -88,12 +82,13 @@ body {
 
 /* ===== WAND + LABEL (original spin) ===== */
 
+/* wand bigger now */
 .wand {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 13%;
-  max-width: 130px;
+  width: 17%;          /* was 13% */
+  max-width: 150px;
   transform: translate(-50%, -50%);
   cursor: pointer;
   transition: transform 0.2s ease, filter 0.2s ease;
@@ -142,7 +137,7 @@ body {
   white-space: nowrap;
 }
 
-/* larger helper text */
+/* larger helper text – hidden by default, only shown after spin */
 .helper-text {
   position: absolute;
   top: 39.2%;
@@ -162,6 +157,7 @@ body {
   z-index: 6;
   text-align: center;
   white-space: nowrap;
+  display: none; /* start hidden */
 }
 
 @keyframes spinLabelPulse {
@@ -405,19 +401,18 @@ body {
   background: var(--ivory-fog);
 }
 
-@media (max-width: 900px) {
-  .main-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+@media (max-width: 800px) {
   .title-wrapper {
-    justify-content: center;
+    position: static;
+    margin-bottom: 16px;
+  }
+  .frame-outer {
+    flex-direction: column;
   }
 }
 
 @media (max-width: 700px) {
-  .wand { width: 16vw; }
+  .wand { width: 20vw; }
   .wand-label { font-size: 0.75rem; padding: 6px 14px; }
   .helper-text { font-size: 0.6rem; padding: 4px 10px; }
   .hotspot { font-size: 0.8rem; padding: 6px 14px; }
@@ -427,39 +422,37 @@ body {
 
 <body>
 <div class="frame-outer">
-  <div class="main-layout">
 
-    <div class="title-wrapper">
-      <img src="Title.png" alt="Dr. MLE's Wheel of Fortune">
+  <div class="title-wrapper">
+    <img src="Title.png" alt="Dr. MLE's Wheel of Fortune">
+  </div>
+
+  <div class="wheel-wrapper">
+
+    <img src="Wheel Background Image.png"
+         alt="Wheel of Fortune Oils"
+         class="wheel-bg" />
+
+    <img src="Magic Wand.png" alt="Spin the Wheel" class="wand" id="wand">
+    <div class="wand-label" id="spin-label">SPIN THE WHEEL</div>
+    <div class="helper-text" id="helper-text">
+      CLICK THE HOTSPOTS IN EACH CORNER TO LEARN MORE
     </div>
 
-    <div class="wheel-wrapper">
+    <img src="Ring.png" alt="" class="halo-overlay" id="halo">
 
-      <img src="Wheel Background Image.png"
-           alt="Wheel of Fortune Oils"
-           class="wheel-bg" />
+    <!-- Sticker stars -->
+    <div class="sticker-star door" id="star-door"></div>
+    <div class="sticker-star hearth" id="star-hearth"></div>
+    <div class="sticker-star river" id="star-river"></div>
+    <div class="sticker-star cross" id="star-cross"></div>
 
-      <img src="Magic Wand.png" alt="Spin the Wheel" class="wand" id="wand">
-      <div class="wand-label" id="spin-label">SPIN THE WHEEL</div>
-      <div class="helper-text" id="helper-text">
-        CLICK THE HOTSPOTS IN EACH CORNER TO LEARN MORE
-      </div>
+    <!-- Hotspots -->
+    <button class="hotspot pos-1" data-slot="1"></button>
+    <button class="hotspot pos-2" data-slot="2"></button>
+    <button class="hotspot pos-3" data-slot="3"></button>
+    <button class="hotspot pos-4" data-slot="4"></button>
 
-      <img src="Ring.png" alt="" class="halo-overlay" id="halo">
-
-      <!-- Sticker stars -->
-      <div class="sticker-star door" id="star-door"></div>
-      <div class="sticker-star hearth" id="star-hearth"></div>
-      <div class="sticker-star river" id="star-river"></div>
-      <div class="sticker-star cross" id="star-cross"></div>
-
-      <!-- Hotspots -->
-      <button class="hotspot pos-1" data-slot="1"></button>
-      <button class="hotspot pos-2" data-slot="2"></button>
-      <button class="hotspot pos-3" data-slot="3"></button>
-      <button class="hotspot pos-4" data-slot="4"></button>
-
-    </div>
   </div>
 </div>
 
@@ -517,12 +510,12 @@ const stickerColors = {
   cross: 'var(--sap-green)'
 };
 
-/* map star → fortune label text */
+/* star → fortune text */
 const fortuneTexts = {
-  river: 'YOUR FORTUNE: A CROSSROADS',      // blue star
-  hearth: 'YOUR FORTUNE: A FLAMING HEART',  // red star
-  door: 'YOUR FORTUNE: A THRESHOLD',        // gold star
-  cross: 'YOUR FORTUNE: A DOORWAY'          // green star
+  river: 'YOUR FORTUNE: A CROSSROADS',
+  hearth: 'YOUR FORTUNE: A FLAMING HEART',
+  door: 'YOUR FORTUNE: A THRESHOLD',
+  cross: 'YOUR FORTUNE: A DOORWAY'
 };
 
 let currentRotation = 0;
@@ -532,7 +525,18 @@ let clickedHotspotsThisSpin = new Set();
 let lastFortuneKey = null;
 let isHoveringWand = false;
 
-/* Label + helper text states */
+/* helper text visibility */
+
+function showHelperAfterSpin() {
+  helperText.style.display = 'inline-flex';
+  helperText.textContent = 'CLICK THE HOTSPOTS IN EACH CORNER TO LEARN MORE';
+}
+
+function hideHelper() {
+  helperText.style.display = 'none';
+}
+
+/* label states */
 
 function setLabelTextIdle() {
   spinLabel.textContent = 'SPIN THE WHEEL';
@@ -548,22 +552,8 @@ function setLabelTextSpinAgain() {
   spinLabel.textContent = 'SPIN AGAIN';
 }
 
-function setLabelTextAllDone() {
-  setLabelTextSpinAgain();
-}
+/* wand hover: show SPIN only while hovering and not spinning */
 
-/* manage helper text visibility */
-
-function showHelperDefault() {
-  helperText.style.display = 'inline-flex';
-  helperText.textContent = 'CLICK THE HOTSPOTS IN EACH CORNER TO LEARN MORE';
-}
-
-function hideHelper() {
-  helperText.style.display = 'none';
-}
-
-/* wand hover behavior: show "SPIN" only while hovering if not spinning */
 wand.addEventListener('mouseenter', () => {
   isHoveringWand = true;
   if (!isSpinning) {
@@ -582,7 +572,7 @@ wand.addEventListener('mouseleave', () => {
   }
 });
 
-/* Spin logic (halo + original wand spin) */
+/* Spin logic */
 
 function triggerSpin() {
   if (isSpinning) return;
@@ -591,7 +581,7 @@ function triggerSpin() {
   clickedHotspotsThisSpin.clear();
   lastFortuneKey = null;
   setLabelTextIdle();
-  showHelperDefault();
+  hideHelper(); // ensure hidden until we intentionally show after spin
 
   Object.values(stickerStars).forEach(s => {
     s.classList.remove('visible');
@@ -641,10 +631,10 @@ function triggerSpin() {
     }
 
     showHotspots(key);
-    setLabelTextForStar(key); // show star-specific fortune
+    setLabelTextForStar(key);   // show fortune
+    showHelperAfterSpin();      // helper appears only now
     isSpinning = false;
 
-    // restore hover behavior after spin
     if (isHoveringWand) {
       spinLabel.textContent = 'SPIN';
     }
@@ -709,14 +699,14 @@ document.addEventListener('click', (e) => {
     clickedHotspotsThisSpin.add(type);
     hasClickedHotspot = true;
 
-    // hide that hotspot (keep current "disappear as clicked" behavior)
+    // keep the fun behavior: each hotspot disappears after click
     target.style.display = 'none';
     target.classList.remove('hotspot-animated');
 
     if (clickedHotspotsThisSpin.size === 1) {
-      // after first hotspot click, remove helper text
+      // hide helper after the first hotspot click
       hideHelper();
-      // DO NOT change fortune label yet
+      // fortune label remains showing the last fortune
     }
 
     if (clickedHotspotsThisSpin.size === 4) {
@@ -725,7 +715,7 @@ document.addEventListener('click', (e) => {
         btn.classList.remove('hotspot-animated');
         btn.style.display = 'none';
       });
-      setLabelTextAllDone(); // now show SPIN AGAIN
+      setLabelTextSpinAgain(); // only now change to SPIN AGAIN
     }
   }
 
