@@ -38,7 +38,7 @@ body {
 .frame-outer {
   min-height: 100vh;
   display: flex;
-  justify-content: center;  /* wheel centered */
+  justify-content: center;
   align-items: center;
   padding: 24px;
   box-sizing: border-box;
@@ -54,11 +54,11 @@ body {
   margin: 0 auto;
 }
 
-/* title is positioned independently; nudged right */
+/* title positioned independently; pulled closer to wheel */
 .title-wrapper {
   position: absolute;
   top: 32px;
-  left: 80px;  /* moved right; does not affect wheel centering */
+  left: 130px; /* closer to the background image */
   z-index: 2;
 }
 
@@ -80,9 +80,8 @@ body {
   background: transparent;
 }
 
-/* ===== WAND + LABEL (original spin) ===== */
+/* ===== WAND + LABEL ===== */
 
-/* wand bigger for better affordance */
 .wand {
   position: absolute;
   top: 50%;
@@ -113,7 +112,6 @@ body {
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* larger fortune label, mobile-readable */
 .wand-label {
   position: absolute;
   top: 34%;
@@ -125,7 +123,7 @@ body {
   border: 1px solid rgba(27,27,27,0.24);
   color: var(--classic-blue);
   font-family: "house-of-cards", serif;
-  font-size: 1.05rem;              /* larger text */
+  font-size: 1.05rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   box-shadow: 0 3px 12px rgba(0,0,0,0.20);
@@ -137,7 +135,6 @@ body {
   white-space: nowrap;
 }
 
-/* larger helper text – hidden until after spin */
 .helper-text {
   position: absolute;
   top: 40%;
@@ -149,7 +146,7 @@ body {
   border: 1px solid rgba(27,27,27,0.18);
   color: var(--classic-blue);
   font-family: "house-of-cards", serif;
-  font-size: 0.95rem;              /* larger for phone */
+  font-size: 0.95rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   box-shadow: 0 2px 8px rgba(0,0,0,0.16);
@@ -175,7 +172,7 @@ body {
   }
 }
 
-/* ===== HALO OVERLAY ===== */
+/* ===== HALO ===== */
 
 .halo-overlay {
   position: absolute;
@@ -200,7 +197,7 @@ body {
   transform-origin: center center;
 }
 
-/* ===== LARGE, BRIGHT STARS ===== */
+/* ===== STARS ===== */
 
 .sticker-star {
   position: absolute;
@@ -280,7 +277,7 @@ body {
 .sticker-star.river { top: 87%; left: 50%; }
 .sticker-star.cross { top: 52%; left: 21%; }
 
-/* ===== HOTSPOT LABELS ===== */
+/* ===== HOTSPOTS (green pills) ===== */
 
 .hotspot {
   position: absolute;
@@ -309,7 +306,6 @@ body {
   white-space: nowrap;
 }
 
-/* extra-strong button affordance on green pills */
 .hotspot.hotspot-animated {
   animation: hotspotBreath 1.6s ease-in-out infinite;
 }
@@ -338,26 +334,19 @@ body {
   outline: none;
 }
 
-.hotspot:focus-visible {
-  box-shadow:
-    0 0 0 3px rgba(15,76,129,0.4),
-    0 0 0 6px rgba(255,255,255,1);
-}
-
 .hotspot.is-active {
   box-shadow:
     0 0 0 2px rgba(0,0,0,0.5),
     0 0 0 6px rgba(250,211,107,0.95);
 }
 
-/* Ritual/Recipe, Symbolism/Story horizontal */
+/* hotspot positions */
 .hotspot.pos-1 { top: 18.5%; left: 30%; }
 .hotspot.pos-2 { top: 18.5%; left: 70%; }
 .hotspot.pos-3 { top: 86%;   left: 30%; }
 .hotspot.pos-4 { top: 86%;   left: 70%; }
 
-/* ===== PRAYER / PLEASURE / PASSAGE / PROSPERITY TAPPABLE OVERLAYS ===== */
-/* transparent buttons over existing art so big words are also tap targets */
+/* ===== BIG WORD HIT AREAS ===== */
 
 .big-label-hit {
   position: absolute;
@@ -369,11 +358,31 @@ body {
   z-index: 8;
 }
 
-/* approximate positions, tuned visually to words */
-.big-label-hit.prayer    { top: 26%; left: 26%; width: 18%; height: 7%; }
-.big-label-hit.pleasure  { top: 26%; left: 74%; width: 22%; height: 7%; }
-.big-label-hit.passage   { top: 87%; left: 24%; width: 22%; height: 7%; }
-.big-label-hit.prosperity{ top: 87%; left: 76%; width: 26%; height: 7%; }
+/* tuned to fully cover the black words on the art */
+.big-label-hit.prayer {
+  top: 27%;
+  left: 26%;
+  width: 22%;
+  height: 8%;
+}
+.big-label-hit.pleasure {
+  top: 27%;
+  left: 74%;
+  width: 24%;
+  height: 8%;
+}
+.big-label-hit.passage {
+  top: 88%;
+  left: 25%;
+  width: 26%;
+  height: 8%;
+}
+.big-label-hit.prosperity {
+  top: 88%;
+  left: 75%;
+  width: 28%;
+  height: 8%;
+}
 
 /* ===== MODALS ===== */
 
@@ -466,13 +475,11 @@ body {
 
     <img src="Ring.png" alt="" class="halo-overlay" id="halo">
 
-    <!-- Sticker stars -->
     <div class="sticker-star door" id="star-door"></div>
     <div class="sticker-star hearth" id="star-hearth"></div>
     <div class="sticker-star river" id="star-river"></div>
     <div class="sticker-star cross" id="star-cross"></div>
 
-    <!-- Hotspots (green pills) -->
     <button class="hotspot pos-1" data-slot="1"></button>
     <button class="hotspot pos-2" data-slot="2"></button>
     <button class="hotspot pos-3" data-slot="3"></button>
@@ -542,7 +549,6 @@ const stickerColors = {
   cross: 'var(--sap-green)'
 };
 
-/* star → fortune text */
 const fortuneTexts = {
   river: 'YOUR FORTUNE: A CROSSROADS',
   hearth: 'YOUR FORTUNE: A FLAMING HEART',
@@ -556,33 +562,24 @@ let clickedHotspotsThisSpin = new Set();
 let lastFortuneKey = null;
 let isHoveringWand = false;
 
-/* helper text visibility */
-
 function showHelperAfterSpin() {
   helperText.style.display = 'inline-flex';
 }
-
 function hideHelper() {
   helperText.style.display = 'none';
 }
 
-/* label states */
-
 function setLabelTextIdle() {
   spinLabel.textContent = 'SPIN THE WHEEL';
 }
-
 function setLabelTextForStar(key) {
   lastFortuneKey = key;
   const text = fortuneTexts[key] || 'YOUR FORTUNE';
   spinLabel.textContent = text;
 }
-
 function setLabelTextSpinAgain() {
   spinLabel.textContent = 'SPIN AGAIN';
 }
-
-/* wand hover: show SPIN while hovering and not spinning */
 
 wand.addEventListener('mouseenter', () => {
   isHoveringWand = true;
@@ -602,8 +599,6 @@ wand.addEventListener('mouseleave', () => {
   }
 });
 
-/* Spin logic */
-
 function triggerSpin() {
   if (isSpinning) return;
   isSpinning = true;
@@ -612,9 +607,7 @@ function triggerSpin() {
   setLabelTextIdle();
   hideHelper();
 
-  Object.values(stickerStars).forEach(s => {
-    s.classList.remove('visible');
-  });
+  Object.values(stickerStars).forEach(s => s.classList.remove('visible'));
 
   hotspotEls.forEach(btn => {
     btn.style.display = 'none';
@@ -630,14 +623,7 @@ function triggerSpin() {
   wand.classList.add('wand-spinning');
 
   const key = stops[Math.floor(Math.random() * stops.length)];
-
-  const targetAngles = {
-    door: 0,
-    hearth: 90,
-    river: 180,
-    cross: 270
-  };
-
+  const targetAngles = { door: 0, hearth: 90, river: 180, cross: 270 };
   const extraSpins = 720;
   const targetRotation = currentRotation + extraSpins + targetAngles[key];
   halo.style.transform =
@@ -648,7 +634,6 @@ function triggerSpin() {
     halo.removeEventListener('transitionend', onEnd);
     halo.classList.remove('halo-spinning');
     halo.style.opacity = 0.4;
-
     wand.classList.remove('wand-spinning');
 
     const star = stickerStars[key];
@@ -672,8 +657,6 @@ function triggerSpin() {
 wand.addEventListener('click', triggerSpin);
 spinLabel.addEventListener('click', triggerSpin);
 
-/* Hotspots (green pills) */
-
 function showHotspots(stickerKey) {
   const baseColor = stickerColors[stickerKey] || 'var(--golden-ochre)';
   const textColor = (stickerKey === 'door') ? 'var(--ink-black)' : 'var(--ivory-fog)';
@@ -691,29 +674,25 @@ function showHotspots(stickerKey) {
   });
 }
 
-/* Big word overlays should behave like clicking the appropriate hotspot.
-   Map each big label to the quadrant keywords. */
-
+/* map big word → hotspot type for click delegation */
 const bigWordToType = {
-  prayer: 'ritual',       // top-left
-  pleasure: 'recipe',     // top-right
-  passage: 'symbolism',   // bottom-left
-  prosperity: 'story'     // bottom-right
+  prayer: 'ritual',
+  pleasure: 'recipe',
+  passage: 'symbolism',
+  prosperity: 'story'
 };
 
 function triggerFromBigWord(bigKey) {
   const desiredType = bigWordToType[bigKey];
   if (!desiredType) return;
-  const btn = hotspotEls.find(b => b.dataset.type === desiredType);
-  if (btn && btn.style.display !== 'none') {
-    btn.click();
-  }
+  const btn = hotspotEls.find(b => b.dataset.type === desiredType &&
+                                   b.style.display !== 'none');
+  if (btn) btn.click();
 }
 
 bigWordButtons.forEach(btn => {
   btn.addEventListener('click', () => {
-    const bigKey = btn.dataset.big;
-    triggerFromBigWord(bigKey);
+    triggerFromBigWord(btn.dataset.big);
   });
 });
 
@@ -722,25 +701,19 @@ const backdrop = document.getElementById('modal-backdrop');
 function openModalFor(stickerKey, type) {
   const id = `modal-${stickerKey}-${type}`;
   const modal = document.getElementById(id);
-  if (!modal) {
-    console.warn('Missing modal:', id);
-    return;
-  }
+  if (!modal) return;
   backdrop.style.display = 'block';
   modal.style.display = 'block';
 }
 
 function closeAllModals() {
-  document.querySelectorAll('.modal').forEach(m => {
-    m.style.display = 'none';
-  });
+  document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
   backdrop.style.display = 'none';
 }
 
-/* Click handling for hotspots */
-
 document.addEventListener('click', (e) => {
   const target = e.target;
+
   if (target.classList.contains('hotspot')) {
     const sticker = target.dataset.sticker;
     const type = target.dataset.type;
@@ -751,7 +724,6 @@ document.addEventListener('click', (e) => {
 
     clickedHotspotsThisSpin.add(type);
 
-    // each hotspot disappears when clicked
     target.style.display = 'none';
     target.classList.remove('hotspot-animated');
 
