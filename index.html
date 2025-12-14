@@ -54,11 +54,11 @@ body {
   margin: 0 auto;
 }
 
-/* title positioned independently; pulled well toward wheel */
+/* title positioned independently; pulled toward wheel */
 .title-wrapper {
   position: absolute;
   top: 32px;
-  left: 180px; /* noticeably closer to the artwork */
+  left: 190px; /* further right than before */
   z-index: 2;
 }
 
@@ -86,8 +86,8 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 17%;
-  max-width: 150px;
+  width: 15%;            /* slightly smaller so it doesn’t overlap labels */
+  max-width: 135px;
   transform: translate(-50%, -50%);
   cursor: pointer;
   transition: transform 0.2s ease, filter 0.2s ease;
@@ -112,7 +112,7 @@ body {
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* FORTUNE PILL: golden ochre with dark text for strong contrast */
+/* fortune pill: high-contrast golden ochre */
 .wand-label {
   position: absolute;
   top: 34%;
@@ -136,7 +136,7 @@ body {
   white-space: nowrap;
 }
 
-/* helper text: ivory for contrast on the art */
+/* helper text */
 .helper-text {
   position: absolute;
   top: 40%;
@@ -174,7 +174,7 @@ body {
   }
 }
 
-/* ===== HALO ===== */
+/* ===== HALO, STARS, HOTSPOTS (unchanged) ===== */
 
 .halo-overlay {
   position: absolute;
@@ -198,8 +198,6 @@ body {
   filter: hue-rotate(-8deg) saturate(1.35) brightness(1.17);
   transform-origin: center center;
 }
-
-/* ===== STARS ===== */
 
 .sticker-star {
   position: absolute;
@@ -279,8 +277,6 @@ body {
 .sticker-star.river { top: 87%; left: 50%; }
 .sticker-star.cross { top: 52%; left: 21%; }
 
-/* ===== HOTSPOTS (green pills) ===== */
-
 .hotspot {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -342,13 +338,12 @@ body {
     0 0 0 6px rgba(250,211,107,0.95);
 }
 
-/* hotspot positions */
 .hotspot.pos-1 { top: 18.5%; left: 30%; }
 .hotspot.pos-2 { top: 18.5%; left: 70%; }
 .hotspot.pos-3 { top: 86%;   left: 30%; }
 .hotspot.pos-4 { top: 86%;   left: 70%; }
 
-/* ===== BIG WORD HIT AREAS ===== */
+/* ===== BIG WORD HIT AREAS (adjusted) ===== */
 
 .big-label-hit {
   position: absolute;
@@ -357,32 +352,32 @@ body {
   padding: 0;
   margin: 0;
   cursor: pointer;
-  z-index: 8;
+  z-index: 8;  /* above wand (5) and wheel */
 }
 
-/* tuned to fully cover the words on the art */
+/* pulled slightly outward from the wheel so nothing overlaps them */
 .big-label-hit.prayer {
-  top: 27%;
-  left: 26%;
-  width: 22%;
-  height: 8%;
-}
-.big-label-hit.pleasure {
-  top: 27%;
-  left: 74%;
+  top: 26%;
+  left: 24%;
   width: 24%;
   height: 8%;
 }
+.big-label-hit.pleasure {
+  top: 26%;
+  left: 76%;
+  width: 26%;
+  height: 8%;
+}
 .big-label-hit.passage {
-  top: 88%;
-  left: 25%;
+  top: 89%;
+  left: 24%;
   width: 26%;
   height: 8%;
 }
 .big-label-hit.prosperity {
-  top: 88%;
-  left: 75%;
-  width: 28%;
+  top: 89%;
+  left: 76%;
+  width: 30%;
   height: 8%;
 }
 
