@@ -58,7 +58,7 @@ body {
 .title-wrapper {
   position: absolute;
   top: 32px;
-  left: 190px; /* further right than before */
+  left: 190px; /* further right */
   z-index: 2;
 }
 
@@ -86,7 +86,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 15%;            /* slightly smaller so it doesn’t overlap labels */
+  width: 15%;            /* slightly smaller to avoid overlapping labels */
   max-width: 135px;
   transform: translate(-50%, -50%);
   cursor: pointer;
@@ -174,7 +174,7 @@ body {
   }
 }
 
-/* ===== HALO, STARS, HOTSPOTS (unchanged) ===== */
+/* ===== HALO, STARS, HOTSPOTS ===== */
 
 .halo-overlay {
   position: absolute;
@@ -343,7 +343,7 @@ body {
 .hotspot.pos-3 { top: 86%;   left: 30%; }
 .hotspot.pos-4 { top: 86%;   left: 70%; }
 
-/* ===== BIG WORD HIT AREAS (adjusted) ===== */
+/* ===== BIG WORD HIT AREAS (larger & farther out) ===== */
 
 .big-label-hit {
   position: absolute;
@@ -352,33 +352,33 @@ body {
   padding: 0;
   margin: 0;
   cursor: pointer;
-  z-index: 8;  /* above wand (5) and wheel */
+  z-index: 8;  /* above wand and wheel */
 }
 
-/* pulled slightly outward from the wheel so nothing overlaps them */
+/* pulled outward so they do not compete with the wheel/wand */
 .big-label-hit.prayer {
-  top: 26%;
-  left: 24%;
-  width: 24%;
-  height: 8%;
+  top: 25%;
+  left: 23%;
+  width: 26%;
+  height: 10%;
 }
 .big-label-hit.pleasure {
-  top: 26%;
-  left: 76%;
-  width: 26%;
-  height: 8%;
+  top: 25%;
+  left: 77%;
+  width: 28%;
+  height: 10%;
 }
 .big-label-hit.passage {
-  top: 89%;
-  left: 24%;
-  width: 26%;
-  height: 8%;
+  top: 90%;
+  left: 23%;
+  width: 28%;
+  height: 10%;
 }
 .big-label-hit.prosperity {
-  top: 89%;
-  left: 76%;
+  top: 90%;
+  left: 77%;
   width: 30%;
-  height: 8%;
+  height: 10%;
 }
 
 /* ===== MODALS ===== */
@@ -670,7 +670,7 @@ function showHotspots(stickerKey) {
   });
 }
 
-/* map big word → hotspot type for click delegation */
+/* map big word → hotspot type */
 const bigWordToType = {
   prayer: 'ritual',
   pleasure: 'recipe',
@@ -678,6 +678,7 @@ const bigWordToType = {
   prosperity: 'story'
 };
 
+/* generic delegation */
 function triggerFromBigWord(bigKey) {
   const desiredType = bigWordToType[bigKey];
   if (!desiredType) return;
@@ -687,13 +688,32 @@ function triggerFromBigWord(bigKey) {
   if (btn) btn.click();
 }
 
+/* add explicit handlers so each big word always opens something even if delegation fails */
+
 bigWordButtons.forEach(btn => {
   btn.addEventListener('click', () => {
-    triggerFromBigWord(btn.dataset.big);
+    const bigKey = btn.dataset.big;
+    // Try normal delegation first.
+    triggerFromBigWord(bigKey);
+
+    // Fallback: open the corresponding modal directly, based on which star/slot was spun.
+    const stickerKey = lastFortuneKey || 'door';
+    const type = bigWordToType[bigKey] || 'ritual';
+    const modalId = `modal-${stickerKey}-${type}`;
+    const modalEl = document.getElementById(modalId);
+    if (modalEl) {
+      backdrop.style.display = 'block';
+      modalEl.style.display = 'block';
+    }
   });
 });
 
 const backdrop = document.getElementById('modal-backdrop');
+
+function closeAllModals() {
+  document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+  backdrop.style.display = 'none';
+}
 
 function openModalFor(stickerKey, type) {
   const id = `modal-${stickerKey}-${type}`;
@@ -701,11 +721,6 @@ function openModalFor(stickerKey, type) {
   if (!modal) return;
   backdrop.style.display = 'block';
   modal.style.display = 'block';
-}
-
-function closeAllModals() {
-  document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-  backdrop.style.display = 'none';
 }
 
 document.addEventListener('click', (e) => {
