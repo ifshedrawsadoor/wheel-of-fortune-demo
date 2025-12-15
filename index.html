@@ -33,7 +33,7 @@ body {
   background-repeat: repeat;
 }
 
-/* ===== LAYOUT ===== */
+/* ===== LAYOUT: centered wheel, title floated left ===== */
 
 .frame-outer {
   min-height: 100vh;
@@ -45,6 +45,7 @@ body {
   position: relative;
 }
 
+/* wheel is the main centered element */
 .wheel-wrapper {
   position: relative;
   max-width: 900px;
@@ -53,12 +54,11 @@ body {
   margin: 0 auto;
 }
 
-/* title moved toward wheel */
-
+/* title positioned independently; pulled toward wheel */
 .title-wrapper {
   position: absolute;
   top: 32px;
-  left: 190px;
+  left: 190px; /* shifted right toward the artwork */
   z-index: 2;
 }
 
@@ -68,6 +68,7 @@ body {
   display: block;
 }
 
+/* only the art; no extra frame */
 .wheel-bg {
   display: block;
   width: 100%;
@@ -85,7 +86,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 15%;
+  width: 15%;         /* slightly smaller so it stays clear of labels */
   max-width: 135px;
   transform: translate(-50%, -50%);
   cursor: pointer;
@@ -111,8 +112,7 @@ body {
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* golden-ochre fortune pill */
-
+/* fortune pill: high-contrast golden ochre */
 .wand-label {
   position: absolute;
   top: 34%;
@@ -136,6 +136,7 @@ body {
   white-space: nowrap;
 }
 
+/* helper text */
 .helper-text {
   position: absolute;
   top: 40%;
@@ -185,7 +186,10 @@ body {
   mix-blend-mode: screen;
   pointer-events: none;
   filter: hue-rotate(-8deg) saturate(1.15);
-  transition: opacity 0.3s ease, transform 1.1s ease-out, filter 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 1.1s ease-out,
+    filter 0.3s ease;
   z-index: 4;
 }
 
@@ -339,7 +343,7 @@ body {
 .hotspot.pos-3 { top: 86%;   left: 30%; }
 .hotspot.pos-4 { top: 86%;   left: 70%; }
 
-/* ===== BIG WORD HIT AREAS (your last working version) ===== */
+/* ===== BIG WORD HIT AREAS (large & outward) ===== */
 
 .big-label-hit {
   position: absolute;
@@ -348,32 +352,37 @@ body {
   padding: 0;
   margin: 0;
   cursor: pointer;
-  z-index: 8;
+  z-index: 8;  /* above wand and wheel */
 }
 
+/* generous rectangles pulled outward so nothing overlaps them */
 .big-label-hit.prayer {
   top: 26%;
   left: 24%;
   width: 26%;
   height: 10%;
 }
+
+/* UPDATED right-side hitboxes */
 .big-label-hit.pleasure {
-  top: 26%;
-  left: 76%;
-  width: 30%;
-  height: 10%;
+  top: 25%;
+  left: 79%;
+  width: 34%;
+  height: 12%;
 }
+
 .big-label-hit.passage {
   top: 89%;
   left: 24%;
   width: 28%;
   height: 10%;
 }
+
 .big-label-hit.prosperity {
-  top: 89%;
-  left: 76%;
-  width: 32%;
-  height: 10%;
+  top: 88%;
+  left: 79%;
+  width: 36%;
+  height: 12%;
 }
 
 /* ===== MODALS ===== */
@@ -621,11 +630,8 @@ function triggerSpin() {
     `translate(-50%, -50%) rotate(${targetRotation}deg)`;
   currentRotation = targetRotation;
 
-  // Fallback in case transitionend is missed
-  let finished = false;
-  const finish = () => {
-    if (finished) return;
-    finished = true;
+  const onEnd = () => {
+    halo.removeEventListener('transitionend', onEnd);
     halo.classList.remove('halo-spinning');
     halo.style.opacity = 0.4;
     wand.classList.remove('wand-spinning');
@@ -645,15 +651,7 @@ function triggerSpin() {
       spinLabel.textContent = 'SPIN';
     }
   };
-
-  const onEnd = () => {
-    halo.removeEventListener('transitionend', onEnd);
-    finish();
-  };
   halo.addEventListener('transitionend', onEnd);
-
-  // safety timeout: slightly longer than CSS transform duration
-  setTimeout(finish, 1300);
 }
 
 wand.addEventListener('click', triggerSpin);
@@ -677,7 +675,6 @@ function showHotspots(stickerKey) {
 }
 
 /* map big word → hotspot type */
-
 const bigWordToType = {
   prayer: 'ritual',
   pleasure: 'recipe',
@@ -685,8 +682,7 @@ const bigWordToType = {
   prosperity: 'story'
 };
 
-/* big words delegate clicks to visible green pills */
-
+/* single delegation path: big words click their visible green pills */
 function triggerFromBigWord(bigKey) {
   const desiredType = bigWordToType[bigKey];
   if (!desiredType) return;
