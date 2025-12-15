@@ -355,22 +355,13 @@ body {
   z-index: 8;  /* above wand and wheel */
 }
 
-/* generous rectangles pulled outward so nothing overlaps them */
+/* left side unchanged */
 .big-label-hit.prayer {
   top: 26%;
   left: 24%;
   width: 26%;
   height: 10%;
 }
-
-/* UPDATED right-side hitboxes */
-.big-label-hit.pleasure {
-  top: 25%;
-  left: 79%;
-  width: 34%;
-  height: 12%;
-}
-
 .big-label-hit.passage {
   top: 89%;
   left: 24%;
@@ -378,6 +369,13 @@ body {
   height: 10%;
 }
 
+/* enlarged right-side hitboxes */
+.big-label-hit.pleasure {
+  top: 25%;
+  left: 79%;
+  width: 34%;
+  height: 12%;
+}
 .big-label-hit.prosperity {
   top: 88%;
   left: 79%;
@@ -682,6 +680,26 @@ const bigWordToType = {
   prosperity: 'story'
 };
 
+const backdrop = document.getElementById('modal-backdrop');
+
+/* always count opened type toward “spin again” */
+function openModalFor(stickerKey, type) {
+  const id = `modal-${stickerKey}-${type}`;
+  const modal = document.getElementById(id);
+  if (!modal) return;
+
+  backdrop.style.display = 'block';
+  modal.style.display = 'block';
+
+  if (!clickedHotspotsThisSpin.has(type)) {
+    clickedHotspotsThisSpin.add(type);
+  }
+
+  if (clickedHotspotsThisSpin.size === 4) {
+    setLabelTextSpinAgain();
+  }
+}
+
 /* single delegation path: big words click their visible green pills */
 function triggerFromBigWord(bigKey) {
   const desiredType = bigWordToType[bigKey];
@@ -697,16 +715,6 @@ bigWordButtons.forEach(btn => {
     triggerFromBigWord(btn.dataset.big);
   });
 });
-
-const backdrop = document.getElementById('modal-backdrop');
-
-function openModalFor(stickerKey, type) {
-  const id = `modal-${stickerKey}-${type}`;
-  const modal = document.getElementById(id);
-  if (!modal) return;
-  backdrop.style.display = 'block';
-  modal.style.display = 'block';
-}
 
 function closeAllModals() {
   document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
@@ -724,21 +732,11 @@ document.addEventListener('click', (e) => {
     hotspotEls.forEach(btn => btn.classList.remove('is-active'));
     target.classList.add('is-active');
 
-    clickedHotspotsThisSpin.add(type);
-
     target.style.display = 'none';
     target.classList.remove('hotspot-animated');
 
     if (clickedHotspotsThisSpin.size === 1) {
       hideHelper();
-    }
-
-    if (clickedHotspotsThisSpin.size === 4) {
-      hotspotEls.forEach(btn => {
-        btn.classList.remove('hotspot-animated');
-        btn.style.display = 'none';
-      });
-      setLabelTextSpinAgain();
     }
   }
 
