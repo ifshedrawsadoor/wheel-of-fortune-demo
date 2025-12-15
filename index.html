@@ -45,7 +45,6 @@ body {
   position: relative;
 }
 
-/* wheel is the main centered element */
 .wheel-wrapper {
   position: relative;
   max-width: 900px;
@@ -55,10 +54,11 @@ body {
 }
 
 /* title positioned independently; pulled toward wheel */
+
 .title-wrapper {
   position: absolute;
   top: 32px;
-  left: 190px; /* shifted right toward the artwork */
+  left: 190px;
   z-index: 2;
 }
 
@@ -69,6 +69,7 @@ body {
 }
 
 /* only the art; no extra frame */
+
 .wheel-bg {
   display: block;
   width: 100%;
@@ -86,7 +87,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 15%;         /* slightly smaller so it stays clear of labels */
+  width: 15%;
   max-width: 135px;
   transform: translate(-50%, -50%);
   cursor: pointer;
@@ -112,7 +113,8 @@ body {
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* fortune pill: high-contrast golden ochre */
+/* high-contrast fortune pill */
+
 .wand-label {
   position: absolute;
   top: 34%;
@@ -136,7 +138,6 @@ body {
   white-space: nowrap;
 }
 
-/* helper text */
 .helper-text {
   position: absolute;
   top: 40%;
@@ -184,7 +185,7 @@ body {
   transform: translate(-50%, -50%) rotate(0deg) scale(1);
   opacity: 0;
   mix-blend-mode: screen;
-  pointer-events: none; /* ensure it never intercepts clicks */
+  pointer-events: none;
   filter: hue-rotate(-8deg) saturate(1.15);
   transition:
     opacity 0.3s ease,
@@ -343,7 +344,7 @@ body {
 .hotspot.pos-3 { top: 86%;   left: 30%; }
 .hotspot.pos-4 { top: 86%;   left: 70%; }
 
-/* ===== BIG WORD HIT AREAS (extra forgiving on right) ===== */
+/* ===== BIG WORD HIT AREAS (JS will set size/position) ===== */
 
 .big-label-hit {
   position: absolute;
@@ -352,36 +353,10 @@ body {
   padding: 0;
   margin: 0;
   cursor: pointer;
-  z-index: 8;  /* above wand and wheel */
+  z-index: 8;
 }
 
-/* left side already behaves well */
-.big-label-hit.prayer {
-  top: 26%;
-  left: 24%;
-  width: 26%;
-  height: 10%;
-}
-.big-label-hit.passage {
-  top: 88%;
-  left: 24%;
-  width: 28%;
-  height: 10%;
-}
-
-/* right side: very wide, slightly higher */
-.big-label-hit.pleasure {
-  top: 25%;
-  left: 80%;
-  width: 38%;
-  height: 14%;
-}
-.big-label-hit.prosperity {
-  top: 87%;
-  left: 80%;
-  width: 40%;
-  height: 14%;
-}
+/* no top/left/width/height here – JS controls them */
 
 /* ===== MODALS ===== */
 
@@ -464,7 +439,8 @@ body {
 
     <img src="Wheel Background Image.png"
          alt="Wheel of Fortune Oils"
-         class="wheel-bg" />
+         class="wheel-bg"
+         id="wheel-image" />
 
     <img src="Magic Wand.png" alt="Spin the Wheel" class="wand" id="wand">
     <div class="wand-label" id="spin-label">SPIN THE WHEEL</div>
@@ -524,6 +500,8 @@ body {
 </div>
 
 <script>
+/* ===== SPIN + HALO LOGIC (unchanged) ===== */
+
 const stops = ['door', 'hearth', 'river', 'cross'];
 const hotspotLabels = ['Ritual', 'Recipe', 'Symbolism', 'Story'];
 
@@ -533,6 +511,7 @@ const spinLabel = document.getElementById('spin-label');
 const helperText = document.getElementById('helper-text');
 const hotspotEls = Array.from(document.querySelectorAll('.hotspot'));
 const bigWordButtons = Array.from(document.querySelectorAll('.big-label-hit'));
+const wheelImg = document.getElementById('wheel-image');
 
 const stickerStars = {
   door: document.getElementById('star-door'),
@@ -672,7 +651,54 @@ function showHotspots(stickerKey) {
   });
 }
 
-/* map big word → hotspot type */
+/* ===== BIG WORD HITBOX MAPPING (1264×1872 design space) ===== */
+/* coordinates in original pixels, slightly generous around the words */
+
+const DESIGN_WIDTH = 1264;
+const DESIGN_HEIGHT = 1872;
+
+const bigWordRects = {
+  prayer:      { x:  80, y:  640, w: 320, h: 140 },
+  pleasure:    { x: 820, y:  640, w: 340, h: 140 },
+  passage:     { x:  90, y: 1480, w: 340, h: 140 },
+  prosperity:  { x: 790, y: 1480, w: 380, h: 140 }
+};
+
+function positionBigWordHitboxes() {
+  if (!wheelImg) return;
+
+  const rect = wheelImg.getBoundingClientRect();
+  const renderedWidth = rect.width;
+  const renderedHeight = rect.height;
+
+  const scaleX = renderedWidth / DESIGN_WIDTH;
+  const scaleY = renderedHeight / DESIGN_HEIGHT;
+
+  const imgOffsetLeft = wheelImg.offsetLeft;
+  const imgOffsetTop = wheelImg.offsetTop;
+
+  Object.entries(bigWordRects).forEach(([key, r]) => {
+    const btn = document.querySelector(`.big-label-hit.${key}`);
+    if (!btn) return;
+
+    const scaledX = r.x * scaleX;
+    const scaledY = r.y * scaleY;
+    const scaledW = r.w * scaleX;
+    const scaledH = r.h * scaleY;
+
+    btn.style.left = `${imgOffsetLeft + scaledX + scaledW / 2}px`;
+    btn.style.top = `${imgOffsetTop + scaledY + scaledH / 2}px`;
+    btn.style.width = `${scaledW}px`;
+    btn.style.height = `${scaledH}px`;
+    btn.style.transform = 'translate(-50%, -50%)';
+  });
+}
+
+window.addEventListener('load', positionBigWordHitboxes);
+window.addEventListener('resize', positionBigWordHitboxes);
+
+/* map big word → hotspot type and delegate clicks */
+
 const bigWordToType = {
   prayer: 'ritual',
   pleasure: 'recipe',
@@ -680,7 +706,6 @@ const bigWordToType = {
   prosperity: 'story'
 };
 
-/* single delegation path: big words click their visible green pills */
 function triggerFromBigWord(bigKey) {
   const desiredType = bigWordToType[bigKey];
   if (!desiredType) return;
@@ -695,6 +720,8 @@ bigWordButtons.forEach(btn => {
     triggerFromBigWord(btn.dataset.big);
   });
 });
+
+/* ===== MODALS ===== */
 
 const backdrop = document.getElementById('modal-backdrop');
 
