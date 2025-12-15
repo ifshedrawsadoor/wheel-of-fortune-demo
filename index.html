@@ -136,22 +136,22 @@ body {
   white-space: nowrap;
 }
 
-/* helper text */
+/* helper text: now styled like smaller fortune pill */
 .helper-text {
   position: absolute;
   top: 40%;
   left: 50%;
   transform: translateX(-50%);
-  padding: 7px 20px 6px 20px;
-  background: rgba(249,246,238,0.96);
+  padding: 7px 22px 6px 22px;
+  background: var(--golden-ochre);
   border-radius: 999px;
-  border: 1px solid rgba(27,27,27,0.18);
-  color: var(--classic-blue);
+  border: 2px solid rgba(0,0,0,0.7);
+  color: var(--ink-black);
   font-family: "house-of-cards", serif;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.16);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.3);
   opacity: 0.98;
   z-index: 6;
   text-align: center;
@@ -355,13 +355,22 @@ body {
   z-index: 8;  /* above wand and wheel */
 }
 
-/* left side unchanged */
+/* left side: strong interactive affordance */
 .big-label-hit.prayer {
   top: 26%;
   left: 24%;
   width: 26%;
   height: 10%;
 }
+
+/* right side: still present, but main CTA is the corner pills */
+.big-label-hit.pleasure {
+  top: 25%;
+  left: 79%;
+  width: 34%;
+  height: 12%;
+}
+
 .big-label-hit.passage {
   top: 89%;
   left: 24%;
@@ -369,19 +378,18 @@ body {
   height: 10%;
 }
 
-/* enlarged right-side hitboxes */
-.big-label-hit.pleasure {
-  top: 25%;
-  left: 79%;
-  width: 34%;
-  height: 12%;
-}
 .big-label-hit.prosperity {
   top: 88%;
   left: 79%;
   width: 36%;
   height: 12%;
 }
+
+/* If you eventually want Pleasure/Prosperity completely non-clickable,
+   you can add:
+   .big-label-hit.pleasure,
+   .big-label-hit.prosperity { pointer-events: none; }
+*/
 
 /* ===== MODALS ===== */
 
@@ -680,27 +688,7 @@ const bigWordToType = {
   prosperity: 'story'
 };
 
-const backdrop = document.getElementById('modal-backdrop');
-
-/* always count opened type toward “spin again” */
-function openModalFor(stickerKey, type) {
-  const id = `modal-${stickerKey}-${type}`;
-  const modal = document.getElementById(id);
-  if (!modal) return;
-
-  backdrop.style.display = 'block';
-  modal.style.display = 'block';
-
-  if (!clickedHotspotsThisSpin.has(type)) {
-    clickedHotspotsThisSpin.add(type);
-  }
-
-  if (clickedHotspotsThisSpin.size === 4) {
-    setLabelTextSpinAgain();
-  }
-}
-
-/* single delegation path: big words click their visible green pills */
+/* delegation from big words to pills (Prayer/Passage strongest affordances) */
 function triggerFromBigWord(bigKey) {
   const desiredType = bigWordToType[bigKey];
   if (!desiredType) return;
@@ -715,6 +703,16 @@ bigWordButtons.forEach(btn => {
     triggerFromBigWord(btn.dataset.big);
   });
 });
+
+const backdrop = document.getElementById('modal-backdrop');
+
+function openModalFor(stickerKey, type) {
+  const id = `modal-${stickerKey}-${type}`;
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  backdrop.style.display = 'block';
+  modal.style.display = 'block';
+}
 
 function closeAllModals() {
   document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
@@ -732,11 +730,21 @@ document.addEventListener('click', (e) => {
     hotspotEls.forEach(btn => btn.classList.remove('is-active'));
     target.classList.add('is-active');
 
+    clickedHotspotsThisSpin.add(type);
+
     target.style.display = 'none';
     target.classList.remove('hotspot-animated');
 
     if (clickedHotspotsThisSpin.size === 1) {
       hideHelper();
+    }
+
+    if (clickedHotspotsThisSpin.size === 4) {
+      hotspotEls.forEach(btn => {
+        btn.classList.remove('hotspot-animated');
+        btn.style.display = 'none';
+      });
+      setLabelTextSpinAgain();
     }
   }
 
