@@ -399,7 +399,7 @@ body {
   z-index: 10000;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%,-52%); /* nudged slightly up */
   border-radius: 18px;
   border: 4px solid var(--classic-blue);
   box-shadow: 0 12px 48px 2px #c9e3f8, 0 0 0 4px #d5eaff60;
@@ -407,12 +407,12 @@ body {
   color: var(--classic-blue);
   font-family: 'house-of-cards', Arial, serif;
   min-width: 320px;
-  width: 70vw;          /* slightly narrower for line length */
+  width: 70vw;
   max-width: 1100px;
   max-height: 85vh;
   box-sizing: border-box;
   padding: 20px 12px 12px 12px;
-  overflow: hidden;     /* outer shell; inner scrolls */
+  overflow: hidden;
   display: none;
 }
 
@@ -448,6 +448,15 @@ body {
   font-size: 2em; color: var(--classic-blue);
   cursor: pointer; z-index: 10001;
   font-weight: bold; border: none; background: none;
+  transition: color 0.15s ease, transform 0.15s ease, text-shadow 0.15s ease;
+}
+
+.modal-close:hover,
+.modal-close:focus-visible {
+  color: var(--tomato-red);
+  transform: scale(1.05);
+  text-shadow: 0 0 6px rgba(0,0,0,0.35);
+  outline: none;
 }
 
 .modal-content img {
@@ -456,7 +465,7 @@ body {
   margin-bottom: 9px;
   display: block;
   object-fit: contain;
-  box-shadow: 0 3px 24px #23222640;
+  box-shadow: 0 2px 16px #23222633; /* lighter shadow for crisper edges */
   background: var(--ivory-fog);
 }
 
@@ -473,6 +482,7 @@ body {
     max-width: 95vw;
     max-height: 90vh;
     padding: 16px 8px 10px 8px;
+    transform: translate(-50%,-50%);
   }
   .modal .modal-content,
   .modal.poem-modal .modal-content,
@@ -545,120 +555,151 @@ body {
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
 <!-- Frankincense (Door / golden ochre) -->
-<div class="modal poem-modal" id="modal-door-symbolism" aria-modal="true" role="dialog">
+<div class="modal poem-modal" id="modal-door-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-door-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
+    <h2 id="title-door-symbolism" class="visually-hidden">Frankincense Symbolism</h2>
     <img src="Frankincense Symbolism.png" alt="Frankincense Symbolism">
   </div>
 </div>
 
-<div class="modal ritual-modal" id="modal-door-ritual" aria-modal="true" role="dialog">
+<div class="modal ritual-modal" id="modal-door-ritual" aria-modal="true" role="dialog" aria-labelledby="title-door-ritual">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
+    <h2 id="title-door-ritual" class="visually-hidden">Frankincense Ritual</h2>
     <img src="Frankincense Ritual.png" alt="Frankincense Ritual">
   </div>
 </div>
 
-<div class="modal ritual-modal" id="modal-door-recipe" aria-modal="true" role="dialog">
+<div class="modal ritual-modal" id="modal-door-recipe" aria-modal="true" role="dialog" aria-labelledby="title-door-recipe">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
+    <h2 id="title-door-recipe" class="visually-hidden">Frankincense Recipe</h2>
     <img src="Frankincense Recipe.png" alt="Frankincense Recipe">
   </div>
 </div>
 
-<div class="modal ritual-modal" id="modal-door-story" aria-modal="true" role="dialog">
+<div class="modal ritual-modal" id="modal-door-story" aria-modal="true" role="dialog" aria-labelledby="title-door-story">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
+    <h2 id="title-door-story" class="visually-hidden">Frankincense Story</h2>
     <img src="Frankincense Story.png" alt="Frankincense Story">
   </div>
 </div>
 
 <!-- Orange (Flaming Heart / red) -->
-<div class="modal poem-modal" id="modal-hearth-symbolism" aria-modal="true" role="dialog">
+<div class="modal poem-modal" id="modal-hearth-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-hearth-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
+    <h2 id="title-hearth-symbolism" class="visually-hidden">Orange Symbolism</h2>
     <img src="Orange Symbolism.png" alt="Orange Symbolism">
   </div>
 </div>
 
-<div class="modal ritual-modal" id="modal-hearth-ritual" aria-modal="true" role="dialog">
+<div class="modal ritual-modal" id="modal-hearth-ritual" aria-modal="true" role="dialog" aria-labelledby="title-hearth-ritual">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
+    <h2 id="title-hearth-ritual" class="visually-hidden">Orange Ritual</h2>
     <img src="Orange Ritual.png" alt="Orange Ritual">
   </div>
 </div>
 
-<div class="modal ritual-modal" id="modal-hearth-recipe" aria-modal="true" role="dialog">
+<div class="modal ritual-modal" id="modal-hearth-recipe" aria-modal="true" role="dialog" aria-labelledby="title-hearth-recipe">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
+    <h2 id="title-hearth-recipe" class="visually-hidden">Orange Recipe</h2>
     <img src="Orange Recipe.png" alt="Orange Recipe">
   </div>
 </div>
 
-<div class="modal ritual-modal" id="modal-hearth-story" aria-modal="true" role="dialog">
+<div class="modal ritual-modal" id="modal-hearth-story" aria-modal="true" role="dialog" aria-labelledby="title-hearth-story">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
+    <h2 id="title-hearth-story" class="visually-hidden">Orange Story</h2>
     <img src="Orange Story.png" alt="Orange Story">
   </div>
 </div>
 
 <!-- Peppermint (Crossroads / blue) -->
-<div class="modal poem-modal" id="modal-river-symbolism" aria-modal="true" role="dialog">
+<div class="modal poem-modal" id="modal-river-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-river-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
+    <h2 id="title-river-symbolism" class="visually-hidden">Peppermint Symbolism</h2>
     <img src="Peppermint Symbolism.png" alt="Peppermint Symbolism">
   </div>
 </div>
 
-<div class="modal ritual-modal" id="modal-river-ritual" aria-modal="true" role="dialog">
+<div class="modal ritual-modal" id="modal-river-ritual" aria-modal="true" role="dialog" aria-labelledby="title-river-ritual">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
+    <h2 id="title-river-ritual" class="visually-hidden">Peppermint Ritual</h2>
     <img src="Peppermint Ritual.png" alt="Peppermint Ritual">
   </div>
 </div>
 
-<div class="modal ritual-modal" id="modal-river-recipe" aria-modal="true" role="dialog">
+<div class="modal ritual-modal" id="modal-river-recipe" aria-modal="true" role="dialog" aria-labelledby="title-river-recipe">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
+    <h2 id="title-river-recipe" class="visually-hidden">Peppermint Recipe</h2>
     <img src="Peppermint Recipe.png" alt="Peppermint Recipe">
   </div>
 </div>
 
-<div class="modal ritual-modal" id="modal-river-story" aria-modal="true" role="dialog">
+<div class="modal ritual-modal" id="modal-river-story" aria-modal="true" role="dialog" aria-labelledby="title-river-story">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
+    <h2 id="title-river-story" class="visually-hidden">Peppermint Story</h2>
     <img src="Peppermint Story.png" alt="Peppermint Story">
   </div>
 </div>
 
 <!-- Almond (Threshold / green) -->
-<div class="modal poem-modal" id="modal-cross-symbolism" aria-modal="true" role="dialog">
+<div class="modal poem-modal" id="modal-cross-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-cross-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
+    <h2 id="title-cross-symbolism" class="visually-hidden">Almond Symbolism</h2>
     <img src="Almond Symbolism.png" alt="Almond Symbolism">
   </div>
 </div>
 
-<div class="modal ritual-modal" id="modal-cross-ritual" aria-modal="true" role="dialog">
+<div class="modal ritual-modal" id="modal-cross-ritual" aria-modal="true" role="dialog" aria-labelledby="title-cross-ritual">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
+    <h2 id="title-cross-ritual" class="visually-hidden">Almond Ritual</h2>
     <img src="Almond Ritual.png" alt="Almond Ritual">
   </div>
 </div>
 
-<div class="modal ritual-modal" id="modal-cross-recipe" aria-modal="true" role="dialog">
+<div class="modal ritual-modal" id="modal-cross-recipe" aria-modal="true" role="dialog" aria-labelledby="title-cross-recipe">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
+    <h2 id="title-cross-recipe" class="visually-hidden">Almond Recipe</h2>
     <img src="Almond Recipe.png" alt="Almond Recipe">
   </div>
 </div>
 
-<div class="modal ritual-modal" id="modal-cross-story" aria-modal="true" role="dialog">
+<div class="modal ritual-modal" id="modal-cross-story" aria-modal="true" role="dialog" aria-labelledby="title-cross-story">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
+    <h2 id="title-cross-story" class="visually-hidden">Almond Story</h2>
     <img src="Almond Story.png" alt="Almond Story">
   </div>
 </div>
+
+<style>
+/* visually hidden utility for ARIA titles */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+</style>
 
 <script>
 const stops = ['door', 'hearth', 'river', 'cross'];
@@ -916,7 +957,7 @@ document.addEventListener('click', (e) => {
   }
 });
 
-/* ESC closes current modal.[web:69]  Focus is kept inside when Tab/Shift+Tab are used. */
+/* ESC closes current modal; Tab traps focus inside.[web:69][web:70] */
 document.addEventListener('keydown', (e) => {
   const openModal = document.querySelector('.modal[data-open="true"]');
   if (!openModal) return;
