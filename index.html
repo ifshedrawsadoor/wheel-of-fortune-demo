@@ -57,13 +57,13 @@ body {
 /* title positioned independently; pushed left into the clouds */
 .title-wrapper {
   position: absolute;
-  top: 16px;      /* small vertical nudge */
-  left: 40px;     /* much farther left so it expands into clouds */
+  top: 16px;
+  left: 40px;
   z-index: 2;
 }
 
 .title-wrapper img {
-  max-width: 440px;   /* larger title image */
+  max-width: 440px;
   height: auto;
   display: block;
 }
@@ -412,7 +412,14 @@ body {
   display: none;
 }
 
+/* poem-style (Symbolism) */
 .modal.poem-modal .modal-content {
+  max-height: 82vh;
+  overflow-y: auto;
+}
+
+/* ritual-style (Ritual/Recipe/Story) – same base modal but allows long vertical scroll */
+.modal.ritual-modal .modal-content {
   max-height: 82vh;
   overflow-y: auto;
 }
@@ -432,6 +439,12 @@ body {
   object-fit: contain;
   box-shadow: 0 3px 24px #23222640;
   background: var(--ivory-fog);
+}
+
+/* Poem.png-style override: Symbolism */
+.poem-img-modal img {
+  width: 99%;
+  max-height: none;
 }
 
 @media (max-width: 800px) {
@@ -495,31 +508,119 @@ body {
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<div class="modal poem-modal" id="modal-door-ritual">
+<!-- Frankincense (Door / golden ochre) -->
+<div class="modal poem-modal" id="modal-door-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
-    <img src="door-ritual.png" alt="Door Ritual">
+    <img src="Frankincense Symbolism.png" alt="Frankincense Symbolism">
   </div>
 </div>
 
-<div class="modal poem-modal" id="modal-door-recipe">
+<div class="modal ritual-modal" id="modal-door-ritual">
   <button class="modal-close" aria-label="Close">&times;</button>
-  <div class="modal-content poem-img-modal">
-    <img src="door-recipe.png" alt="Door Recipe">
+  <div class="modal-content">
+    <img src="Frankincense Ritual.png" alt="Frankincense Ritual">
   </div>
 </div>
 
+<div class="modal ritual-modal" id="modal-door-recipe">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <img src="Frankincense Recipe.png" alt="Frankincense Recipe">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-door-story">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <img src="Frankincense Story.png" alt="Frankincense Story">
+  </div>
+</div>
+
+<!-- Orange (Flaming Heart / red) -->
 <div class="modal poem-modal" id="modal-hearth-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
-    <img src="hearth-symbolism.png" alt="Hearth Symbolism">
+    <img src="Orange Symbolism.png" alt="Orange Symbolism">
   </div>
 </div>
 
-<div class="modal poem-modal" id="modal-cross-story">
+<div class="modal ritual-modal" id="modal-hearth-ritual">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <img src="Orange Ritual.png" alt="Orange Ritual">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-hearth-recipe">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <img src="Orange Recipe.png" alt="Orange Recipe">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-hearth-story">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <img src="Orange Story.png" alt="Orange Story">
+  </div>
+</div>
+
+<!-- Peppermint (Crossroads / blue) -->
+<div class="modal poem-modal" id="modal-river-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
-    <img src="cross-story.png" alt="Crossroads Story">
+    <img src="Peppermint Symbolism.png" alt="Peppermint Symbolism">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-river-ritual">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <img src="Peppermint Ritual.png" alt="Peppermint Ritual">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-river-recipe">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <img src="Peppermint Recipe.png" alt="Peppermint Recipe">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-river-story">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <img src="Peppermint Story.png" alt="Peppermint Story">
+  </div>
+</div>
+
+<!-- Almond (Threshold / green) -->
+<div class="modal poem-modal" id="modal-cross-symbolism">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Almond Symbolism.png" alt="Almond Symbolism">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-cross-ritual">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <img src="Almond Ritual.png" alt="Almond Ritual">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-cross-recipe">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <img src="Almond Recipe.png" alt="Almond Recipe">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-cross-story">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <img src="Almond Story.png" alt="Almond Story">
   </div>
 </div>
 
@@ -542,10 +643,10 @@ const stickerStars = {
 };
 
 const stickerColors = {
-  door: 'var(--golden-ochre)',
-  hearth: 'var(--tomato-red)',
-  river: 'var(--classic-blue)',
-  cross: 'var(--sap-green)'
+  door: 'var(--golden-ochre)',   // Frankincense
+  hearth: 'var(--tomato-red)',   // Orange
+  river: 'var(--classic-blue)',  // Peppermint
+  cross: 'var(--sap-green)'      // Almond
 };
 
 const fortuneTexts = {
