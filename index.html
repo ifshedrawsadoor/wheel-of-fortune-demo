@@ -57,13 +57,13 @@ body {
 /* title positioned independently; pulled toward wheel */
 .title-wrapper {
   position: absolute;
-  top: 32px;
-  left: 190px; /* shifted right toward the artwork */
+  top: 18px;       /* was 32px; pulls title slightly up */
+  left: 120px;     /* was 190px; lets it overlap clouds more */
   z-index: 2;
 }
 
 .title-wrapper img {
-  max-width: 260px;
+  max-width: 360px;  /* was 260px; makes Title.png larger */
   height: auto;
   display: block;
 }
@@ -86,7 +86,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 15%;         /* slightly smaller so it stays clear of labels */
+  width: 15%;
   max-width: 135px;
   transform: translate(-50%, -50%);
   cursor: pointer;
@@ -352,10 +352,9 @@ body {
   padding: 0;
   margin: 0;
   cursor: pointer;
-  z-index: 8;  /* above wand and wheel */
+  z-index: 8;
 }
 
-/* left side: strong interactive affordance */
 .big-label-hit.prayer {
   top: 26%;
   left: 24%;
@@ -363,7 +362,6 @@ body {
   height: 10%;
 }
 
-/* right side: still present, but main CTA is the corner pills */
 .big-label-hit.pleasure {
   top: 25%;
   left: 79%;
@@ -384,12 +382,6 @@ body {
   width: 36%;
   height: 12%;
 }
-
-/* If you eventually want Pleasure/Prosperity completely non-clickable,
-   you can add:
-   .big-label-hit.pleasure,
-   .big-label-hit.prosperity { pointer-events: none; }
-*/
 
 /* ===== MODALS ===== */
 
