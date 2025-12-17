@@ -199,23 +199,27 @@ body {
   transform-origin: center center;
 }
 
+/* stars: now slightly larger and more glowy for visibility */
 .sticker-star {
   position: absolute;
-  width: 84px;
-  height: 84px;
+  width: 92px;
+  height: 92px;
   border-radius: 50%;
   background: radial-gradient(circle at center,
-    rgba(255,255,255,0.98) 0%,
-    rgba(255,255,255,0.75) 32%,
+    rgba(255,255,255,1) 0%,
+    rgba(255,255,255,0.9) 32%,
     rgba(255,255,255,0.0) 72%);
-  box-shadow: 0 0 26px rgba(0,0,0,0.6);
+  box-shadow:
+    0 0 26px rgba(0,0,0,0.55),
+    0 0 26px rgba(250,211,107,0.3);
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0.8);
+  transform: translate(-50%, -50%) scale(0.9);
   transition: opacity 0.2s ease, transform 0.2s ease;
   z-index: 4;
   pointer-events: none;
 }
 
+/* extra inner ring for the top star */
 .sticker-star.door::before {
   content: "";
   position: absolute;
@@ -245,37 +249,42 @@ body {
   );
 }
 
+/* stronger pulse and glow */
 @keyframes starPulse {
   0% {
     transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 0 18px rgba(0,0,0,0.55),
-                0 0 0 0 rgba(250, 211, 107, 0.9);
+    box-shadow:
+      0 0 20px rgba(0,0,0,0.6),
+      0 0 0 0 rgba(250, 211, 107, 0.9);
     opacity: 1;
   }
   50% {
     transform: translate(-50%, -50%) scale(1.12);
-    box-shadow: 0 0 26px rgba(0,0,0,0.75),
-                0 0 22px 6px rgba(250, 211, 107, 0.9);
+    box-shadow:
+      0 0 32px rgba(0,0,0,0.85),
+      0 0 26px 8px rgba(250, 211, 107, 0.95);
     opacity: 1;
   }
   100% {
-    transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 0 18px rgba(0,0,0,0.55),
-                0 0 0 0 rgba(250, 211, 107, 0);
+    transform: translate(-50%, -50%) scale(1.02);
+    box-shadow:
+      0 0 20px rgba(0,0,0,0.6),
+      0 0 0 0 rgba(250, 211, 107, 0);
     opacity: 1;
   }
 }
 
 .sticker-star.visible {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, -50%) scale(1.02);
   animation: starPulse 1.9s ease-in-out infinite;
 }
 
-.sticker-star.door { top: 18%; left: 50%; }
-.sticker-star.hearth { top: 52%; left: 79%; }
-.sticker-star.river { top: 87%; left: 50%; }
-.sticker-star.cross { top: 52%; left: 21%; }
+/* NEW POSITIONS: pulled inward over stickers */
+.sticker-star.door   { top: 31%; left: 50%; } /* door at top center */
+.sticker-star.hearth { top: 55%; left: 82%; } /* flaming heart on right */
+.sticker-star.river  { top: 82%; left: 50%; } /* crossroads / river bottom */
+.sticker-star.cross  { top: 55%; left: 18%; } /* threshold / almonds left */
 
 .hotspot {
   position: absolute;
@@ -383,7 +392,7 @@ body {
   height: 12%;
 }
 
-/* ===== MODALS ===== */
+/* ===== MODALS (unchanged from last version) ===== */
 
 .modal-backdrop {
   position: fixed;
@@ -393,13 +402,12 @@ body {
   display: none;
 }
 
-/* large, readable, responsive modal */
 .modal {
   position: fixed;
   z-index: 10000;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-52%); /* nudged slightly up */
+  transform: translate(-50%,-52%);
   border-radius: 18px;
   border: 4px solid var(--classic-blue);
   box-shadow: 0 12px 48px 2px #c9e3f8, 0 0 0 4px #d5eaff60;
@@ -416,7 +424,6 @@ body {
   display: none;
 }
 
-/* scrollable content with padding and scroll hint */
 .modal .modal-content {
   position: relative;
   max-height: calc(85vh - 40px);
@@ -424,7 +431,6 @@ body {
   padding-bottom: 18px;
 }
 
-/* subtle bottom fade to indicate scrollability.[web:55][web:65] */
 .modal .modal-content::after {
   content: "";
   position: sticky;
@@ -436,7 +442,6 @@ body {
   background: linear-gradient(to bottom, rgba(249,246,238,0), rgba(249,246,238,0.92));
 }
 
-/* Symbolism and long panels share same behavior */
 .modal.poem-modal .modal-content,
 .modal.ritual-modal .modal-content {
   max-height: calc(85vh - 40px);
@@ -465,17 +470,15 @@ body {
   margin-bottom: 9px;
   display: block;
   object-fit: contain;
-  box-shadow: 0 2px 16px #23222633; /* lighter shadow for crisper edges */
+  box-shadow: 0 2px 16px #23222633;
   background: var(--ivory-fog);
 }
 
-/* Poem.png-style override: Symbolism */
 .poem-img-modal img {
   width: 100%;
   max-height: none;
 }
 
-/* Mobile: let modal use more viewport */
 @media (max-width: 700px) {
   .modal {
     width: 95vw;
@@ -554,7 +557,7 @@ body {
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<!-- Frankincense (Door / golden ochre) -->
+<!-- Modals (same as before; omitted comments for brevity) -->
 <div class="modal poem-modal" id="modal-door-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-door-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -587,7 +590,6 @@ body {
   </div>
 </div>
 
-<!-- Orange (Flaming Heart / red) -->
 <div class="modal poem-modal" id="modal-hearth-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-hearth-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -620,7 +622,6 @@ body {
   </div>
 </div>
 
-<!-- Peppermint (Crossroads / blue) -->
 <div class="modal poem-modal" id="modal-river-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-river-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -653,7 +654,6 @@ body {
   </div>
 </div>
 
-<!-- Almond (Threshold / green) -->
 <div class="modal poem-modal" id="modal-cross-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-cross-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -687,7 +687,6 @@ body {
 </div>
 
 <style>
-/* visually hidden utility for ARIA titles */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -720,10 +719,10 @@ const stickerStars = {
 };
 
 const stickerColors = {
-  door: 'var(--golden-ochre)',   // Frankincense
-  hearth: 'var(--tomato-red)',   // Orange
-  river: 'var(--classic-blue)',  // Peppermint
-  cross: 'var(--sap-green)'      // Almond
+  door: 'var(--golden-ochre)',
+  hearth: 'var(--tomato-red)',
+  river: 'var(--classic-blue)',
+  cross: 'var(--sap-green)'
 };
 
 const fortuneTexts = {
@@ -738,8 +737,6 @@ let isSpinning = false;
 let clickedHotspotsThisSpin = new Set();
 let lastFortuneKey = null;
 let isHoveringWand = false;
-
-/* focus trap state */
 let lastTriggerButton = null;
 let lastFocusedElementBeforeModal = null;
 
@@ -854,7 +851,6 @@ function showHotspots(stickerKey) {
   });
 }
 
-/* map big word → hotspot type */
 const bigWordToType = {
   prayer: 'ritual',
   pleasure: 'recipe',
@@ -862,7 +858,6 @@ const bigWordToType = {
   prosperity: 'story'
 };
 
-/* delegation from big words to pills (Prayer/Passage strongest affordances) */
 function triggerFromBigWord(bigKey) {
   const desiredType = bigWordToType[bigKey];
   if (!desiredType) return;
@@ -888,7 +883,6 @@ function getFocusableElements(container) {
   ).filter(el => !el.disabled && el.offsetParent !== null);
 }
 
-/* open/close modals with focus trap.[web:60][web:69] */
 function openModalFor(stickerKey, type, triggerEl) {
   const id = `modal-${stickerKey}-${type}`;
   const modal = document.getElementById(id);
@@ -957,7 +951,6 @@ document.addEventListener('click', (e) => {
   }
 });
 
-/* ESC closes current modal; Tab traps focus inside.[web:69][web:70] */
 document.addEventListener('keydown', (e) => {
   const openModal = document.querySelector('.modal[data-open="true"]');
   if (!openModal) return;
