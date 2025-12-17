@@ -518,15 +518,15 @@ body {
   border: 0;
 }
 
-/* ===== STACKED IMAGES BELOW WHEEL (TKOS STYLE) ===== */
+/* ===== STACKED IMAGES BELOW WHEEL ===== */
 
+/* let wallpaper show behind panels */
 .stack-section {
-  background: var(--ivory-fog);
-  margin-top: 40px; /* start panel lower so wallpaper shows behind wheel */
+  background: transparent;
+  margin-top: 24px;
 }
 
 .stack-section .frame-outer-intro {
-  background: var(--ivory-fog);
   padding: 64px 0 64px 0;
   min-height: 100vh;
   display: flex;
@@ -534,15 +534,12 @@ body {
   align-items: flex-start;
 }
 
-.stack-section .frame-outer-intro + .frame-outer-intro {
-  margin-top: -32px;
-}
-
+/* translucent ivory card so wallpaper glows behind */
 .hotspot-bg-animate-container {
-  background: var(--ivory-fog);
+  background: rgba(249, 246, 238, 0.9);
   border-radius: 32px;
   box-shadow: 0 8px 40px 8px #ece6dd;
-  margin: 0 auto;
+  margin: 0 auto 64px auto;
   padding: 46px 50px 104px 50px;
   max-width: 1100px;
   min-width: 340px;
@@ -612,9 +609,9 @@ body {
 .halo-h3 { left: 55.5%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 .halo-h4 { left: 83.3%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 
-/* image 4: pull 1 and 4 further toward center */
-#four-scents .halo-h1 { left: 25%; }
-#four-scents .halo-h4 { left: 75%; }
+/* image 4: pull 1 and 4 strongly toward center */
+#four-scents .halo-h1 { left: 28%; }
+#four-scents .halo-h4 { left: 72%; }
 
 /* image 6: push left/right halos slightly away from center */
 #wheel-of-fortune-static .halo-h2 { left: 42%; }
@@ -682,7 +679,7 @@ body {
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<!-- wheel modals (unchanged) -->
+<!-- wheel modals -->
 <div class="modal poem-modal" id="modal-door-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-door-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
