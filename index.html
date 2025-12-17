@@ -45,7 +45,6 @@ body {
   position: relative;
 }
 
-/* wheel is the main centered element */
 .wheel-wrapper {
   position: relative;
   max-width: 900px;
@@ -54,7 +53,6 @@ body {
   margin: 0 auto;
 }
 
-/* title positioned independently; pushed left into the clouds */
 .title-wrapper {
   position: absolute;
   top: 16px;
@@ -68,7 +66,6 @@ body {
   display: block;
 }
 
-/* only the art; no extra frame */
 .wheel-bg {
   display: block;
   width: 100%;
@@ -112,7 +109,6 @@ body {
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* fortune pill: high-contrast golden ochre */
 .wand-label {
   position: absolute;
   top: 34%;
@@ -136,7 +132,6 @@ body {
   white-space: nowrap;
 }
 
-/* helper text: now styled like smaller fortune pill */
 .helper-text {
   position: absolute;
   top: 40%;
@@ -199,7 +194,8 @@ body {
   transform-origin: center center;
 }
 
-/* stars: now slightly larger and more glowy for visibility */
+/* stars */
+
 .sticker-star {
   position: absolute;
   width: 92px;
@@ -219,7 +215,6 @@ body {
   pointer-events: none;
 }
 
-/* extra inner ring for the top star */
 .sticker-star.door::before {
   content: "";
   position: absolute;
@@ -249,7 +244,6 @@ body {
   );
 }
 
-/* stronger pulse and glow */
 @keyframes starPulse {
   0% {
     transform: translate(-50%, -50%) scale(1);
@@ -280,11 +274,11 @@ body {
   animation: starPulse 1.9s ease-in-out infinite;
 }
 
-/* NEW POSITIONS: pulled inward over stickers */
-.sticker-star.door   { top: 31%; left: 50%; } /* door at top center */
-.sticker-star.hearth { top: 55%; left: 82%; } /* flaming heart on right */
-.sticker-star.river  { top: 82%; left: 50%; } /* crossroads / river bottom */
-.sticker-star.cross  { top: 55%; left: 18%; } /* threshold / almonds left */
+/* fine-tuned positions: closer to center and stickers */
+.sticker-star.door   { top: 28%; left: 50%; } /* higher over door */
+.sticker-star.hearth { top: 54%; left: 78%; } /* up and slightly in */
+.sticker-star.river  { top: 79%; left: 50%; } /* a nudge upward */
+.sticker-star.cross  { top: 54%; left: 22%; } /* up and slightly in */
 
 .hotspot {
   position: absolute;
@@ -352,7 +346,7 @@ body {
 .hotspot.pos-3 { top: 86%;   left: 30%; }
 .hotspot.pos-4 { top: 86%;   left: 70%; }
 
-/* ===== BIG WORD HIT AREAS (large & outward) ===== */
+/* BIG WORD HIT AREAS */
 
 .big-label-hit {
   position: absolute;
@@ -392,7 +386,7 @@ body {
   height: 12%;
 }
 
-/* ===== MODALS (unchanged from last version) ===== */
+/* ===== MODALS (same as last version) ===== */
 
 .modal-backdrop {
   position: fixed;
@@ -494,8 +488,6 @@ body {
   }
 }
 
-/* existing responsive tweaks */
-
 @media (max-width: 800px) {
   .title-wrapper {
     position: static;
@@ -511,6 +503,19 @@ body {
   .wand-label { font-size: 0.95rem; padding: 7px 18px; }
   .helper-text { font-size: 0.85rem; padding: 6px 14px; }
   .hotspot { font-size: 0.9rem; padding: 8px 18px; }
+}
+
+/* visually hidden utility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
 }
 </style>
 </head>
@@ -546,7 +551,6 @@ body {
     <button class="hotspot pos-3" data-slot="3"></button>
     <button class="hotspot pos-4" data-slot="4"></button>
 
-    <!-- Big word tap targets -->
     <button class="big-label-hit prayer"     data-big="prayer"     aria-label="Prayer corner"></button>
     <button class="big-label-hit pleasure"   data-big="pleasure"   aria-label="Pleasure corner"></button>
     <button class="big-label-hit passage"    data-big="passage"    aria-label="Passage corner"></button>
@@ -557,7 +561,7 @@ body {
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<!-- Modals (same as before; omitted comments for brevity) -->
+<!-- Modals (unchanged content) -->
 <div class="modal poem-modal" id="modal-door-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-door-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -685,20 +689,6 @@ body {
     <img src="Almond Story.png" alt="Almond Story">
   </div>
 </div>
-
-<style>
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0,0,0,0);
-  white-space: nowrap;
-  border: 0;
-}
-</style>
 
 <script>
 const stops = ['door', 'hearth', 'river', 'cross'];
