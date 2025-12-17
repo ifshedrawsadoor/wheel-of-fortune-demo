@@ -33,7 +33,7 @@ body {
   background-repeat: repeat;
 }
 
-/* ===== LAYOUT: centered wheel, title floated left ===== */
+/* ===== LAYOUT ===== */
 
 .frame-outer {
   min-height: 100vh;
@@ -274,11 +274,11 @@ body {
   animation: starPulse 1.9s ease-in-out infinite;
 }
 
-/* fine-tuned positions: closer to center and stickers */
-.sticker-star.door   { top: 28%; left: 50%; } /* higher over door */
-.sticker-star.hearth { top: 54%; left: 78%; } /* up and slightly in */
-.sticker-star.river  { top: 79%; left: 50%; } /* a nudge upward */
-.sticker-star.cross  { top: 54%; left: 22%; } /* up and slightly in */
+/* adjusted positions – nudge up, pull in */
+.sticker-star.door   { top: 26%; left: 50%; } /* a bit higher */
+.sticker-star.hearth { top: 52%; left: 74%; } /* up and in toward heart */
+.sticker-star.river  { top: 77%; left: 50%; } /* slightly higher */
+.sticker-star.cross  { top: 52%; left: 26%; } /* up and in toward almonds */
 
 .hotspot {
   position: absolute;
@@ -386,7 +386,7 @@ body {
   height: 12%;
 }
 
-/* ===== MODALS (same as last version) ===== */
+/* ===== MODALS / ACCESSIBILITY (unchanged) ===== */
 
 .modal-backdrop {
   position: fixed;
@@ -505,7 +505,6 @@ body {
   .hotspot { font-size: 0.9rem; padding: 8px 18px; }
 }
 
-/* visually hidden utility */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -561,7 +560,7 @@ body {
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<!-- Modals (unchanged content) -->
+<!-- Modals (content unchanged) -->
 <div class="modal poem-modal" id="modal-door-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-door-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
