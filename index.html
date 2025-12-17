@@ -29,9 +29,10 @@ html, body {
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background-image: url('Wheel Wallpaper.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: repeat;
+  background-size: 1184px auto;   /* lock to wallpaper width for cloud curtain */
+  background-position: top center;
+  background-repeat: repeat-y;
+  background-color: #a5d8f5;      /* sky fallback behind tiles */
 }
 
 /* ===== LAYOUT (WHEEL) ===== */
@@ -520,7 +521,6 @@ body {
 
 /* ===== STACKED IMAGES BELOW WHEEL ===== */
 
-/* let wallpaper show behind panels */
 .stack-section {
   background: transparent;
   margin-top: 24px;
@@ -609,9 +609,9 @@ body {
 .halo-h3 { left: 55.5%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 .halo-h4 { left: 83.3%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 
-/* image 4: pull 1 and 4 strongly toward center */
-#four-scents .halo-h1 { left: 28%; }
-#four-scents .halo-h4 { left: 72%; }
+/* image 4: pull 1 and 4 toward center */
+#four-scents .halo-h1 { left: 30%; }
+#four-scents .halo-h4 { left: 70%; }
 
 /* image 6: push left/right halos slightly away from center */
 #wheel-of-fortune-static .halo-h2 { left: 42%; }
