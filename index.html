@@ -276,10 +276,10 @@ body {
 }
 
 /* final positions */
-.sticker-star.door   { top: 26%; left: 50%; } /* golden */
-.sticker-star.hearth { top: 52%; left: 72%; } /* red moved left toward center */
-.sticker-star.river  { top: 77%; left: 50%; } /* blue */
-.sticker-star.cross  { top: 52%; left: 28%; } /* green moved right toward center */
+.sticker-star.door   { top: 26%; left: 50%; }
+.sticker-star.hearth { top: 52%; left: 72%; }
+.sticker-star.river  { top: 77%; left: 50%; }
+.sticker-star.cross  { top: 52%; left: 28%; }
 
 .hotspot {
   position: absolute;
@@ -522,6 +522,7 @@ body {
 
 .stack-section {
   background: var(--ivory-fog);
+  margin-top: 40px; /* start panel lower so wallpaper shows behind wheel */
 }
 
 .stack-section .frame-outer-intro {
@@ -605,15 +606,15 @@ body {
   100% { box-shadow: 0 0 0 0 rgba(242,226,5,0); }
 }
 
-/* base halo positions (tuned per image with container IDs) */
+/* base halo positions */
 .halo-h1 { left: 16.6%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 .halo-h2 { left: 44.5%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 .halo-h3 { left: 55.5%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 .halo-h4 { left: 83.3%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 
-/* image 4: pull 1 and 4 toward center */
-#four-scents .halo-h1 { left: 22%; }
-#four-scents .halo-h4 { left: 78%; }
+/* image 4: pull 1 and 4 further toward center */
+#four-scents .halo-h1 { left: 25%; }
+#four-scents .halo-h4 { left: 75%; }
 
 /* image 6: push left/right halos slightly away from center */
 #wheel-of-fortune-static .halo-h2 { left: 42%; }
@@ -640,7 +641,7 @@ body {
 </head>
 
 <body>
-<!-- ===== WHEEL SECTION (unchanged) ===== -->
+<!-- ===== WHEEL SECTION ===== -->
 <div class="frame-outer">
 
   <div class="title-wrapper">
@@ -681,7 +682,7 @@ body {
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<!-- existing wheel modals -->
+<!-- wheel modals (unchanged) -->
 <div class="modal poem-modal" id="modal-door-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-door-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -810,9 +811,7 @@ body {
   </div>
 </div>
 
-<!-- ===== NEW MODALS FOR IMAGES 4 & 6 ===== -->
-
-<!-- Four Scents halos -->
+<!-- new modals for images 4 & 6 -->
 <div class="modal poem-modal" id="modal-four-frankincense" aria-modal="true" role="dialog">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -841,7 +840,6 @@ body {
   </div>
 </div>
 
-<!-- Wheel of Fortune halos -->
 <div class="modal poem-modal" id="modal-wheel-themes" aria-modal="true" role="dialog">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -859,7 +857,6 @@ body {
 <!-- ===== STACKED IMAGES BELOW WHEEL ===== -->
 <div class="stack-section">
 
-  <!-- 1: Snow Angel's Wheel of Fortune -->
   <div class="frame-outer-intro">
     <div class="hotspot-bg-animate-container">
       <img
@@ -870,7 +867,6 @@ body {
     </div>
   </div>
 
-  <!-- 2: Instructions -->
   <div class="frame-outer-intro">
     <div class="hotspot-bg-animate-container">
       <img
@@ -881,7 +877,6 @@ body {
     </div>
   </div>
 
-  <!-- 3: My Story -->
   <div class="frame-outer-intro">
     <div class="hotspot-bg-animate-container">
       <img
@@ -892,7 +887,6 @@ body {
     </div>
   </div>
 
-  <!-- 4: The Four Scents with four halo hotspots -->
   <div class="frame-outer-intro">
     <div class="hotspot-bg-animate-container" id="four-scents">
       <img
@@ -901,7 +895,6 @@ body {
         class="bg-main-img"
       />
       <div class="hotspots-absolute">
-        <!-- order: Frankincense, Wild Orange, Peppermint, Almond -->
         <button class="halo-hotspot halo-h1" data-modal="modal-four-frankincense" aria-label="Frankincense halo"></button>
         <button class="halo-hotspot halo-h2" data-modal="modal-four-orange" aria-label="Wild Orange halo"></button>
         <button class="halo-hotspot halo-h3" data-modal="modal-four-peppermint" aria-label="Peppermint halo"></button>
@@ -910,7 +903,6 @@ body {
     </div>
   </div>
 
-  <!-- 5: The Remix Engine -->
   <div class="frame-outer-intro">
     <div class="hotspot-bg-animate-container">
       <img
@@ -921,7 +913,6 @@ body {
     </div>
   </div>
 
-  <!-- 6: The Wheel of Fortune with two halo hotspots (Themes + Spiritual Ask) -->
   <div class="frame-outer-intro">
     <div class="hotspot-bg-animate-container" id="wheel-of-fortune-static">
       <img
@@ -930,7 +921,6 @@ body {
         class="bg-main-img"
       />
       <div class="hotspots-absolute">
-        <!-- left halo: Themes; right halo: Spiritual Ask -->
         <button class="halo-hotspot halo-h2" data-modal="modal-wheel-themes" aria-label="Themes halo"></button>
         <button class="halo-hotspot halo-h3" data-modal="modal-wheel-spiritual" aria-label="Spiritual Ask halo"></button>
       </div>
@@ -940,7 +930,6 @@ body {
 </div>
 
 <script>
-/* ===== existing wheel JS ===== */
 const stops = ['door', 'hearth', 'river', 'cross'];
 const hotspotLabels = ['Ritual', 'Recipe', 'Symbolism', 'Story'];
 
@@ -1190,7 +1179,6 @@ document.addEventListener('click', (e) => {
     closeAllModals();
   }
 
-  /* halo hotspots for images 4 & 6 */
   if (target.classList.contains('halo-hotspot')) {
     const modalId = target.dataset.modal;
     if (!modalId) return;
