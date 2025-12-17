@@ -15,6 +15,7 @@
   --sap-green: #2E6F40;
   --ivory-fog: #F9F6EE;
   --ink-black: #1B1B1B;
+  --halo-yellow: #F2E205;
 }
 
 /* ===== FULL-SCREEN WALLPAPER ===== */
@@ -33,7 +34,7 @@ body {
   background-repeat: repeat;
 }
 
-/* ===== LAYOUT ===== */
+/* ===== LAYOUT (WHEEL) ===== */
 
 .frame-outer {
   min-height: 100vh;
@@ -386,7 +387,7 @@ body {
   height: 12%;
 }
 
-/* ===== MODALS / ACCESSIBILITY (unchanged) ===== */
+/* ===== MODALS / ACCESSIBILITY (wheel) ===== */
 
 .modal-backdrop {
   position: fixed;
@@ -516,10 +517,123 @@ body {
   white-space: nowrap;
   border: 0;
 }
+
+/* ===== NEW STACKED IMAGES BELOW WHEEL (TKOS STYLE) ===== */
+/* cloned from TKOS .frame-outer + .hotspot-bg-animate-container + .bg-main-img.[file:74] */
+
+.stack-section {
+  background: var(--ivory-fog);
+}
+
+.stack-section .frame-outer-intro {
+  background: var(--ivory-fog);
+  padding: 64px 0 64px 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.stack-section .frame-outer-intro + .frame-outer-intro {
+  margin-top: -32px;
+}
+
+.hotspot-bg-animate-container {
+  background: var(--ivory-fog);
+  border-radius: 32px;
+  box-shadow: 0 8px 40px 8px #ece6dd;
+  margin: 0 auto;
+  padding: 46px 50px 104px 50px;
+  max-width: 1100px;
+  min-width: 340px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bg-main-img {
+  display: block;
+  width: 100%;
+  max-width: 1000px;
+  min-width: 320px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 22px;
+  margin: 0 auto;
+  box-shadow: 0 3px 18px 0 #ded8ce;
+  background: var(--ivory-fog);
+}
+
+/* halo-style hotspots for images 4 & 6 */
+
+.hotspots-absolute {
+  position: absolute;
+  left: 0; top: 0; width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+.halo-hotspot {
+  pointer-events: auto;
+  width: 60px;
+  height: 60px;
+  background: var(--halo-yellow);
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  position: absolute;
+  z-index: 3;
+}
+
+.halo-hotspot::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  animation: haloPulse 1.25s infinite;
+}
+
+@keyframes haloPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(242,226,5,0.8); }
+  70%  { box-shadow: 0 0 0 18px rgba(242,226,5,0); }
+  100% { box-shadow: 0 0 0 0 rgba(242,226,5,0); }
+}
+
+/* use TKOS bottom halo positions.[file:74] */
+.halo-h1 { left: 16.6%; top: calc(100% - 70px); transform: translate(-50%, 0); }
+.halo-h2 { left: 44.5%; top: calc(100% - 70px); transform: translate(-50%, 0); }
+.halo-h3 { left: 55.5%; top: calc(100% - 70px); transform: translate(-50%, 0); }
+.halo-h4 { left: 83.3%; top: calc(100% - 70px); transform: translate(-50%, 0); }
+
+@media (max-width:1100px) {
+  .hotspot-bg-animate-container { padding-left: 3vw; padding-right: 3vw; }
+  .bg-main-img { max-width: 95vw; }
+}
+
+@media (max-width: 900px) {
+  .stack-section .frame-outer-intro { padding: 2vw 0 2vw 0; }
+  .hotspot-bg-animate-container {
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-top: 32px;
+    padding-bottom: 84px;
+  }
+  .halo-h1, .halo-h2, .halo-h3, .halo-h4 {
+    top: calc(100% - 54px);
+  }
+}
 </style>
 </head>
 
 <body>
+<!-- ===== WHEEL SECTION (unchanged) ===== -->
 <div class="frame-outer">
 
   <div class="title-wrapper">
@@ -560,7 +674,7 @@ body {
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<!-- Modals (same content as before) -->
+<!-- existing wheel modals (unchanged) -->
 <div class="modal poem-modal" id="modal-door-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-door-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -689,7 +803,135 @@ body {
   </div>
 </div>
 
+<!-- ===== NEW MODALS FOR IMAGES 4 & 6 ===== -->
+<!-- Four Scents halos -->
+<div class="modal poem-modal" id="modal-four-frankincense" aria-modal="true" role="dialog">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Frankincense.png" alt="Frankincense">
+  </div>
+</div>
+
+<div class="modal poem-modal" id="modal-four-almond" aria-modal="true" role="dialog">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Almond.png" alt="Almond">
+  </div>
+</div>
+
+<div class="modal poem-modal" id="modal-four-orange" aria-modal="true" role="dialog">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Wild Orange.png" alt="Wild Orange">
+  </div>
+</div>
+
+<div class="modal poem-modal" id="modal-four-peppermint" aria-modal="true" role="dialog">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Peppermint.png" alt="Peppermint">
+  </div>
+</div>
+
+<!-- Wheel of Fortune halos -->
+<div class="modal poem-modal" id="modal-wheel-themes" aria-modal="true" role="dialog">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Themes.png" alt="Themes">
+  </div>
+</div>
+
+<div class="modal poem-modal" id="modal-wheel-prompts" aria-modal="true" role="dialog">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Prompts.png" alt="Prompts">
+  </div>
+</div>
+
+<!-- ===== STACKED IMAGES BELOW WHEEL ===== -->
+<div class="stack-section">
+
+  <!-- 1: Snow Angel's Wheel of Fortune -->
+  <div class="frame-outer-intro">
+    <div class="hotspot-bg-animate-container">
+      <img
+        src="1 - Snow Angel's Wheel of Fortune.png"
+        alt="Snow Angel's Wheel of Fortune overview"
+        class="bg-main-img"
+      />
+    </div>
+  </div>
+
+  <!-- 2: Instructions -->
+  <div class="frame-outer-intro">
+    <div class="hotspot-bg-animate-container">
+      <img
+        src="2- Instructions.png"
+        alt="Instructions"
+        class="bg-main-img"
+      />
+    </div>
+  </div>
+
+  <!-- 3: My Story -->
+  <div class="frame-outer-intro">
+    <div class="hotspot-bg-animate-container">
+      <img
+        src="3 - My Story.png"
+        alt="My Story"
+        class="bg-main-img"
+      />
+    </div>
+  </div>
+
+  <!-- 4: The Four Scents with four halo hotspots -->
+  <div class="frame-outer-intro">
+    <div class="hotspot-bg-animate-container" id="four-scents">
+      <img
+        src="4 - The Four Scents.png"
+        alt="The Four Scents"
+        class="bg-main-img"
+      />
+      <div class="hotspots-absolute">
+        <button class="halo-hotspot halo-h1" data-modal="modal-four-frankincense" aria-label="Frankincense halo"></button>
+        <button class="halo-hotspot halo-h2" data-modal="modal-four-almond" aria-label="Almond halo"></button>
+        <button class="halo-hotspot halo-h3" data-modal="modal-four-orange" aria-label="Wild Orange halo"></button>
+        <button class="halo-hotspot halo-h4" data-modal="modal-four-peppermint" aria-label="Peppermint halo"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5: The Remix Engine -->
+  <div class="frame-outer-intro">
+    <div class="hotspot-bg-animate-container">
+      <img
+        src="5 - The Remix Engine.png"
+        alt="The Remix Engine"
+        class="bg-main-img"
+      />
+    </div>
+  </div>
+
+  <!-- 6: The Wheel of Fortune with two halo hotspots (left/right) -->
+  <div class="frame-outer-intro">
+    <div class="hotspot-bg-animate-container" id="wheel-of-fortune-static">
+      <img
+        src="6 - The Wheel of Fortune.png"
+        alt="The Wheel of Fortune static wheel"
+        class="bg-main-img"
+      />
+      <div class="hotspots-absolute">
+        <!-- use h2 and h3 so they sit over inner two halos -->
+        <button class="halo-hotspot halo-h2" data-modal="modal-wheel-themes" aria-label="Themes halo"></button>
+        <button class="halo-hotspot halo-h3" data-modal="modal-wheel-prompts" aria-label="Prompts halo"></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
 <script>
+/* ===== existing wheel JS (unchanged) ===== */
 const stops = ['door', 'hearth', 'river', 'cross'];
 const hotspotLabels = ['Ritual', 'Recipe', 'Symbolism', 'Story'];
 
@@ -937,6 +1179,24 @@ document.addEventListener('click', (e) => {
   if (target.classList.contains('modal-close') ||
       target.id === 'modal-backdrop') {
     closeAllModals();
+  }
+
+  /* NEW: click handler for halo hotspots on images 4 & 6 */
+  if (target.classList.contains('halo-hotspot')) {
+    const modalId = target.dataset.modal;
+    if (!modalId) return;
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    lastTriggerButton = target;
+    lastFocusedElementBeforeModal = document.activeElement;
+
+    backdrop.style.display = 'block';
+    modal.style.display = 'block';
+    modal.setAttribute('data-open', 'true');
+
+    const focusables = getFocusableElements(modal);
+    if (focusables.length) focusables[0].focus();
   }
 });
 
