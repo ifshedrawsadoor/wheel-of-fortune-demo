@@ -444,28 +444,22 @@ body {
   overflow-y: auto;
 }
 
-/* updated close button styles */
-
+/* CHANGE #3: larger close X */
 .modal-close {
-  position: absolute;
-  top: 10px;
-  right: 22px;
-  font-size: 2.4em; /* bigger X */
+  position: absolute; top: 12px; right: 28px;
+  font-size: 2.8em;
+  line-height: 1;
   color: var(--classic-blue);
-  cursor: pointer;
-  font-weight: bold;
-  border: none;
-  background: none;
-  text-shadow: 0 0 4px rgba(255,255,255,0.9); /* glow on clouds */
-  z-index: 10001;
+  cursor: pointer; z-index: 10001;
+  font-weight: bold; border: none; background: none;
   transition: color 0.15s ease, transform 0.15s ease, text-shadow 0.15s ease;
 }
 
 .modal-close:hover,
 .modal-close:focus-visible {
   color: var(--tomato-red);
-  transform: scale(1.08);
-  text-shadow: 0 0 8px rgba(255,255,255,1);
+  transform: scale(1.05);
+  text-shadow: 0 0 6px rgba(0,0,0,0.35);
   outline: none;
 }
 
@@ -618,11 +612,11 @@ body {
 .halo-h3 { left: 55.5%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 .halo-h4 { left: 83.3%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 
-/* image 4: outer halos pushed further */
-#four-scents .halo-h1 { left: 23%; }
+/* CHANGE #2: image 4 outer halos adjusted */
+#four-scents .halo-h1 { left: 20%; }
 #four-scents .halo-h2 { left: 41%; }
 #four-scents .halo-h3 { left: 59%; }
-#four-scents .halo-h4 { left: 77%; }
+#four-scents .halo-h4 { left: 80%; }
 
 /* image 6: subtle separation under THEMES / SPIRITUAL ASK */
 #wheel-of-fortune-static .halo-h2 { left: 41%; }
@@ -699,7 +693,7 @@ body {
   </div>
 </div>
 
-<!-- FRANKINCENSE: Recipe and Ritual correctly wired -->
+<!-- CHANGE #1: ritual/recipe swapped for Frankincense -->
 <div class="modal ritual-modal" id="modal-door-recipe" aria-modal="true" role="dialog" aria-labelledby="title-door-recipe">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
@@ -732,7 +726,7 @@ body {
   </div>
 </div>
 
-<!-- ORANGE -->
+<!-- Orange ritual/recipe swapped -->
 <div class="modal ritual-modal" id="modal-hearth-recipe" aria-modal="true" role="dialog" aria-labelledby="title-hearth-recipe">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
@@ -765,7 +759,7 @@ body {
   </div>
 </div>
 
-<!-- PEPPERMINT -->
+<!-- Peppermint ritual/recipe swapped -->
 <div class="modal ritual-modal" id="modal-river-recipe" aria-modal="true" role="dialog" aria-labelledby="title-river-recipe">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
@@ -798,7 +792,7 @@ body {
   </div>
 </div>
 
-<!-- ALMOND -->
+<!-- Almond ritual/recipe swapped -->
 <div class="modal ritual-modal" id="modal-cross-recipe" aria-modal="true" role="dialog" aria-labelledby="title-cross-recipe">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content">
