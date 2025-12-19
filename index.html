@@ -29,10 +29,10 @@ html, body {
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background-image: url('Wheel Wallpaper.png');
-  background-size: 1184px auto;
+  background-size: 1184px auto;   /* lock to wallpaper width for cloud curtain */
   background-position: top center;
   background-repeat: repeat-y;
-  background-color: #a5d8f5;
+  background-color: #a5d8f5;      /* sky fallback behind tiles */
 }
 
 /* ===== LAYOUT (WHEEL) ===== */
@@ -444,12 +444,9 @@ body {
   overflow-y: auto;
 }
 
-/* larger close X */
 .modal-close {
   position: absolute; top: 12px; right: 28px;
-  font-size: 2.8em;
-  line-height: 1;
-  color: var(--classic-blue);
+  font-size: 2em; color: var(--classic-blue);
   cursor: pointer; z-index: 10001;
   font-weight: bold; border: none; background: none;
   transition: color 0.15s ease, transform 0.15s ease, text-shadow 0.15s ease;
@@ -537,7 +534,7 @@ body {
   align-items: flex-start;
 }
 
-/* translucent ivory card */
+/* translucent ivory card so wallpaper glows behind */
 .hotspot-bg-animate-container {
   background: rgba(249, 246, 238, 0.9);
   border-radius: 32px;
@@ -612,13 +609,13 @@ body {
 .halo-h3 { left: 55.5%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 .halo-h4 { left: 83.3%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 
-/* image 4: center h1 under Frankincense, h4 under Almond */
-#four-scents .halo-h1 { left: 20%; }
+/* image 4: outer halos pushed further */
+#four-scents .halo-h1 { left: 23%; }
 #four-scents .halo-h2 { left: 41%; }
 #four-scents .halo-h3 { left: 59%; }
-#four-scents .halo-h4 { left: 80%; }
+#four-scents .halo-h4 { left: 77%; }
 
-/* image 6: subtle separation */
+/* image 6: subtle separation under THEMES / SPIRITUAL ASK */
 #wheel-of-fortune-static .halo-h2 { left: 41%; }
 #wheel-of-fortune-static .halo-h3 { left: 59%; }
 
@@ -637,19 +634,6 @@ body {
   }
   .halo-h1, .halo-h2, .halo-h3, .halo-h4 {
     top: calc(100% - 54px);
-  }
-}
-
-/* MOBILE: tighten gaps between stacked images */
-@media (max-width: 700px) {
-  .stack-section .frame-outer-intro {
-    padding: 24px 0 24px 0;   /* was 64px each side via desktop rule */
-    min-height: auto;          /* allow sections to shrink in height */
-  }
-  .hotspot-bg-animate-container {
-    margin-bottom: 32px;       /* was 64px */
-    padding-top: 24px;         /* was 46px */
-    padding-bottom: 56px;      /* was 104px */
   }
 }
 </style>
@@ -697,8 +681,551 @@ body {
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<!-- wheel modals (unchanged) -->
-<!-- ... keep all your existing modal markup and script here exactly as in your current file ... -->
+<!-- wheel modals -->
+<div class="modal poem-modal" id="modal-door-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-door-symbolism">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <h2 id="title-door-symbolism" class="visually-hidden">Frankincense Symbolism</h2>
+    <img src="Frankincense Symbolism.png" alt="Frankincense Symbolism">
+  </div>
+</div>
 
+<div class="modal ritual-modal" id="modal-door-ritual" aria-modal="true" role="dialog" aria-labelledby="title-door-ritual">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <h2 id="title-door-ritual" class="visually-hidden">Frankincense Ritual</h2>
+    <img src="Frankincense Ritual.png" alt="Frankincense Ritual">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-door-recipe" aria-modal="true" role="dialog" aria-labelledby="title-door-recipe">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <h2 id="title-door-recipe" class="visually-hidden">Frankincense Recipe</h2>
+    <img src="Frankincense Recipe.png" alt="Frankincense Recipe">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-door-story" aria-modal="true" role="dialog" aria-labelledby="title-door-story">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <h2 id="title-door-story" class="visually-hidden">Frankincense Story</h2>
+    <img src="Frankincense Story.png" alt="Frankincense Story">
+  </div>
+</div>
+
+<div class="modal poem-modal" id="modal-hearth-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-hearth-symbolism">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <h2 id="title-hearth-symbolism" class="visually-hidden">Orange Symbolism</h2>
+    <img src="Orange Symbolism.png" alt="Orange Symbolism">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-hearth-ritual" aria-modal="true" role="dialog" aria-labelledby="title-hearth-ritual">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <h2 id="title-hearth-ritual" class="visually-hidden">Orange Ritual</h2>
+    <img src="Orange Ritual.png" alt="Orange Ritual">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-hearth-recipe" aria-modal="true" role="dialog" aria-labelledby="title-hearth-recipe">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <h2 id="title-hearth-recipe" class="visually-hidden">Orange Recipe</h2>
+    <img src="Orange Recipe.png" alt="Orange Recipe">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-hearth-story" aria-modal="true" role="dialog" aria-labelledby="title-hearth-story">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <h2 id="title-hearth-story" class="visually-hidden">Orange Story</h2>
+    <img src="Orange Story.png" alt="Orange Story">
+  </div>
+</div>
+
+<div class="modal poem-modal" id="modal-river-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-river-symbolism">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <h2 id="title-river-symbolism" class="visually-hidden">Peppermint Symbolism</h2>
+    <img src="Peppermint Symbolism.png" alt="Peppermint Symbolism">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-river-ritual" aria-modal="true" role="dialog" aria-labelledby="title-river-ritual">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <h2 id="title-river-ritual" class="visually-hidden">Peppermint Ritual</h2>
+    <img src="Peppermint Ritual.png" alt="Peppermint Ritual">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-river-recipe" aria-modal="true" role="dialog" aria-labelledby="title-river-recipe">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <h2 id="title-river-recipe" class="visually-hidden">Peppermint Recipe</h2>
+    <img src="Peppermint Recipe.png" alt="Peppermint Recipe">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-river-story" aria-modal="true" role="dialog" aria-labelledby="title-river-story">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <h2 id="title-river-story" class="visually-hidden">Peppermint Story</h2>
+    <img src="Peppermint Story.png" alt="Peppermint Story">
+  </div>
+</div>
+
+<div class="modal poem-modal" id="modal-cross-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-cross-symbolism">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <h2 id="title-cross-symbolism" class="visually-hidden">Almond Symbolism</h2>
+    <img src="Almond Symbolism.png" alt="Almond Symbolism">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-cross-ritual" aria-modal="true" role="dialog" aria-labelledby="title-cross-ritual">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <h2 id="title-cross-ritual" class="visually-hidden">Almond Ritual</h2>
+    <img src="Almond Ritual.png" alt="Almond Ritual">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-cross-recipe" aria-modal="true" role="dialog" aria-labelledby="title-cross-recipe">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <h2 id="title-cross-recipe" class="visually-hidden">Almond Recipe</h2>
+    <img src="Almond Recipe.png" alt="Almond Recipe">
+  </div>
+</div>
+
+<div class="modal ritual-modal" id="modal-cross-story" aria-modal="true" role="dialog" aria-labelledby="title-cross-story">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content">
+    <h2 id="title-cross-story" class="visually-hidden">Almond Story</h2>
+    <img src="Almond Story.png" alt="Almond Story">
+  </div>
+</div>
+
+<!-- new modals for images 4 & 6 -->
+<div class="modal poem-modal" id="modal-four-frankincense" aria-modal="true" role="dialog">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Frankincense.png" alt="Frankincense">
+  </div>
+</div>
+
+<div class="modal poem-modal" id="modal-four-orange" aria-modal="true" role="dialog">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Wild Orange.png" alt="Wild Orange">
+  </div>
+</div>
+
+<div class="modal poem-modal" id="modal-four-peppermint" aria-modal="true" role="dialog">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Peppermint.png" alt="Peppermint">
+  </div>
+</div>
+
+<div class="modal poem-modal" id="modal-four-almond" aria-modal="true" role="dialog">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Almond.png" alt="Almond">
+  </div>
+</div>
+
+<div class="modal poem-modal" id="modal-wheel-themes" aria-modal="true" role="dialog">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Themes.png" alt="Themes">
+  </div>
+</div>
+
+<div class="modal poem-modal" id="modal-wheel-spiritual" aria-modal="true" role="dialog">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-content poem-img-modal">
+    <img src="Spiritual Ask.png" alt="Spiritual Ask">
+  </div>
+</div>
+
+<!-- ===== STACKED IMAGES BELOW WHEEL ===== -->
+<div class="stack-section">
+
+  <div class="frame-outer-intro">
+    <div class="hotspot-bg-animate-container">
+      <img
+        src="1 - Snow Angel's Wheel of Fortune.png"
+        alt="Snow Angel's Wheel of Fortune overview"
+        class="bg-main-img"
+      />
+    </div>
+  </div>
+
+  <div class="frame-outer-intro">
+    <div class="hotspot-bg-animate-container">
+      <img
+        src="2 - Instructions.png"
+        alt="Instructions"
+        class="bg-main-img"
+      />
+    </div>
+  </div>
+
+  <div class="frame-outer-intro">
+    <div class="hotspot-bg-animate-container">
+      <img
+        src="3 - My Story.png"
+        alt="My Story"
+        class="bg-main-img"
+      />
+    </div>
+  </div>
+
+  <div class="frame-outer-intro">
+    <div class="hotspot-bg-animate-container" id="four-scents">
+      <img
+        src="4 - The Four Scents.png"
+        alt="The Four Scents"
+        class="bg-main-img"
+      />
+      <div class="hotspots-absolute">
+        <button class="halo-hotspot halo-h1" data-modal="modal-four-frankincense" aria-label="Frankincense halo"></button>
+        <button class="halo-hotspot halo-h2" data-modal="modal-four-orange" aria-label="Wild Orange halo"></button>
+        <button class="halo-hotspot halo-h3" data-modal="modal-four-peppermint" aria-label="Peppermint halo"></button>
+        <button class="halo-hotspot halo-h4" data-modal="modal-four-almond" aria-label="Almond halo"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame-outer-intro">
+    <div class="hotspot-bg-animate-container">
+      <img
+        src="5 - The Remix Engine.png"
+        alt="The Remix Engine"
+        class="bg-main-img"
+      />
+    </div>
+  </div>
+
+  <div class="frame-outer-intro">
+    <div class="hotspot-bg-animate-container" id="wheel-of-fortune-static">
+      <img
+        src="6 - The Wheel of Fortune.png"
+        alt="The Wheel of Fortune static wheel"
+        class="bg-main-img"
+      />
+      <div class="hotspots-absolute">
+        <button class="halo-hotspot halo-h2" data-modal="modal-wheel-themes" aria-label="Themes halo"></button>
+        <button class="halo-hotspot halo-h3" data-modal="modal-wheel-spiritual" aria-label="Spiritual Ask halo"></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const stops = ['door', 'hearth', 'river', 'cross'];
+const hotspotLabels = ['Ritual', 'Recipe', 'Symbolism', 'Story'];
+
+const halo = document.getElementById('halo');
+const wand = document.getElementById('wand');
+const spinLabel = document.getElementById('spin-label');
+const helperText = document.getElementById('helper-text');
+const hotspotEls = Array.from(document.querySelectorAll('.hotspot'));
+const bigWordButtons = Array.from(document.querySelectorAll('.big-label-hit'));
+
+const stickerStars = {
+  door: document.getElementById('star-door'),
+  hearth: document.getElementById('star-hearth'),
+  river: document.getElementById('star-river'),
+  cross: document.getElementById('star-cross')
+};
+
+const stickerColors = {
+  door: 'var(--golden-ochre)',
+  hearth: 'var(--tomato-red)',
+  river: 'var(--classic-blue)',
+  cross: 'var(--sap-green)'
+};
+
+const fortuneTexts = {
+  river: 'YOUR FORTUNE: A CROSSROADS',
+  hearth: 'YOUR FORTUNE: A FLAMING HEART',
+  door: 'YOUR FORTUNE: A THRESHOLD',
+  cross: 'YOUR FORTUNE: A DOORWAY'
+};
+
+let currentRotation = 0;
+let isSpinning = false;
+let clickedHotspotsThisSpin = new Set();
+let lastFortuneKey = null;
+let isHoveringWand = false;
+let lastTriggerButton = null;
+let lastFocusedElementBeforeModal = null;
+
+function showHelperAfterSpin() {
+  helperText.style.display = 'inline-flex';
+}
+function hideHelper() {
+  helperText.style.display = 'none';
+}
+
+function setLabelTextIdle() {
+  spinLabel.textContent = 'SPIN THE WHEEL';
+}
+function setLabelTextForStar(key) {
+  lastFortuneKey = key;
+  spinLabel.textContent = fortuneTexts[key] || 'YOUR FORTUNE';
+}
+function setLabelTextSpinAgain() {
+  spinLabel.textContent = 'SPIN AGAIN';
+}
+
+wand.addEventListener('mouseenter', () => {
+  isHoveringWand = true;
+  if (!isSpinning) {
+    spinLabel.textContent = 'SPIN';
+  }
+});
+
+wand.addEventListener('mouseleave', () => {
+  isHoveringWand = false;
+  if (!isSpinning) {
+    if (lastFortuneKey) {
+      setLabelTextForStar(lastFortuneKey);
+    } else {
+      setLabelTextIdle();
+    }
+  }
+});
+
+function triggerSpin() {
+  if (isSpinning) return;
+  isSpinning = true;
+  clickedHotspotsThisSpin.clear();
+  lastFortuneKey = null;
+  setLabelTextIdle();
+  hideHelper();
+
+  Object.values(stickerStars).forEach(s => s.classList.remove('visible'));
+
+  hotspotEls.forEach(btn => {
+    btn.style.display = 'none';
+    btn.classList.remove('is-active');
+    btn.classList.remove('hotspot-animated');
+  });
+
+  halo.classList.add('halo-spinning');
+  halo.style.opacity = 0.75;
+
+  wand.classList.remove('wand-spinning');
+  void wand.offsetWidth;
+  wand.classList.add('wand-spinning');
+
+  const key = stops[Math.floor(Math.random() * stops.length)];
+  const targetAngles = { door: 0, hearth: 90, river: 180, cross: 270 };
+  const extraSpins = 720;
+  const targetRotation = currentRotation + extraSpins + targetAngles[key];
+  halo.style.transform =
+    `translate(-50%, -50%) rotate(${targetRotation}deg)`;
+  currentRotation = targetRotation;
+
+  const onEnd = () => {
+    halo.removeEventListener('transitionend', onEnd);
+    halo.classList.remove('halo-spinning');
+    halo.style.opacity = 0.4;
+    wand.classList.remove('wand-spinning');
+
+    const star = stickerStars[key];
+    if (star) {
+      star.style.color = stickerColors[key] || 'var(--golden-ochre)';
+      star.classList.add('visible');
+    }
+
+    showHotspots(key);
+    setLabelTextForStar(key);
+    showHelperAfterSpin();
+    isSpinning = false;
+
+    if (isHoveringWand) {
+      spinLabel.textContent = 'SPIN';
+    }
+  };
+  halo.addEventListener('transitionend', onEnd);
+}
+
+wand.addEventListener('click', triggerSpin);
+spinLabel.addEventListener('click', triggerSpin);
+
+function showHotspots(stickerKey) {
+  const baseColor = stickerColors[stickerKey] || 'var(--golden-ochre)';
+  const textColor = (stickerKey === 'door') ? 'var(--ink-black)' : 'var(--ivory-fog)';
+
+  hotspotEls.forEach((btn, index) => {
+    btn.textContent = hotspotLabels[index];
+    btn.dataset.sticker = stickerKey;
+    btn.dataset.type = hotspotLabels[index].toLowerCase();
+    if (!clickedHotspotsThisSpin.has(btn.dataset.type)) {
+      btn.style.display = 'inline-flex';
+    }
+    btn.style.backgroundColor = baseColor;
+    btn.style.color = textColor;
+    btn.classList.add('hotspot-animated');
+  });
+}
+
+const bigWordToType = {
+  prayer: 'ritual',
+  pleasure: 'recipe',
+  passage: 'symbolism',
+  prosperity: 'story'
+};
+
+function triggerFromBigWord(bigKey) {
+  const desiredType = bigWordToType[bigKey];
+  if (!desiredType) return;
+  const btn = hotspotEls.find(
+    b => b.dataset.type === desiredType && b.style.display !== 'none'
+  );
+  if (btn) btn.click();
+}
+
+bigWordButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    triggerFromBigWord(btn.dataset.big);
+  });
+});
+
+const backdrop = document.getElementById('modal-backdrop');
+
+function getFocusableElements(container) {
+  return Array.from(
+    container.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+  ).filter(el => !el.disabled && el.offsetParent !== null);
+}
+
+function openModalFor(stickerKey, type, triggerEl) {
+  const id = `modal-${stickerKey}-${type}`;
+  const modal = document.getElementById(id);
+  if (!modal) return;
+
+  lastTriggerButton = triggerEl || null;
+  lastFocusedElementBeforeModal = document.activeElement;
+
+  backdrop.style.display = 'block';
+  modal.style.display = 'block';
+
+  const focusables = getFocusableElements(modal);
+  if (focusables.length) {
+    focusables[0].focus();
+  }
+
+  modal.setAttribute('data-open', 'true');
+}
+
+function closeAllModals() {
+  document.querySelectorAll('.modal').forEach(m => {
+    m.style.display = 'none';
+    m.removeAttribute('data-open');
+  });
+  backdrop.style.display = 'none';
+
+  if (lastTriggerButton && typeof lastTriggerButton.focus === 'function') {
+    lastTriggerButton.focus();
+  } else if (lastFocusedElementBeforeModal && typeof lastFocusedElementBeforeModal.focus === 'function') {
+    lastFocusedElementBeforeModal.focus();
+  }
+}
+
+document.addEventListener('click', (e) => {
+  const target = e.target;
+
+  if (target.classList.contains('hotspot')) {
+    const sticker = target.dataset.sticker;
+    const type = target.dataset.type;
+    openModalFor(sticker, type, target);
+
+    hotspotEls.forEach(btn => btn.classList.remove('is-active'));
+    target.classList.add('is-active');
+
+    clickedHotspotsThisSpin.add(type);
+
+    target.style.display = 'none';
+    target.classList.remove('hotspot-animated');
+
+    if (clickedHotspotsThisSpin.size === 1) {
+      hideHelper();
+    }
+
+    if (clickedHotspotsThisSpin.size === 4) {
+      hotspotEls.forEach(btn => {
+        btn.classList.remove('hotspot-animated');
+        btn.style.display = 'none';
+      });
+      setLabelTextSpinAgain();
+    }
+  }
+
+  if (target.classList.contains('modal-close') ||
+      target.id === 'modal-backdrop') {
+    closeAllModals();
+  }
+
+  if (target.classList.contains('halo-hotspot')) {
+    const modalId = target.dataset.modal;
+    if (!modalId) return;
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    lastTriggerButton = target;
+    lastFocusedElementBeforeModal = document.activeElement;
+
+    backdrop.style.display = 'block';
+    modal.style.display = 'block';
+    modal.setAttribute('data-open', 'true');
+
+    const focusables = getFocusableElements(modal);
+    if (focusables.length) focusables[0].focus();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  const openModal = document.querySelector('.modal[data-open="true"]');
+  if (!openModal) return;
+
+  if (e.key === 'Escape' || e.key === 'Esc') {
+    e.preventDefault();
+    closeAllModals();
+    return;
+  }
+
+  if (e.key === 'Tab') {
+    const focusables = getFocusableElements(openModal);
+    if (!focusables.length) return;
+
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+});
+</script>
 </body>
 </html>
