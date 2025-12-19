@@ -953,15 +953,15 @@ const stickerColors = {
   cross: 'var(--sap-green)'
 };
  
-/* UPDATED fortunes:
-   - river -> A THRESHOLD
-   - door  -> A DOOR
+/* Correct mapping:
+   - cross  -> A CROSSROADS (blue star bottom)
+   - river  -> A THRESHOLD  (green star left)
 */
 const fortuneTexts = {
+  cross: 'YOUR FORTUNE: A CROSSROADS',
   river: 'YOUR FORTUNE: A THRESHOLD',
   hearth: 'YOUR FORTUNE: A FLAMING HEART',
-  door: 'YOUR FORTUNE: A DOOR',
-  cross: 'YOUR FORTUNE: A CROSSROADS'
+  door: 'YOUR FORTUNE: A DOOR'
 };
  
 let currentRotation = 0;
@@ -1052,7 +1052,7 @@ function triggerSpin() {
     }
  
     showHotspots(key);
-    setLabelTextForStar(key);   // always show "YOUR FORTUNE: ..." when spin stops
+    setLabelTextForStar(key);   // show "YOUR FORTUNE: ..." when spin stops
     showHelperAfterSpin();
     isSpinning = false;
  
@@ -1173,8 +1173,7 @@ document.addEventListener('click', (e) => {
         btn.classList.remove('hotspot-animated');
         btn.style.display = 'none';
       });
-      // Do not overwrite the fortune when all four are clicked.
-      // Spin label will change to a fortune again on the next spin.
+      // keep current fortune text; it will change again on next spin
     }
   }
  
