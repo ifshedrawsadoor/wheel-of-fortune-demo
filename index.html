@@ -265,8 +265,7 @@ body {
     transform: translate(-50%, -50%) scale(1.02);
     box-shadow:
       0 0 20px rgba(0,0,0,0.6),
-      0 0 0 0 rgba(250, 211,
-107, 0);
+      0 0 0 0 rgba(250, 211, 107, 0);
     opacity: 1;
   }
 }
@@ -954,11 +953,11 @@ const stickerColors = {
   cross: 'var(--sap-green)'
 };
  
-/* Final, explicit mapping:
-   door   (yellow, top)    -> A DOOR
-   hearth (red, right)     -> A FLAMING HEART
-   cross  (blue, bottom)   -> A CROSSROADS
-   river  (green, left)    -> A THRESHOLD
+/* Explicit fortune mapping:
+   door   (top, yellow star)   -> A DOOR
+   hearth (right, red star)    -> A FLAMING HEART
+   cross  (bottom, blue star)  -> A CROSSROADS
+   river  (left, green star)   -> A THRESHOLD
 */
 const fortuneTexts = {
   door:  'YOUR FORTUNE: A DOOR',
@@ -1055,7 +1054,7 @@ function triggerSpin() {
     }
  
     showHotspots(key);
-    setLabelTextForStar(key);   // "YOUR FORTUNE: ..." for the winning star
+    setLabelTextForStar(key);   // always show correct fortune for the landed star
     showHelperAfterSpin();
     isSpinning = false;
  
@@ -1176,7 +1175,7 @@ document.addEventListener('click', (e) => {
         btn.classList.remove('hotspot-animated');
         btn.style.display = 'none';
       });
-      // leave the current fortune text; next spin will set a new one
+      // keep the last fortune text until the next spin
     }
   }
  
