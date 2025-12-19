@@ -50,7 +50,7 @@ body {
 .wheel-wrapper {
   position: relative;
   max-width: 900px;
-  width: min(80vw, 900px);
+  width: 100%;
   max-height: 95vh;
   margin: 0 auto;
 }
@@ -109,23 +109,6 @@ body {
   0%   { transform: translate(-50%, -50%) rotate(0deg); }
   70%  { transform: translate(-50%, -50%) rotate(430deg); }
   100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* LARGE SPIN HIT AREA OVER WHEEL CENTER */
-.spin-hit-area {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 32%;
-  height: 32%;
-  border-radius: 50%;
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  z-index: 4;
 }
  
 .wand-label {
@@ -523,14 +506,6 @@ body {
   .helper-text { font-size: 0.85rem; padding: 6px 14px; }
   .hotspot { font-size: 0.9rem; padding: 8px 18px; }
 }
-
-/* small tablet band if you need a nudge; currently neutral */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .wand-label {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-}
  
 .visually-hidden {
   position: absolute;
@@ -679,10 +654,6 @@ body {
          class="wheel-bg" />
  
     <img src="Magic Wand.png" alt="Spin the Wheel" class="wand" id="wand">
-
-    <!-- LARGE SPIN HIT AREA -->
-    <button class="spin-hit-area" aria-label="Spin the wheel"></button>
-
     <div class="wand-label" id="spin-label">SPIN THE WHEEL</div>
     <div class="helper-text" id="helper-text">
       CLICK THE HOTSPOTS IN EACH CORNER TO LEARN MORE
@@ -967,7 +938,6 @@ const spinLabel = document.getElementById('spin-label');
 const helperText = document.getElementById('helper-text');
 const hotspotEls = Array.from(document.querySelectorAll('.hotspot'));
 const bigWordButtons = Array.from(document.querySelectorAll('.big-label-hit'));
-const spinHitArea = document.querySelector('.spin-hit-area');
  
 const stickerStars = {
   door: document.getElementById('star-door'),
@@ -983,12 +953,11 @@ const stickerColors = {
   cross: 'var(--sap-green)'
 };
  
-// UPDATED fortune mapping per your narrative
 const fortuneTexts = {
-  river: 'YOUR FORTUNE: A THRESHOLD',
-  door:  'YOUR FORTUNE: A DOOR',
-  hearth:'YOUR FORTUNE: A FLAMING HEART',
-  cross: 'YOUR FORTUNE: A CROSSROADS'
+  river: 'YOUR FORTUNE: A CROSSROADS',
+  hearth: 'YOUR FORTUNE: A FLAMING HEART',
+  door: 'YOUR FORTUNE: A THRESHOLD',
+  cross: 'YOUR FORTUNE: A DOORWAY'
 };
  
 let currentRotation = 0;
@@ -1092,7 +1061,6 @@ function triggerSpin() {
  
 wand.addEventListener('click', triggerSpin);
 spinLabel.addEventListener('click', triggerSpin);
-spinHitArea.addEventListener('click', triggerSpin);
  
 function showHotspots(stickerKey) {
   const baseColor = stickerColors[stickerKey] || 'var(--golden-ochre)';
@@ -1201,12 +1169,12 @@ document.addEventListener('click', (e) => {
         btn.classList.remove('hotspot-animated');
         btn.style.display = 'none';
       });
-      // keep current fortune text instead of forcing SPIN AGAIN
+      setLabelTextSpinAgain();
     }
   }
  
   if (target.classList.contains('modal-close') ||
-      target.id === 'modal-backdrop')) {
+      target.id === 'modal-backdrop') {
     closeAllModals();
   }
  
