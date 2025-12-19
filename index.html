@@ -47,12 +47,16 @@ body {
   position: relative;
 }
 
+/* centered wrapper so overlays track wheel center responsively */
 .wheel-wrapper {
   position: relative;
   max-width: 900px;
   width: 100%;
   max-height: 95vh;
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .title-wrapper {
@@ -214,7 +218,8 @@ body {
   transform: translate(-50%, -50%) scale(0.9);
   transition: opacity 0.2s ease, transform 0.2s ease;
   z-index: 4;
-  pointer-events: none;
+  pointer-events: auto; /* star is clickable */
+  cursor: pointer;
 }
 
 .sticker-star.door::before {
@@ -496,6 +501,15 @@ body {
   }
   .frame-outer {
     flex-direction: column;
+  }
+}
+
+/* tablet tweak: keep SPIN / YOUR FORTUNE centered visually */
+@media (min-width: 700px) and (max-width: 1024px) {
+  .wand-label,
+  .helper-text {
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
@@ -809,7 +823,7 @@ body {
   </div>
 </div>
 
-<!-- new modals for images 4 & 6 -->
+<!-- modals for images 4 & 6 -->
 <div class="modal poem-modal" id="modal-four-frankincense" aria-modal="true" role="dialog">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -985,7 +999,7 @@ function setLabelTextSpinAgain() {
   spinLabel.textContent = 'SPIN AGAIN';
 }
 
-/* unchanged hover behavior before a spin */
+/* hover behavior before a spin only */
 wand.addEventListener('mouseenter', () => {
   isHoveringWand = true;
   if (!isSpinning && !lastFortuneKey) {
@@ -1048,11 +1062,7 @@ function triggerSpin() {
     }
 
     showHotspots(key);
-
-    /* CHANGE: immediately show fortune text and keep it,
-       regardless of hover state */
-    setLabelTextForStar(key);
-
+    setLabelTextForStar(key);   // fortune text immediately
     showHelperAfterSpin();
     isSpinning = false;
   };
@@ -1194,6 +1204,34 @@ document.addEventListener('click', (e) => {
     const focusables = getFocusableElements(modal);
     if (focusables.length) focusables[0].focus();
   }
+});
+
+/* NEW: star hotspots -> single-image modals */
+const starToModal = {
+  hearth: 'modal-four-orange',      // red star -> Wild Orange
+  door:   'modal-four-frankincense',// yellow star -> Frankincense
+  cross:  'modal-four-peppermint',  // green star -> Peppermint
+  river:  'modal-four-almond'       // blue star -> Almond
+};
+
+Object.entries(stickerStars).forEach(([key, starEl]) => {
+  if (!starEl) return;
+  starEl.addEventListener('click', () => {
+    const modalId = starToModal[key];
+    if (!modalId) return;
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    lastTriggerButton = starEl;
+    lastFocusedElementBeforeModal = document.activeElement;
+
+    backdrop.style.display = 'block';
+    modal.style.display = 'block';
+    modal.setAttribute('data-open', 'true');
+
+    const focusables = getFocusableElements(modal);
+    if (focusables.length) focusables[0].focus();
+  });
 });
 
 document.addEventListener('keydown', (e) => {
