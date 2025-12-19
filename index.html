@@ -935,6 +935,35 @@ body {
 const stops = ['door', 'hearth', 'river', 'cross'];
 const hotspotLabels = ['Ritual', 'Recipe', 'Symbolism', 'Story'];
 
+/* Explicit mapping: for each sticker, which modal id to open
+   for slots 1, 2, 3, 4 (Ritual, Recipe, Symbolism, Story) */
+const hotspotConfig = {
+  door: [
+    'modal-door-ritual',
+    'modal-door-recipe',
+    'modal-door-symbolism',
+    'modal-door-story'
+  ],
+  hearth: [
+    'modal-hearth-ritual',
+    'modal-hearth-recipe',
+    'modal-hearth-symbolism',
+    'modal-hearth-story'
+  ],
+  river: [
+    'modal-river-ritual',
+    'modal-river-recipe',
+    'modal-river-symbolism',
+    'modal-river-story'
+  ],
+  cross: [
+    'modal-cross-ritual',
+    'modal-cross-recipe',
+    'modal-cross-symbolism',
+    'modal-cross-story'
+  ]
+};
+
 const halo = document.getElementById('halo');
 const wand = document.getElementById('wand');
 const spinLabel = document.getElementById('spin-label');
@@ -1072,8 +1101,8 @@ function showHotspots(stickerKey) {
   hotspotEls.forEach((btn, index) => {
     btn.textContent = hotspotLabels[index];
     btn.dataset.sticker = stickerKey;
-    btn.dataset.type = hotspotLabels[index].toLowerCase();
-    if (!clickedHotspotsThisSpin.has(btn.dataset.type)) {
+    btn.dataset.slot = String(index + 1); // 1–4
+    if (!clickedHotspotsThisSpin.has(btn.dataset.slot)) {
       btn.style.display = 'inline-flex';
     }
     btn.style.backgroundColor = baseColor;
@@ -1082,18 +1111,19 @@ function showHotspots(stickerKey) {
   });
 }
 
-const bigWordToType = {
-  prayer: 'ritual',
-  pleasure: 'recipe',
-  passage: 'symbolism',
-  prosperity: 'story'
+/* big word areas now map to slot numbers instead of types */
+const bigWordToSlot = {
+  prayer: 1,      // Ritual
+  pleasure: 2,    // Recipe
+  passage: 3,     // Symbolism
+  prosperity: 4   // Story
 };
 
 function triggerFromBigWord(bigKey) {
-  const desiredType = bigWordToType[bigKey];
-  if (!desiredType) return;
+  const slot = bigWordToSlot[bigKey];
+  if (!slot) return;
   const btn = hotspotEls.find(
-    b => b.dataset.type === desiredType && b.style.display !== 'none'
+    b => b.dataset.slot === String(slot) && b.style.display !== 'none'
   );
   if (btn) btn.click();
 }
@@ -1114,9 +1144,8 @@ function getFocusableElements(container) {
   ).filter(el => !el.disabled && el.offsetParent !== null);
 }
 
-function openModalFor(stickerKey, type, triggerEl) {
-  const id = `modal-${stickerKey}-${type}`;
-  const modal = document.getElementById(id);
+function openModalById(modalId, triggerEl) {
+  const modal = document.getElementById(modalId);
   if (!modal) return;
 
   lastTriggerButton = triggerEl || null;
@@ -1124,16 +1153,11 @@ function openModalFor(stickerKey, type, triggerEl) {
 
   backdrop.style.display = 'block';
   modal.style.display = 'block';
+  modal.setAttribute('data-open', 'true');
 
   const focusables = getFocusableElements(modal);
-  if (focusables.length) {
-    focusables[0].focus();
-  }
-
-  modal.setAttribute('data-open', 'true');
+  if (focusables.length) focusables[0].focus();
 }
-
-/* ===== CLICK / KEY HANDLERS ===== */
 
 function closeAllModals() {
   document.querySelectorAll('.modal').forEach(m => {
@@ -1152,18 +1176,20 @@ function closeAllModals() {
 document.addEventListener('click', (e) => {
   const target = e.target;
 
-  /* IMPORTANT CHANGE: resolve to closest .hotspot button so dataset.type is correct */
   const hotspotButton = target.closest && target.closest('.hotspot');
-
   if (hotspotButton) {
     const sticker = hotspotButton.dataset.sticker;
-    const type = hotspotButton.dataset.type;
-    openModalFor(sticker, type, hotspotButton);
+    const slot = parseInt(hotspotButton.dataset.slot, 10);
+    const mapping = hotspotConfig[sticker] || [];
+    const modalId = mapping[slot - 1];
+    if (modalId) {
+      openModalById(modalId, hotspotButton);
+    }
 
     hotspotEls.forEach(btn => btn.classList.remove('is-active'));
     hotspotButton.classList.add('is-active');
 
-    clickedHotspotsThisSpin.add(type);
+    clickedHotspotsThisSpin.add(hotspotButton.dataset.slot);
 
     hotspotButton.style.display = 'none';
     hotspotButton.classList.remove('hotspot-animated');
@@ -1191,18 +1217,7 @@ document.addEventListener('click', (e) => {
   if (target.classList.contains('halo-hotspot')) {
     const modalId = target.dataset.modal;
     if (!modalId) return;
-    const modal = document.getElementById(modalId);
-    if (!modal) return;
-
-    lastTriggerButton = target;
-    lastFocusedElementBeforeModal = document.activeElement;
-
-    backdrop.style.display = 'block';
-    modal.style.display = 'block';
-    modal.setAttribute('data-open', 'true');
-
-    const focusables = getFocusableElements(modal);
-    if (focusables.length) focusables[0].focus();
+    openModalById(modalId, target);
   }
 });
 
