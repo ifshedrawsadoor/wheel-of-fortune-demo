@@ -265,7 +265,8 @@ body {
     transform: translate(-50%, -50%) scale(1.02);
     box-shadow:
       0 0 20px rgba(0,0,0,0.6),
-      0 0 0 0 rgba(250, 211, 107, 0);
+      0 0 0 0 rgba(250, 211,
+107, 0);
     opacity: 1;
   }
 }
@@ -953,15 +954,17 @@ const stickerColors = {
   cross: 'var(--sap-green)'
 };
  
-/* Correct mapping:
-   - cross  -> A CROSSROADS (blue star bottom)
-   - river  -> A THRESHOLD  (green star left)
+/* Final, explicit mapping:
+   door   (yellow, top)    -> A DOOR
+   hearth (red, right)     -> A FLAMING HEART
+   cross  (blue, bottom)   -> A CROSSROADS
+   river  (green, left)    -> A THRESHOLD
 */
 const fortuneTexts = {
+  door:  'YOUR FORTUNE: A DOOR',
+  hearth:'YOUR FORTUNE: A FLAMING HEART',
   cross: 'YOUR FORTUNE: A CROSSROADS',
-  river: 'YOUR FORTUNE: A THRESHOLD',
-  hearth: 'YOUR FORTUNE: A FLAMING HEART',
-  door: 'YOUR FORTUNE: A DOOR'
+  river: 'YOUR FORTUNE: A THRESHOLD'
 };
  
 let currentRotation = 0;
@@ -1052,7 +1055,7 @@ function triggerSpin() {
     }
  
     showHotspots(key);
-    setLabelTextForStar(key);   // show "YOUR FORTUNE: ..." when spin stops
+    setLabelTextForStar(key);   // "YOUR FORTUNE: ..." for the winning star
     showHelperAfterSpin();
     isSpinning = false;
  
@@ -1173,7 +1176,7 @@ document.addEventListener('click', (e) => {
         btn.classList.remove('hotspot-animated');
         btn.style.display = 'none';
       });
-      // keep current fortune text; it will change again on next spin
+      // leave the current fortune text; next spin will set a new one
     }
   }
  
