@@ -684,7 +684,7 @@ body {
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<!-- wheel modals: each *-ritual has Ritual PNG, each *-recipe has Recipe PNG -->
+<!-- wheel modals -->
 <div class="modal poem-modal" id="modal-door-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-door-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
@@ -1133,6 +1133,8 @@ function openModalFor(stickerKey, type, triggerEl) {
   modal.setAttribute('data-open', 'true');
 }
 
+/* ===== CLICK / KEY HANDLERS ===== */
+
 function closeAllModals() {
   document.querySelectorAll('.modal').forEach(m => {
     m.style.display = 'none';
@@ -1150,18 +1152,21 @@ function closeAllModals() {
 document.addEventListener('click', (e) => {
   const target = e.target;
 
-  if (target.classList.contains('hotspot')) {
-    const sticker = target.dataset.sticker;
-    const type = target.dataset.type;
-    openModalFor(sticker, type, target);
+  /* IMPORTANT CHANGE: resolve to closest .hotspot button so dataset.type is correct */
+  const hotspotButton = target.closest && target.closest('.hotspot');
+
+  if (hotspotButton) {
+    const sticker = hotspotButton.dataset.sticker;
+    const type = hotspotButton.dataset.type;
+    openModalFor(sticker, type, hotspotButton);
 
     hotspotEls.forEach(btn => btn.classList.remove('is-active'));
-    target.classList.add('is-active');
+    hotspotButton.classList.add('is-active');
 
     clickedHotspotsThisSpin.add(type);
 
-    target.style.display = 'none';
-    target.classList.remove('hotspot-animated');
+    hotspotButton.style.display = 'none';
+    hotspotButton.classList.remove('hotspot-animated');
 
     if (clickedHotspotsThisSpin.size === 1) {
       hideHelper();
@@ -1174,11 +1179,13 @@ document.addEventListener('click', (e) => {
       });
       setLabelTextSpinAgain();
     }
+    return;
   }
 
   if (target.classList.contains('modal-close') ||
       target.id === 'modal-backdrop') {
     closeAllModals();
+    return;
   }
 
   if (target.classList.contains('halo-hotspot')) {
