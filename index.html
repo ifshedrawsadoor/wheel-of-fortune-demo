@@ -279,8 +279,8 @@ body {
 /* final positions */
 .sticker-star.door   { top: 26%; left: 50%; }
 .sticker-star.hearth { top: 52%; left: 72%; }
-.sticker-star.river  { top: 77%; left: 50%; }  /* bottom */
-.sticker-star.cross  { top: 52%; left: 28%; }  /* left  */
+.sticker-star.river  { top: 77%; left: 50%; }
+.sticker-star.cross  { top: 52%; left: 28%; }
 
 .hotspot {
   position: absolute;
@@ -457,7 +457,6 @@ body {
   color: var(--tomato-red);
   transform: scale(1.05);
   text-shadow: 0 0 6px rgba(0,0,0,0.35);
-  outline: none;
 }
 
 .modal-content img {
@@ -949,16 +948,10 @@ const stickerStars = {
 const stickerColors = {
   door: 'var(--golden-ochre)',
   hearth: 'var(--tomato-red)',
-  river: 'var(--classic-blue)',  // bottom, blue
-  cross: 'var(--sap-green)'      // left, green
+  river: 'var(--classic-blue)',
+  cross: 'var(--sap-green)'
 };
 
-/* FORTUNES – mapped to keys actually used for positions:
-   door  -> yellow, top
-   hearth-> red, right
-   river -> blue, bottom (crossroads sticker)
-   cross -> green, left  (river sticker)
-*/
 const fortuneTexts = {
   door:  'YOUR FORTUNE: A DOOR',
   hearth:'YOUR FORTUNE: A FLAMING HEART',
@@ -992,9 +985,10 @@ function setLabelTextSpinAgain() {
   spinLabel.textContent = 'SPIN AGAIN';
 }
 
+/* unchanged hover behavior before a spin */
 wand.addEventListener('mouseenter', () => {
   isHoveringWand = true;
-  if (!isSpinning) {
+  if (!isSpinning && !lastFortuneKey) {
     spinLabel.textContent = 'SPIN';
   }
 });
@@ -1054,13 +1048,13 @@ function triggerSpin() {
     }
 
     showHotspots(key);
+
+    /* CHANGE: immediately show fortune text and keep it,
+       regardless of hover state */
     setLabelTextForStar(key);
+
     showHelperAfterSpin();
     isSpinning = false;
-
-    if (isHoveringWand) {
-      spinLabel.textContent = 'SPIN';
-    }
   };
   halo.addEventListener('transitionend', onEnd);
 }
