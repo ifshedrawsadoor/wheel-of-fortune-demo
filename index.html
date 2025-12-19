@@ -29,10 +29,10 @@ html, body {
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background-image: url('Wheel Wallpaper.png');
-  background-size: 1184px auto;   /* lock to wallpaper width for cloud curtain */
+  background-size: 1184px auto;
   background-position: top center;
   background-repeat: repeat-y;
-  background-color: #a5d8f5;      /* sky fallback behind tiles */
+  background-color: #a5d8f5;
 }
 
 /* ===== LAYOUT (WHEEL) ===== */
@@ -537,7 +537,7 @@ body {
   align-items: flex-start;
 }
 
-/* translucent ivory card so wallpaper glows behind */
+/* translucent ivory card */
 .hotspot-bg-animate-container {
   background: rgba(249, 246, 238, 0.9);
   border-radius: 32px;
@@ -612,13 +612,13 @@ body {
 .halo-h3 { left: 55.5%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 .halo-h4 { left: 83.3%; top: calc(100% - 70px); transform: translate(-50%, 0); }
 
-/* image 4: outer halos pushed toward Frankincense and Almond */
+/* image 4: center h1 under Frankincense, h4 under Almond */
 #four-scents .halo-h1 { left: 20%; }
 #four-scents .halo-h2 { left: 41%; }
 #four-scents .halo-h3 { left: 59%; }
 #four-scents .halo-h4 { left: 80%; }
 
-/* image 6: subtle separation under THEMES / SPIRITUAL ASK */
+/* image 6: subtle separation */
 #wheel-of-fortune-static .halo-h2 { left: 41%; }
 #wheel-of-fortune-static .halo-h3 { left: 59%; }
 
@@ -684,7 +684,7 @@ body {
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<!-- wheel modals -->
+<!-- wheel modals: each *-ritual has Ritual PNG, each *-recipe has Recipe PNG -->
 <div class="modal poem-modal" id="modal-door-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-door-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
