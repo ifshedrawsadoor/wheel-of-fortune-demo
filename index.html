@@ -110,12 +110,17 @@ body {
   70%  { transform: translate(-50%, -50%) rotate(430deg); }
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
+
+/* Center both pill labels horizontally on all screens */
+.wand-label,
+.helper-text {
+  left: 50%;
+  transform: translateX(-50%);
+}
  
 .wand-label {
   position: absolute;
   top: 34%;
-  left: 50%;
-  transform: translateX(-50%);
   padding: 9px 26px 8px 26px;
   background: var(--golden-ochre);
   border-radius: 999px;
@@ -137,8 +142,6 @@ body {
 .helper-text {
   position: absolute;
   top: 40%;
-  left: 50%;
-  transform: translateX(-50%);
   padding: 7px 22px 6px 22px;
   background: var(--golden-ochre);
   border-radius: 999px;
