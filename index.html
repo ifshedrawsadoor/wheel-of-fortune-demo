@@ -649,29 +649,23 @@ body {
 
 /* ===== MOBILE-ONLY TWEAKS ===== */
 
-/* 1. Portrait: adjust wand size and star offsets + arrow alignment */
+/* 1. Portrait: adjust wand label centering and star (arrow) offsets */
 @media (max-width: 700px) and (orientation: portrait) {
-  .wand {
-    top: 52%;
-    width: 22%;
-  }
-
-  /* keep "Your Fortune" centered horizontally */
+  /* "Your Fortune" pill centered horizontally */
   .wand-label {
     top: 31%;
     left: 50%;
     transform: translateX(-50%);
-    text-align: center;
   }
 
-  /* move heart (hearth) arrow slightly right, on top of sticker */
-  .sticker-star.hearth {
-    left: 75%;
-  }
-
-  /* move green river arrow slightly left, on top of sticker */
+  /* Green river arrow slightly left, over the river sticker */
   .sticker-star.river {
     left: 46%;
+  }
+
+  /* Red heart arrow slightly right, over the heart sticker */
+  .sticker-star.hearth {
+    left: 74%;
   }
 }
 
@@ -685,7 +679,7 @@ body {
   }
 }
 
-/* 3. Mobile: original star tweaks kept neutral (non-orientation-specific) */
+/* 3. Mobile: original star tweaks kept neutral */
 @media (max-width: 700px) {
   .sticker-star.hearth { left: 72%; }
   .sticker-star.river  { left: 50%; }
