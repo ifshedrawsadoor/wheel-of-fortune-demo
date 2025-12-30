@@ -649,12 +649,11 @@ body {
 
 /* ===== MOBILE-ONLY TWEAKS ===== */
 
-/* 1. Portrait: center SPIN / YOUR FORTUNE vertically over wheel,
-      adjust wand and star offsets */
+/* 1. Portrait: adjust wand size and star offsets */
 @media (max-width: 700px) and (orientation: portrait) {
   .wand {
-    top: 52%;        /* moved down to center vertically on wheel */
-    width: 24%;      /* increased size so it reaches both red bands */
+    top: 52%;
+    width: 24%;
   }
   .wand-label {
     top: 31%;
@@ -662,10 +661,10 @@ body {
     transform: translateX(-50%);
   }
   .sticker-star.hearth {
-    left: 74%;       /* slight nudge right over heart sticker */
+    left: 74%;
   }
   .sticker-star.river {
-    left: 46%;       /* slight nudge left over river sticker */
+    left: 46%;
   }
 }
 
@@ -679,9 +678,9 @@ body {
   }
 }
 
-/* 3. Mobile: nudge red star right and green star left (non‑orientation‑specific) */
+/* 3. Mobile: original star tweaks kept neutral */
 @media (max-width: 700px) {
-  .sticker-star.hearth { left: 76%; }
+  .sticker-star.hearth { left: 72%; }
   .sticker-star.river  { left: 50%; }
 }
 </style>
@@ -704,7 +703,7 @@ body {
     <img src="Magic Wand.png" alt="Spin the Wheel" class="wand" id="wand">
     <div class="wand-label" id="spin-label">SPIN THE WHEEL</div>
     <div class="helper-text" id="helper-text">
-      CLICK THE HOTSPOTS IN EACH CORNER TO LEARN MORE
+      CLICK THE HOTSPOTS IN EACH CORNER
     </div>
 
     <img src="Ring.png" alt="" class="halo-overlay" id="halo">
@@ -1031,11 +1030,8 @@ function setLabelTextForStar(key) {
   lastFortuneKey = key;
   spinLabel.textContent = fortuneTexts[key] || 'YOUR FORTUNE';
 }
-function setLabelTextSpinAgain() {
-  spinLabel.textContent = 'SPIN AGAIN';
-}
 
-/* unchanged hover behavior before a spin */
+/* hover behavior before a spin */
 wand.addEventListener('mouseenter', () => {
   isHoveringWand = true;
   if (!isSpinning && !lastFortuneKey) {
@@ -1099,7 +1095,6 @@ function triggerSpin() {
 
     showHotspots(key);
 
-    /* immediately show fortune text and keep it */
     setLabelTextForStar(key);
 
     showHelperAfterSpin();
@@ -1218,7 +1213,7 @@ document.addEventListener('click', (e) => {
         btn.classList.remove('hotspot-animated');
         btn.style.display = 'none';
       });
-      setLabelTextSpinAgain();
+      setLabelTextIdle();
     }
   }
 
