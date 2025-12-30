@@ -640,39 +640,27 @@ body {
   }
 }
 
-/* tighten stacked sections on phones only */
+/* NEW: tighten stacked sections on phones only */
 @media (max-width: 700px) {
   .stack-section .frame-outer-intro {
     min-height: auto;
   }
 }
 
-/* ===== MOBILE-ONLY TWEAKS ===== */
+/* ===== MOBILE-ONLY FIXES ===== */
 
-/* 1. Portrait: center SPIN / YOUR FORTUNE vertically over wheel */
+/* Portrait: keep SPIN / SPIN AGAIN centered over the wheel */
 @media (max-width: 700px) and (orientation: portrait) {
-  .wand {
-    top: 46%;
-  }
   .wand-label {
-    top: 31%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
-/* 2. Landscape: separate yellow pills so they do not overlap */
-@media (max-width: 900px) and (orientation: landscape) {
-  .wand-label {
-    top: 30%;
-  }
-  .helper-text {
-    top: 47%;
-  }
-}
-
-/* 3. Mobile: nudge red star right and green star left */
-@media (max-width: 700px) {
-  .sticker-star.hearth { left: 76%; }
-  .sticker-star.river  { left: 24%; }
+/* Portrait: nudge inner stars further out (green left, red right) */
+@media (max-width: 700px) and (orientation: portrait) {
+  .sticker-star.hearth { left: 78%; }
+  .sticker-star.river  { left: 22%; }
 }
 </style>
 </head>
