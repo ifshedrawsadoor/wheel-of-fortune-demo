@@ -136,12 +136,12 @@ body {
   text-align: center;
   animation: spinLabelPulse 1.8s ease-in-out infinite alternate;
   cursor: pointer;
-  white-space: nowrap;
+  /* allow multi-line text so fortunes can break onto two lines */
 }
 
 .helper-text {
   position: absolute;
-  top: 40%;
+  top: 58%; /* moved below wand */
   padding: 7px 22px 6px 22px;
   background: var(--golden-ochre);
   border-radius: 999px;
@@ -675,7 +675,7 @@ body {
     top: 30%;
   }
   .helper-text {
-    top: 47%;
+    top: 60%; /* keep helper text under wand in landscape */
   }
 }
 
@@ -1003,10 +1003,10 @@ const stickerColors = {
 };
 
 const fortuneTexts = {
-  door:  'YOUR FORTUNE: A DOOR',
-  hearth:'YOUR FORTUNE: A FLAMING HEART',
-  river: 'YOUR FORTUNE: A CROSSROADS',
-  cross: 'YOUR FORTUNE: A THRESHOLD'
+  door:  'YOUR FORTUNE:<br>A DOORWAY',
+  hearth:'YOUR FORTUNE:<br>A FLAMING HEART',
+  river: 'YOUR FORTUNE:<br>A CROSSROADS',
+  cross: 'YOUR FORTUNE:<br>A THRESHOLD'
 };
 
 let currentRotation = 0;
@@ -1029,7 +1029,7 @@ function setLabelTextIdle() {
 }
 function setLabelTextForStar(key) {
   lastFortuneKey = key;
-  spinLabel.textContent = fortuneTexts[key] || 'YOUR FORTUNE';
+  spinLabel.innerHTML = fortuneTexts[key] || 'YOUR FORTUNE';
 }
 
 /* hover behavior before a spin */
