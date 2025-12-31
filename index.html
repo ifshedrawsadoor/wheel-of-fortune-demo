@@ -29,10 +29,10 @@ html, body {
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background-image: url('Wheel Wallpaper.png');
-  background-size: 1184px auto;
+  background-size: 1184px auto;   /* lock to wallpaper width for cloud curtain */
   background-position: top center;
   background-repeat: repeat-y;
-  background-color: #a5d8f5;
+  background-color: #a5d8f5;      /* sky fallback behind tiles */
 }
 
 /* ===== LAYOUT (WHEEL) ===== */
@@ -55,17 +55,6 @@ body {
   margin: 0 auto;
 }
 
-/* NEW: fixed-aspect-ratio stage for wheel artwork + overlays */
-.wheel-stage {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1264 / 1872; /* original wheel image ratio */
-  border-radius: 22px;
-  box-shadow: 0 8px 40px 8px #ece6dd;
-  overflow: hidden;
-  background: transparent;
-}
-
 .title-wrapper {
   position: absolute;
   top: 16px;
@@ -80,11 +69,14 @@ body {
 }
 
 .wheel-bg {
-  position: absolute;
-  inset: 0;
+  display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  max-height: 95vh;
   object-fit: contain;
+  border-radius: 22px;
+  box-shadow: 0 8px 40px 8px #ece6dd;
+  background: transparent;
 }
 
 /* ===== WAND + LABEL ===== */
@@ -122,13 +114,13 @@ body {
 /* Center both pill labels horizontally on all screens */
 .wand-label,
 .helper-text {
-  position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .wand-label {
-  top: 34%; /* aligned as percentage of wheel-stage height */
+  position: absolute;
+  top: 34%;
   padding: 9px 26px 8px 26px;
   background: var(--golden-ochre);
   border-radius: 999px;
@@ -148,6 +140,7 @@ body {
 }
 
 .helper-text {
+  position: absolute;
   top: 40%;
   padding: 7px 22px 6px 22px;
   background: var(--golden-ochre);
@@ -287,7 +280,7 @@ body {
   animation: starPulse 1.9s ease-in-out infinite;
 }
 
-/* final positions as percentages of wheel-stage */
+/* final positions */
 .sticker-star.door   { top: 26%; left: 50%; }
 .sticker-star.hearth { top: 52%; left: 72%; }
 .sticker-star.river  { top: 77%; left: 50%; }
@@ -663,13 +656,14 @@ body {
     width: 30%;
   }
   .wand-label {
-    top: 31%; /* fine-tune vertical alignment for phones here */
+    top: 31%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
   }
-  /* move hearth (heart) slightly right on mobile portrait */
   .sticker-star.hearth {
-    left: 78%;
+    left: 76%;
   }
-  /* move river slightly left on mobile portrait */
   .sticker-star.river {
     left: 44%;
   }
@@ -685,9 +679,10 @@ body {
   }
 }
 
-/* 3. Mobile: neutral star block no longer overrides portrait */
+/* 3. Mobile: original star tweaks kept neutral */
 @media (max-width: 700px) {
-  /* intentionally blank for star positions */
+  .sticker-star.hearth { left: 72%; }
+  .sticker-star.river  { left: 50%; }
 }
 </style>
 </head>
@@ -701,44 +696,41 @@ body {
   </div>
 
   <div class="wheel-wrapper">
-    <!-- NEW: stage container -->
-    <div class="wheel-stage">
 
-      <img src="Wheel Background Image.png"
-           alt="Wheel of Fortune Oils"
-           class="wheel-bg" />
+    <img src="Wheel Background Image.png"
+         alt="Wheel of Fortune Oils"
+         class="wheel-bg" />
 
-      <img src="Magic Wand.png" alt="Spin the Wheel" class="wand" id="wand">
-      <div class="wand-label" id="spin-label">SPIN THE WHEEL</div>
-      <div class="helper-text" id="helper-text">
-        CLICK THE HOTSPOTS IN EACH CORNER
-      </div>
-
-      <img src="Ring.png" alt="" class="halo-overlay" id="halo">
-
-      <!-- Stars as hotspots -->
-      <div class="sticker-star door" id="star-door" data-modal="modal-four-orange"></div>
-      <div class="sticker-star hearth" id="star-hearth" data-modal="modal-four-frankincense"></div>
-      <div class="sticker-star river" id="star-river" data-modal="modal-four-peppermint"></div>
-      <div class="sticker-star cross" id="star-cross" data-modal="modal-four-almond"></div>
-
-      <button class="hotspot pos-1" data-slot="1"></button>
-      <button class="hotspot pos-2" data-slot="2"></button>
-      <button class="hotspot pos-3" data-slot="3"></button>
-      <button class="hotspot pos-4" data-slot="4"></button>
-
-      <button class="big-label-hit prayer"     data-big="prayer"     aria-label="Prayer corner"></button>
-      <button class="big-label-hit pleasure"   data-big="pleasure"   aria-label="Pleasure corner"></button>
-      <button class="big-label-hit passage"    data-big="passage"    aria-label="Passage corner"></button>
-      <button class="big-label-hit prosperity" data-big="prosperity" aria-label="Prosperity corner"></button>
-
+    <img src="Magic Wand.png" alt="Spin the Wheel" class="wand" id="wand">
+    <div class="wand-label" id="spin-label">SPIN THE WHEEL</div>
+    <div class="helper-text" id="helper-text">
+      CLICK THE HOTSPOTS IN EACH CORNER
     </div>
+
+    <img src="Ring.png" alt="" class="halo-overlay" id="halo">
+
+    <!-- Stars as hotspots -->
+    <div class="sticker-star door" id="star-door" data-modal="modal-four-orange"></div>
+    <div class="sticker-star hearth" id="star-hearth" data-modal="modal-four-frankincense"></div>
+    <div class="sticker-star river" id="star-river" data-modal="modal-four-peppermint"></div>
+    <div class="sticker-star cross" id="star-cross" data-modal="modal-four-almond"></div>
+
+    <button class="hotspot pos-1" data-slot="1"></button>
+    <button class="hotspot pos-2" data-slot="2"></button>
+    <button class="hotspot pos-3" data-slot="3"></button>
+    <button class="hotspot pos-4" data-slot="4"></button>
+
+    <button class="big-label-hit prayer"     data-big="prayer"     aria-label="Prayer corner"></button>
+    <button class="big-label-hit pleasure"   data-big="pleasure"   aria-label="Pleasure corner"></button>
+    <button class="big-label-hit passage"    data-big="passage"    aria-label="Passage corner"></button>
+    <button class="big-label-hit prosperity" data-big="prosperity" aria-label="Prosperity corner"></button>
+
   </div>
 </div>
 
 <div class="modal-backdrop" id="modal-backdrop"></div>
 
-<!-- wheel modals (unchanged) -->
+<!-- wheel modals -->
 <div class="modal poem-modal" id="modal-door-symbolism" aria-modal="true" role="dialog" aria-labelledby="title-door-symbolism">
   <button class="modal-close" aria-label="Close">&times;</button>
   <div class="modal-content poem-img-modal">
